@@ -209,7 +209,7 @@ if (empty($_SESSION['active'])){
         <div>
             <label for="diashabiles">Días hábiles(Automático)</label>
             
-            <div id="diashabiles" style="font-size:30px"></div>
+            <div id="diashabiles" style="font-size:30px" ></div>
         </div>
         <div>
             <label for="unds">Unidades(*)</label>
