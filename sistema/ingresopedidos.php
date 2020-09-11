@@ -88,9 +88,9 @@ include "../conexion.php";
         $dias1= round($diaspedido*$tiempo1);
         $inicio1=sumasdiasemana($fechainicio,0);
         $final1= sumasdiasemana($inicio1,$dias1-1);
-        if($dato1!=''){
-            $insert_1=mysqli_query($conexion,"INSERT INTO $dato1(pedido, iniciofecha, finfecha, dias) VALUES ('$maxpedido','$inicio1','$final1', $dias1)");
-            }
+        
+        $insert_1=mysqli_query($conexion,"INSERT INTO $dato1(pedido, iniciofecha, finfecha, dias) VALUES ('$maxpedido','$inicio1','$final1', $dias1)");
+            
         
         #comparacion celda2
         $dato2=strtolower($result['2']);

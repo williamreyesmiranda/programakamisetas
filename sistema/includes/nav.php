@@ -6,26 +6,13 @@
 				</li>
 				<?php
 				if($_SESSION['idrol']==1 || $_SESSION['idrol']==4){
-					echo "
-					
-					<li >
+					echo "<li >
 					<a href=\"listabodegageneral.php\">Bodega</a>
-				</li>
-				<li class=\"principal\">
-					<a href=\"lista_cliente.php\">Pacientes</a>
-				</li>
-				";}
-				
-				
+				</li>";}
 				if($_SESSION['idrol']==1 || $_SESSION['idrol']==3){
-					echo "
-					<li >
-					<a href=\"lista_admisiones.php\">Admisiones</a>
-					 
-				</li>
-					";
-				}
-				
+					echo "<li >
+					<a href=\"listacortegeneral.php\">Corte</a>
+				</li>";}
 				
 				if($_SESSION['idrol']==1){
 					echo "
