@@ -297,7 +297,7 @@ if (empty($_SESSION['active'])){
             
 			success:function(r){
                 $('#diashabiles').html(r);
-                $('#diashabilesdiv').html(r);
+                
 				
 			}
 		});
