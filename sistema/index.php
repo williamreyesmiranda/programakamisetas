@@ -21,12 +21,12 @@ if (empty($_SESSION['active'])){
   header('location: ../');
 }
 include "includes/header.php";
-	$query1=mysqli_query($conexion, "SELECT * FROM menu WHERE id=1");
+	/* $query1=mysqli_query($conexion, "SELECT * FROM menu WHERE id=1");
 	$data1=mysqli_fetch_array($query1);
 	$query2=mysqli_query($conexion, "SELECT * FROM menu WHERE id=2");
 	$data2=mysqli_fetch_array($query2);
 	$query3=mysqli_query($conexion, "SELECT * FROM menu WHERE id=3");
-	$data3=mysqli_fetch_array($query3);
+	$data3=mysqli_fetch_array($query3); */
 ?>
 	<section id="container">
 	 	<center><h1 style="text-transform: uppercase;"> <?php if ($_SESSION['sexo']=='hombre'){echo 'Bienvenido '.$_SESSION['nombre'].' al sistema de producción';}else{echo 'Bienvenida '.$_SESSION['nombre'].' al sistema de producción';};?></h1>

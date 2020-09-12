@@ -53,7 +53,7 @@ function sumasdiasemana($fecha,$dias)
 	
     <?php include "includes/scripts.php"?>
     
-	<title>BODEGA</title>
+	<title>CORTE</title>
 	<link rel="shortcut icon" href="img/kamisetas-icono.png" type="image/x-icon">
 	<style>
   
@@ -68,14 +68,14 @@ if (empty($_SESSION['active'])){
 ?>
 
 
-<a href="listabodegageneral.php" class="btn_new" style="position:fixed ; top:0px; left: 0px;"><input style="display:block; width:150px; position:fixed ; top:0px; left: 0%;;" class="btn_new" type='button' href="listabodegageneral.php" value='MENÚ' /></a>
+<a href="listacortegeneral.php" class="btn_new" style="position:fixed ; top:0px; left: 0px;"><input style="display:block; width:150px; position:fixed ; top:0px; left: 0%;;" class="btn_new" type='button' href="listacortegeneral.php" value='MENÚ' /></a>
 
 <input style="display:block; width:150px; position:fixed ; top:0px; left: 85%;;" class="btn_new" type='button' onclick='window.print();' value='Imprimir' />
 
 
 <center><div style="width:99%">
 
-<h1 style="font-size:50px; font-weight:bold; color: #00a8a8">REPORTE DE BODEGA <?php echo date('d-m-Y');?></h1>
+<h1 style="font-size:50px; font-weight:bold; color: #00a8a8">REPORTE DE CORTE <?php echo date('d-m-Y');?></h1>
         <table style="width:50% !important; ">
             <thead>
                 <tr >
@@ -89,39 +89,39 @@ if (empty($_SESSION['active'])){
             <tbody>
                 <tr>
                     <th class="titulo">Pedidos</th>
-                    <td background="red"><?php $query=mysqli_query($conexion,"SELECT * FROM bodega WHERE finfecha<'$hoy' AND estado<=2"); echo mysqli_num_rows($query)?></td>
-                    <td><?php $query=mysqli_query($conexion,"SELECT * FROM bodega WHERE estado<=2 AND finfecha BETWEEN'$hoy' AND '$tresdias' "); echo mysqli_num_rows($query)?></td>
-                    <td><?php $query=mysqli_query($conexion,"SELECT * FROM bodega WHERE finfecha>='$cuatrodias' AND estado<=2"); echo mysqli_num_rows($query)?></td>
-                    <td><?php $query=mysqli_query($conexion,"SELECT * FROM bodega WHERE  estado<=2"); echo mysqli_num_rows($query)?></td>
+                    <td background="red"><?php $query=mysqli_query($conexion,"SELECT * FROM corte WHERE finfecha<'$hoy' AND estado<=2"); echo mysqli_num_rows($query)?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT * FROM corte WHERE estado<=2 AND finfecha BETWEEN'$hoy' AND '$tresdias' "); echo mysqli_num_rows($query)?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT * FROM corte WHERE finfecha>='$cuatrodias' AND estado<=2"); echo mysqli_num_rows($query)?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT * FROM corte WHERE  estado<=2"); echo mysqli_num_rows($query)?></td>
                 </tr>
                 <tr>
                     <th class="titulo">Unds Listas</th>
-                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(parcial) as 'suma' FROM bodega WHERE finfecha<'$hoy' AND estado<=2"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
-                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(parcial) as 'suma' FROM bodega WHERE estado<=2 AND finfecha BETWEEN'$hoy' AND '$tresdias'"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
-                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(parcial) as 'suma' FROM bodega WHERE finfecha>='$cuatrodias' AND estado<=2"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
-                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(parcial) as 'suma' FROM bodega WHERE  estado<=2"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(parcial) as 'suma' FROM corte WHERE finfecha<'$hoy' AND estado<=2"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(parcial) as 'suma' FROM corte WHERE estado<=2 AND finfecha BETWEEN'$hoy' AND '$tresdias'"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(parcial) as 'suma' FROM corte WHERE finfecha>='$cuatrodias' AND estado<=2"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(parcial) as 'suma' FROM corte WHERE  estado<=2"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
                 </tr>
                 <tr>
                     <th class="titulo">Unds Faltantes</th>
-                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds-bo.parcial) as 'resta' FROM bodega bo INNER JOIN pedidos pe ON bo.pedido=pe.idpedido
-                                                            WHERE bo.estado<=2 AND bo.finfecha<'$hoy'"); $result=mysqli_fetch_array($query); echo $result['resta'];?></td>
-                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds-bo.parcial) as 'resta' FROM bodega bo INNER JOIN pedidos pe ON bo.pedido=pe.idpedido
-                                                            WHERE bo.estado<=2 AND bo.finfecha BETWEEN'$hoy' AND '$tresdias'"); $result=mysqli_fetch_array($query); echo $result['resta'];?></td>
-                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds-bo.parcial) as 'resta' FROM bodega bo INNER JOIN pedidos pe ON bo.pedido=pe.idpedido
-                                                            WHERE bo.estado<=2 AND bo.finfecha>='$cuatrodias'"); $result=mysqli_fetch_array($query); echo $result['resta'];?></td>
-                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds-bo.parcial) as 'resta' FROM bodega bo INNER JOIN pedidos pe ON bo.pedido=pe.idpedido
-                                                            WHERE bo.estado<=2"); $result=mysqli_fetch_array($query); echo $result['resta'];?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds-co.parcial) as 'resta' FROM corte co INNER JOIN pedidos pe ON co.pedido=pe.idpedido
+                                                            WHERE co.estado<=2 AND co.finfecha<'$hoy'"); $result=mysqli_fetch_array($query); echo $result['resta'];?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds-co.parcial) as 'resta' FROM corte co INNER JOIN pedidos pe ON co.pedido=pe.idpedido
+                                                            WHERE co.estado<=2 AND co.finfecha BETWEEN'$hoy' AND '$tresdias'"); $result=mysqli_fetch_array($query); echo $result['resta'];?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds-co.parcial) as 'resta' FROM corte co INNER JOIN pedidos pe ON co.pedido=pe.idpedido
+                                                            WHERE co.estado<=2 AND co.finfecha>='$cuatrodias'"); $result=mysqli_fetch_array($query); echo $result['resta'];?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds-co.parcial) as 'resta' FROM corte co INNER JOIN pedidos pe ON co.pedido=pe.idpedido
+                                                            WHERE co.estado<=2"); $result=mysqli_fetch_array($query); echo $result['resta'];?></td>
                 </tr>
                 <tr>
                     <th class="titulo">Unds Totales</th>
-                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds) as 'suma' FROM bodega bo INNER JOIN pedidos pe ON bo.pedido=pe.idpedido
-                                                            WHERE bo.estado<=2 AND bo.finfecha<'$hoy'"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
-                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds) as 'suma' FROM bodega bo INNER JOIN pedidos pe ON bo.pedido=pe.idpedido
-                                                            WHERE bo.estado<=2 AND bo.finfecha BETWEEN'$hoy' AND '$tresdias'"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
-                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds) as 'suma' FROM bodega bo INNER JOIN pedidos pe ON bo.pedido=pe.idpedido
-                                                            WHERE bo.estado<=2 AND bo.finfecha>='$cuatrodias'"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
-                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds) as 'suma' FROM bodega bo INNER JOIN pedidos pe ON bo.pedido=pe.idpedido
-                                                            WHERE bo.estado<=2"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds) as 'suma' FROM corte co INNER JOIN pedidos pe ON co.pedido=pe.idpedido
+                                                            WHERE co.estado<=2 AND co.finfecha<'$hoy'"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds) as 'suma' FROM corte co INNER JOIN pedidos pe ON co.pedido=pe.idpedido
+                                                            WHERE co.estado<=2 AND co.finfecha BETWEEN'$hoy' AND '$tresdias'"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds) as 'suma' FROM corte co INNER JOIN pedidos pe ON co.pedido=pe.idpedido
+                                                            WHERE co.estado<=2 AND co.finfecha>='$cuatrodias'"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds) as 'suma' FROM corte co INNER JOIN pedidos pe ON co.pedido=pe.idpedido
+                                                            WHERE co.estado<=2"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
                 </tr>
             </tbody>
         </table>
@@ -133,7 +133,7 @@ if (empty($_SESSION['active'])){
               
             <tr class="titulo">
                 <th style="border-right: 1px solid #9ecaca"colspan="9">Información Pedido</th>
-                <th colspan="8"> Información Bodega</th>
+                <th colspan="8"> Información corte</th>
             </tr>   
              <tr class="titulo">
                 <th >Pedido</th>
@@ -168,14 +168,14 @@ if (empty($_SESSION['active'])){
             
             $query=mysqli_query($conexion, "SELECT pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
             pe.fecha_fin as 'finpedido', pe.dias_habiles as 'diaspedido', pe.unds, pe.fecha_ingreso, pe.usuario,
-            bo.idbodega, bo.iniciofecha as 'iniciobodega', bo.finfecha as 'finbodega', bo.dias as 'diasbodega',
-            bo.inicioprocesofecha, bo.finprocesofecha, bo.parcial, us.usuario, bo.obs_bodega, pr.siglas, es.estado
+            co.idcorte, co.iniciofecha as 'iniciocorte', co.finfecha as 'fincorte', co.dias as 'diascorte',
+            co.inicioprocesofecha, co.finprocesofecha, co.parcial, us.usuario, co.obs_corte, pr.siglas, es.estado
             FROM pedidos pe 
             INNER JOIN procesos pr ON pe.procesos=pr.idproceso
-            INNER JOIN bodega bo ON pe.idpedido=bo.pedido
+            INNER JOIN corte co ON pe.idpedido=co.pedido
             INNER JOIN usuario us on pe.usuario=us.idusuario
-            INNER JOIN estado es ON bo.estado=es.id_estado
-            WHERE bo.estado<=2 and finfecha<'$hoy'");
+            INNER JOIN estado es ON co.estado=es.id_estado
+            WHERE co.estado<=2 and finfecha<'$hoy'");
             
             $result=mysqli_num_rows($query);
 
@@ -188,14 +188,14 @@ if (empty($_SESSION['active'])){
                     $falta=$unds-$parcial;
                     
                     $diapedido=$data['finpedido'];
-                    $diabodega=$data['finbodega'];
+                    $diacorte=$data['fincorte'];
                     $diafaltapedido=  number_of_working_days($hoy, $diapedido)-1;
                     if($diafaltapedido<0){
                         $diafaltapedido=  -(number_of_working_days($diapedido, $hoy)-1);
                     }
-                    $diafaltabodega=  number_of_working_days($hoy, $diabodega)-1;   
-                    if($diafaltabodega<0){
-                        $diafaltabodega=  -(number_of_working_days($diabodega, $hoy)-1);
+                    $diafaltacorte=  number_of_working_days($hoy, $diacorte)-1;   
+                    if($diafaltacorte<0){
+                        $diafaltacorte=  -(number_of_working_days($diacorte, $hoy)-1);
                     }
                     echo "
                     <tr>
@@ -216,19 +216,19 @@ if (empty($_SESSION['active'])){
                    echo " <td class=\"redtable\">".$data['siglas']."</td>
                     <td class=\"redtable\" style=\"border-right: 1px solid #00a8a8\">".$unds."</td>
                    
-                    <td class=\"redtable\">".$data['iniciobodega']."</td>
-                    <td class=\"redtable\">".$data['finbodega']."</td>
-                    <td class=\"redtable\">".$data['diasbodega']."</td>";
-                    if($diafaltabodega>3){
-                        echo "<td class=\"greentable\">".$diafaltabodega."</td>";
-                     }elseif($diafaltabodega>=0){
-                         echo "<td class=\"yellowtable\">".$diafaltabodega."</td>";  
+                    <td class=\"redtable\">".$data['iniciocorte']."</td>
+                    <td class=\"redtable\">".$data['fincorte']."</td>
+                    <td class=\"redtable\">".$data['diascorte']."</td>";
+                    if($diafaltacorte>3){
+                        echo "<td class=\"greentable\">".$diafaltacorte."</td>";
+                     }elseif($diafaltacorte>=0){
+                         echo "<td class=\"yellowtable\">".$diafaltacorte."</td>";  
                      }else{
-                         echo "<td class=\"redtable\">".$diafaltabodega."</td>"; 
+                         echo "<td class=\"redtable\">".$diafaltacorte."</td>"; 
                      }
                     echo "<td class=\"redtable\">".$parcial."</td>
                     <td class=\"redtable\">".$falta."</td>
-                    <td class=\"redtable\">".$data['obs_bodega']."</td>
+                    <td class=\"redtable\">".$data['obs_corte']."</td>
                     <td class=\"redtable\">".$data['estado']."</td>
                     </tr>                    ";
                 }
@@ -243,14 +243,14 @@ if (empty($_SESSION['active'])){
             
             $query=mysqli_query($conexion, "SELECT pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
             pe.fecha_fin as 'finpedido', pe.dias_habiles as 'diaspedido', pe.unds, pe.fecha_ingreso, pe.usuario,
-            bo.idbodega, bo.iniciofecha as 'iniciobodega', bo.finfecha as 'finbodega', bo.dias as 'diasbodega',
-            bo.inicioprocesofecha, bo.finprocesofecha, bo.parcial, us.usuario, bo.obs_bodega, pr.siglas, es.estado
+            co.idcorte, co.iniciofecha as 'iniciocorte', co.finfecha as 'fincorte', co.dias as 'diascorte',
+            co.inicioprocesofecha, co.finprocesofecha, co.parcial, us.usuario, co.obs_corte, pr.siglas, es.estado
             FROM pedidos pe 
             INNER JOIN procesos pr ON pe.procesos=pr.idproceso
-            INNER JOIN bodega bo ON pe.idpedido=bo.pedido
+            INNER JOIN corte co ON pe.idpedido=co.pedido
             INNER JOIN usuario us on pe.usuario=us.idusuario
-            INNER JOIN estado es ON bo.estado=es.id_estado
-            WHERE bo.estado<=2 and finfecha BETWEEN'$hoy' AND '$tresdias'");
+            INNER JOIN estado es ON co.estado=es.id_estado
+            WHERE co.estado<=2 and finfecha BETWEEN'$hoy' AND '$tresdias'");
             
             $result=mysqli_num_rows($query);
 
@@ -263,14 +263,14 @@ if (empty($_SESSION['active'])){
                     $falta=$unds-$parcial;
                     
                     $diapedido=$data['finpedido'];
-                    $diabodega=$data['finbodega'];
+                    $diacorte=$data['fincorte'];
                     $diafaltapedido=  number_of_working_days($hoy, $diapedido)-1;
                     if($diafaltapedido<0){
                         $diafaltapedido=  -(number_of_working_days($diapedido, $hoy)-1);
                     }
-                    $diafaltabodega=  number_of_working_days($hoy, $diabodega)-1;   
-                    if($diafaltabodega<0){
-                        $diafaltabodega=  -(number_of_working_days($diabodega, $hoy)-1);
+                    $diafaltacorte=  number_of_working_days($hoy, $diacorte)-1;   
+                    if($diafaltacorte<0){
+                        $diafaltacorte=  -(number_of_working_days($diacorte, $hoy)-1);
                     }
                     echo "
                     <tr>
@@ -291,19 +291,19 @@ if (empty($_SESSION['active'])){
                    echo " <td class=\"yellowtable\">".$data['siglas']."</td>
                     <td class=\"yellowtable\" style=\"border-right: 1px solid #00a8a8\">".$unds."</td>
                    
-                    <td class=\"yellowtable\">".$data['iniciobodega']."</td>
-                    <td class=\"yellowtable\">".$data['finbodega']."</td>
-                    <td class=\"yellowtable\">".$data['diasbodega']."</td>";
-                    if($diafaltabodega>3){
-                        echo "<td class=\"greentable\">".$diafaltabodega."</td>";
-                     }elseif($diafaltabodega>=0){
-                         echo "<td class=\"yellowtable\">".$diafaltabodega."</td>";  
+                    <td class=\"yellowtable\">".$data['iniciocorte']."</td>
+                    <td class=\"yellowtable\">".$data['fincorte']."</td>
+                    <td class=\"yellowtable\">".$data['diascorte']."</td>";
+                    if($diafaltacorte>3){
+                        echo "<td class=\"greentable\">".$diafaltacorte."</td>";
+                     }elseif($diafaltacorte>=0){
+                         echo "<td class=\"yellowtable\">".$diafaltacorte."</td>";  
                      }else{
-                         echo "<td class=\"redtable\">".$diafaltabodega."</td>"; 
+                         echo "<td class=\"redtable\">".$diafaltacorte."</td>"; 
                      }
                     echo "<td class=\"yellowtable\">".$parcial."</td>
                     <td class=\"yellowtable\">".$falta."</td>
-                    <td class=\"yellowtable\">".$data['obs_bodega']."</td>
+                    <td class=\"yellowtable\">".$data['obs_corte']."</td>
                     <td class=\"yellowtable\">".$data['estado']."</td>
                     </tr>                    ";
                 }
@@ -318,14 +318,14 @@ if (empty($_SESSION['active'])){
            
             $query=mysqli_query($conexion, "SELECT pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
             pe.fecha_fin as 'finpedido', pe.dias_habiles as 'diaspedido', pe.unds, pe.fecha_ingreso, pe.usuario,
-            bo.idbodega, bo.iniciofecha as 'iniciobodega', bo.finfecha as 'finbodega', bo.dias as 'diasbodega',
-            bo.inicioprocesofecha, bo.finprocesofecha, bo.parcial, us.usuario, bo.obs_bodega, pr.siglas, es.estado
+            co.idcorte, co.iniciofecha as 'iniciocorte', co.finfecha as 'fincorte', co.dias as 'diascorte',
+            co.inicioprocesofecha, co.finprocesofecha, co.parcial, us.usuario, co.obs_corte, pr.siglas, es.estado
             FROM pedidos pe 
             INNER JOIN procesos pr ON pe.procesos=pr.idproceso
-            INNER JOIN bodega bo ON pe.idpedido=bo.pedido
+            INNER JOIN corte co ON pe.idpedido=co.pedido
             INNER JOIN usuario us on pe.usuario=us.idusuario
-            INNER JOIN estado es ON bo.estado=es.id_estado
-            WHERE bo.estado<=2 and finfecha>='$cuatrodias'");
+            INNER JOIN estado es ON co.estado=es.id_estado
+            WHERE co.estado<=2 and finfecha>='$cuatrodias'");
             
             $result=mysqli_num_rows($query);
 
@@ -338,14 +338,14 @@ if (empty($_SESSION['active'])){
                     $falta=$unds-$parcial;
                     
                     $diapedido=$data['finpedido'];
-                    $diabodega=$data['finbodega'];
+                    $diacorte=$data['fincorte'];
                     $diafaltapedido=  number_of_working_days($hoy, $diapedido)-1;
                     if($diafaltapedido<0){
                         $diafaltapedido=  -(number_of_working_days($diapedido, $hoy)-1);
                     }
-                    $diafaltabodega=  number_of_working_days($hoy, $diabodega)-1;   
-                    if($diafaltabodega<0){
-                        $diafaltabodega=  -(number_of_working_days($diabodega, $hoy)-1);
+                    $diafaltacorte=  number_of_working_days($hoy, $diacorte)-1;   
+                    if($diafaltacorte<0){
+                        $diafaltacorte=  -(number_of_working_days($diacorte, $hoy)-1);
                     }
                     echo "
                     <tr>
@@ -366,19 +366,19 @@ if (empty($_SESSION['active'])){
                    echo " <td class=\"greentable\">".$data['siglas']."</td>
                     <td class=\"greentable\" style=\"border-right: 1px solid #00a8a8\">".$unds."</td>
                    
-                    <td class=\"greentable\">".$data['iniciobodega']."</td>
-                    <td class=\"greentable\">".$data['finbodega']."</td>
-                    <td class=\"greentable\">".$data['diasbodega']."</td>";
-                    if($diafaltabodega>3){
-                        echo "<td class=\"greentable\">".$diafaltabodega."</td>";
-                     }elseif($diafaltabodega>=0){
-                         echo "<td class=\"yellowtable\">".$diafaltabodega."</td>";  
+                    <td class=\"greentable\">".$data['iniciocorte']."</td>
+                    <td class=\"greentable\">".$data['fincorte']."</td>
+                    <td class=\"greentable\">".$data['diascorte']."</td>";
+                    if($diafaltacorte>3){
+                        echo "<td class=\"greentable\">".$diafaltacorte."</td>";
+                     }elseif($diafaltacorte>=0){
+                         echo "<td class=\"yellowtable\">".$diafaltacorte."</td>";  
                      }else{
-                         echo "<td class=\"redtable\">".$diafaltabodega."</td>"; 
+                         echo "<td class=\"redtable\">".$diafaltacorte."</td>"; 
                      }
                     echo "<td class=\"greentable\">".$parcial."</td>
                     <td class=\"greentable\">".$falta."</td>
-                    <td class=\"greentable\"> ".$data['obs_bodega']."</td>
+                    <td class=\"greentable\"> ".$data['obs_corte']."</td>
                     <td class=\"greentable\">".$data['estado']."</td>
                     </tr>                    ";
                 }

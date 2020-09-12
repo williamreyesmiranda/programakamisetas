@@ -331,6 +331,37 @@ input, select, textarea {
 	text-align: center;
 	font-weight: bold;
 }
+
+
+.listaa{
+	display: inline-block;
+	position: absolute;
+	left: 15px;
+	top: 120px;
+
+}
+/* tablas de reporte de pedidos */
+.titulo{
+	text-align: center;
+	padding: 10px;
+	background-color: #00a8a8;
+	color: #9ecaca;
+	font-size: 20px;
+	border-top: 1px solid #9ecaca3d;
+	text-transform: uppercase;
+}
+.titulo th {
+	text-align: center;
+}
+.redtable{
+	background-color: #ff000088 !important;
+}
+.yellowtable{
+	background-color: #fbff0088 !important;
+}
+.greentable{
+	background-color: #00ff1588 !important;
+}
 .btn_new{
 	display: inline-block;
 	position:absolute;
@@ -351,30 +382,15 @@ input, select, textarea {
 	color: #00a8a8;
 	text-decoration: none;
 }
-
-.listaa{
-	display: inline-block;
-	position: absolute;
-	left: 15px;
-	top: 120px;
-
-}
-
+/* fin tablas de reporte de pedidos */
 table{
 	
 	font-size: 15px;
-	width: 100%;
-	border: 1px solid #00a8a8f1
+	
+	
 	
 }
-table th{
-	text-align: center;
-	padding: 10px;
-	background-color: #00a8a8;
-	color: #9ecaca;
-	font-size: 20px;
-	border-top: 1px solid #9ecaca3d;
-}
+
 
 
 table td{

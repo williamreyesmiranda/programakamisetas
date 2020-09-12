@@ -29,8 +29,7 @@ if (empty($_SESSION['active'])){
 include "includes/header.php"?>
 <section id="container">
 
-<a href="listabodegageneral.php" class="btn_new" style="position:fixed ; top:150px; left: 0px;">General</a>
-<a href="reporte_bodega.php" class="btn_new" style="position:fixed ; top:150px; left: 120px;">Reporte</a>
+<a href="reporte_bodega.php" class="btn_new" style="position:fixed ; top:150px; left: 0px;">Reporte</a>
 
 
 <center><div style="width:100%">
@@ -40,12 +39,12 @@ include "includes/header.php"?>
        
         <table id="tabla" class="display" >
          <thead>   
-            <tr>
+            <tr class="titulo">
                 <th style="border-right: 1px solid #9ecaca"colspan="10">Información Pedido</th>
                 
                 <th colspan="9"> Información Bodega</th>
             </tr>   
-             <tr>
+             <tr class="titulo">
                 <th>Pedido</th>
                 <th>Cliente</th>
                 <th>Asesor</th>
@@ -136,11 +135,11 @@ include "includes/header.php"?>
                     <td>".$data['finpedido']."</td>
                     <td>".$data['diaspedido']."</td>";
                     if($diafaltapedido>3){
-                       echo "<td style=\"background-color: #00ff1588;\">".$diafaltapedido."</td>";
+                       echo "<td class=\"greentable\">".$diafaltapedido."</td>";
                     }elseif($diafaltapedido>=0){
-                        echo "<td style=\"background-color: #fbff0088;\">".$diafaltapedido."</td>";  
+                        echo "<td class=\"yellowtable\">".$diafaltapedido."</td>";  
                     }else{
-                        echo "<td style=\"background-color: #ff000088;\">".$diafaltapedido."</td>"; 
+                        echo "<td class=\"redtable\">".$diafaltapedido."</td>"; 
                     }
                     
                    echo " <td>".$data['siglas']."</td>
@@ -151,11 +150,11 @@ include "includes/header.php"?>
                     <td>".$data['finbodega']."</td>
                     <td>".$data['diasbodega']."</td>";
                     if($diafaltabodega>3){
-                        echo "<td style=\"background-color: #00ff1588;\">".$diafaltabodega."</td>";
+                        echo "<td class=\"greentable\">".$diafaltabodega."</td>";
                      }elseif($diafaltabodega>=0){
-                         echo "<td style=\"background-color: #fbff0088;\">".$diafaltabodega."</td>";  
+                         echo "<td class=\"yellowtable\">".$diafaltabodega."</td>";  
                      }else{
-                         echo "<td style=\"background-color: #ff000088;\">".$diafaltabodega."</td>"; 
+                         echo "<td class=\"redtable\">".$diafaltabodega."</td>"; 
                      }
                     echo "<td>".$parcial."</td>
                     <td>".$falta."</td>

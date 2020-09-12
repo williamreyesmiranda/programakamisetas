@@ -1,0 +1,39 @@
+/* tablas de reporte de pedidos */
+.titulo{
+	text-align: center !important;
+	padding: 10px !important;
+	background-color: #00a8a8 !important;
+	color: #9ecaca !important;
+	font-size: 15px !important;
+	border-top: 1px solid #9ecaca3d !important;
+	text-transform: uppercase !important;
+}
+.titulo th {
+	text-align: center !important;
+	font-size: 10px !important;
+}
+
+.redtable{
+	background-color: #ff000088 !important;
+	font-size: 10px !important;
+}
+.yellowtable{
+	background-color: #fbff0088 !important;
+	font-size: 10px !important;
+}
+.greentable{
+	background-color: #00ff1588 !important;
+	font-size: 10px !important;
+}
+
+a, input {
+	display: none !important;
+  }
+  h1{
+	font-size:50px !important; 
+	font-weight:bold !important; 
+	color: #00a8a8 !important;
+  }
+  
+
+/* fin tablas de reporte de pedidos */
