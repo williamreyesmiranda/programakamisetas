@@ -1,8 +1,6 @@
 <?php
 session_start();
-if($_SESSION['idrol']!=1){
-    header('location: ../');
-}
+
 include "../conexion.php";
     if(!empty($_POST)){
         $alert='';
@@ -96,7 +94,7 @@ if ($result_sql==0){
 	<meta charset="UTF-8">
 	
 	<?php include "includes/scripts.php"?>
-    <title>ACTUALIZACION</title>
+    <title>ACTUALIZACIÓN</title>
     <link rel="shortcut icon" href="img/kamisetas-icono.png" type="image/x-icon">
 	<style>
 	
@@ -119,7 +117,7 @@ include "includes/header.php"?>
     <div class="form-register">
         
     <a href="listacortegeneral.php" class="btn_new" style="position:fixed ; top:150px; left: 0px;">General</a>
-    <a href="" class="btn_new" style="position:fixed ; top:150px; left: 120px;">Reporte</a>
+    <a href="reporte_corte.php" class="btn_new" style="position:fixed ; top:150px; left: 200px;">Reporte</a>
   
 
         <form action="" method="post">

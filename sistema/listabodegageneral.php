@@ -1,8 +1,6 @@
 <?php
 session_start();
-if($_SESSION['idrol']!=1){
-    header('location: ../');
-}
+
 include "../conexion.php";
 
 ?>

@@ -1,8 +1,6 @@
 <?php
 session_start();
-if($_SESSION['idrol']!=1){
-    header('location: ../');
-}
+
 include "../conexion.php";
 date_default_timezone_set('America/Bogota');
 if(!empty($_POST)){
@@ -82,7 +80,7 @@ include "includes/header.php"?>
 	<section id="container">
 
     <a href="listabodegageneral.php" class="btn_new" style="position:fixed ; top:150px; left: 0px;">General</a>
-    <a href="" class="btn_new" style="position:fixed ; top:150px; left: 120px;">Reporte</a>
+    <a href="reporte_bodega.php" class="btn_new" style="position:fixed ; top:150px; left: 200px;">Reporte</a>
 
         <div class="data_delete">
         

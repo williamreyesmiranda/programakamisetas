@@ -1,8 +1,6 @@
 <?php
 session_start();
-if($_SESSION['idrol']!=1){
-    header('location: ../');
-}
+
 include "../conexion.php";
 date_default_timezone_set('America/Bogota');
 //fechas a dias
@@ -126,7 +124,7 @@ if (empty($_SESSION['active'])){
             </tbody>
         </table>
         </div>
-       <br><br><br>
+       <br>
        <div style="width:99%">
         <table id="tabla" >
          <thead>  

@@ -1,17 +1,23 @@
 <nav>
 			<ul>
 				<li><a href="index.php">Inicio</a></li>
-				<li class="principal">
-					<a href="ingresopedidos.php">Ingreso Pedidos</a>
-				</li>
+				
 				<?php
-				if($_SESSION['idrol']==1 || $_SESSION['idrol']==4){
+				if($_SESSION['idrol']==1 || $_SESSION['idrol']==4 || $_SESSION['idrol']==3){//bodega
+					echo "<li >
+					<a href=\"ingresopedidos.php\">Ingreso Pedidos</a>
+				</li>";}
+				if($_SESSION['idrol']==1 || $_SESSION['idrol']==4){//bodega
 					echo "<li >
 					<a href=\"listabodegageneral.php\">Bodega</a>
 				</li>";}
-				if($_SESSION['idrol']==1 || $_SESSION['idrol']==3){
+				if($_SESSION['idrol']==1 || $_SESSION['idrol']==3){//corte
 					echo "<li >
 					<a href=\"listacortegeneral.php\">Corte</a>
+				</li>";}
+				if($_SESSION['idrol']==1 || $_SESSION['idrol']==2){//confeccion
+					echo "<li >
+					<a href=\"listaconfecciongeneral.php\">Confección</a>
 				</li>";}
 				
 				if($_SESSION['idrol']==1){
