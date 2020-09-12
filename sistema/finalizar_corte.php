@@ -6,11 +6,11 @@ if($_SESSION['idrol']!=1){
 include "../conexion.php";
 date_default_timezone_set('America/Bogota');
 if(!empty($_POST)){
-$id = $_POST['idbodega'];
+$id = $_POST['idcorte'];
 $obs = $_POST['obs'];
 $parcial = $_POST['unds'];
-$query_delete=mysqli_query($conexion, "UPDATE bodega SET estado= 4, obs_bodega='$obs', parcial='$parcial'
-                                        WHERE idbodega=$id ");
+$query_delete=mysqli_query($conexion, "UPDATE corte SET estado= 4, obs_corte='$obs', parcial='$parcial'
+                                        WHERE idcorte=$id ");
 $sql=mysqli_query($conexion, "SELECT * FROM corte WHERE idcorte=$idcorte");
 $sqlselect=mysqli_fetch_array($sql);
 $idpedido=$sqlselect['pedido'];
@@ -24,34 +24,34 @@ if($query_delete){
  
 
 if(empty($_REQUEST['id'])){
-    header("location: listabodegageneral.php");
+    header("location: listacortegeneral.php");
 }else{
     
-    $idbodega=$_REQUEST['id'];
+    $idcorte=$_REQUEST['id'];
 
     $query=mysqli_query($conexion, "SELECT pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
     pe.fecha_fin as 'finpedido', pe.dias_habiles as 'diaspedido', pe.unds, pe.fecha_ingreso, pe.usuario,
-    bo.idbodega, bo.iniciofecha as 'iniciobodega', bo.finfecha as 'finbodega', bo.dias as 'diasbodega',
-    bo.inicioprocesofecha, bo.finprocesofecha, bo.parcial, us.usuario, bo.obs_bodega, pr.siglas, es.estado, es.id_estado
+    co.idcorte, co.iniciofecha as 'iniciocorte', co.finfecha as 'fincorte', co.dias as 'diascorte',
+    co.inicioprocesofecha, co.finprocesofecha, co.parcial, us.usuario, co.obs_corte, pr.siglas, es.estado, es.id_estado
     FROM pedidos pe 
     INNER JOIN procesos pr ON pe.procesos=pr.idproceso
-    INNER JOIN bodega bo ON pe.idpedido=bo.pedido
+    INNER JOIN corte co ON pe.idpedido=co.pedido
     INNER JOIN usuario us on pe.usuario=us.idusuario
-    INNER JOIN estado es ON bo.estado=es.id_estado WHERE bo.idbodega=$idbodega");
+    INNER JOIN estado es ON co.estado=es.id_estado WHERE co.idcorte=$idcorte");
     $result = mysqli_num_rows($query);
 
     if($result>0){
         $data = mysqli_fetch_array($query);
-            $id= $data['idbodega'];
+            $id= $data['idcorte'];
             $pedido= $data['num_pedido'];
             $iniciopedido=$data['iniciopedido'];
             $finpedido=$data['finpedido'];
             $siglas=$data['siglas'];
             $unds=$data['unds'];
-            $iniciobodega=$data['iniciobodega'];
-            $finbodega=$data['finbodega'];
+            $iniciocorte=$data['iniciocorte'];
+            $fincorte=$data['fincorte'];
             $parcial=$data['parcial'];
-            $obs=$data['obs_bodega'];
+            $obs=$data['obs_corte'];
             $estado=$data['estado'];
             $idestado=$data['id_estado'];
         }else{
@@ -85,7 +85,7 @@ if (empty($_SESSION['active'])){
 include "includes/header.php"?>
 	<section id="container">
 
-    <a href="listabodegageneral.php" class="btn_new" style="position:fixed ; top:150px; left: 0px;">General</a>
+    <a href="listacortegeneral.php" class="btn_new" style="position:fixed ; top:150px; left: 0px;">General</a>
     <a href="" class="btn_new" style="position:fixed ; top:150px; left: 120px;">Reporte</a>
 
         <div class="data_delete">
@@ -95,7 +95,7 @@ include "includes/header.php"?>
             <div class="alert"><?php echo isset($alert) ? $alert : '';?></div>
             <hr>
             <div style="border: 1px solid #00a8a8; border-radius: 10px; ">
-            <input type="hidden" name="idbodega" id="idbodega" value="<?php echo $idbodega;?>">
+            <input type="hidden" name="idcorte" id="idcorte" value="<?php echo $idcorte;?>">
             <input type="hidden" name="unds" id="unds" value="<?php echo $unds?>">
         <center> <h3 style="text-transform: uppercase; ">pedido: <?php echo $pedido?></h3>
        
@@ -114,13 +114,13 @@ include "includes/header.php"?>
         </center>
         </div>
         <div style="border: 1px solid #00a8a8; border-radius: 10px; ">
-        <center> <h3 style="text-transform: uppercase; ">Info Bodega</h3>
+        <center> <h3 style="text-transform: uppercase; ">Info corte</h3>
         
         <div>
-            Fecha Inicio: <?php echo $iniciobodega?>
+            Fecha Inicio: <?php echo $iniciocorte?>
         </div>
         <div>
-            Fecha Entrega: <?php echo $finbodega?>
+            Fecha Entrega: <?php echo $fincorte?>
         </div>
         
         <div>
@@ -133,7 +133,7 @@ include "includes/header.php"?>
             
             <input type="submit" value="Confirmar" class="btn_ok glyphicon glyphicon-remove">
             
-            <a href="listabodegageneral.php" class="btn_cancel"><span >Cancelar</span> </a>
+            <a href="listacortegeneral.php" class="btn_cancel"><span >Cancelar</span> </a>
                
             </form>
         </div>

@@ -61,7 +61,7 @@ include "includes/header.php"?>
                 <th>Fecha Entrega</th>
                 <th>Días Hab</th>
                 <th>Días Falta</th>
-                <th>OC</th>
+                <th> N° OC</th>
                 <th>Unds Parcial</th>
                 <th>Unds Falta</th>
                 <th>Observaciones</th>
@@ -95,7 +95,7 @@ include "includes/header.php"?>
 
             $query=mysqli_query($conexion, "SELECT pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
             pe.fecha_fin as 'finpedido', pe.dias_habiles as 'diaspedido', pe.unds, pe.fecha_ingreso, pe.usuario,
-            co.idcorte, co.iniciofecha as 'iniciocorte', co.finfecha as 'fincorte', co.dias as 'diascorte',
+            co.idcorte, co.iniciofecha as 'iniciocorte', co.finfecha as 'fincorte', co.dias as 'diascorte', co.oc,
             co.inicioprocesofecha, co.finprocesofecha, co.parcial, us.usuario, co.obs_corte, pr.siglas, es.estado, est.estado as 'estadopedido'
             FROM pedidos pe 
             INNER JOIN procesos pr ON pe.procesos=pr.idproceso
@@ -159,7 +159,8 @@ include "includes/header.php"?>
                      }else{
                          echo "<td style=\"background-color: #ff000088;\">".$diafaltacorte."</td>"; 
                      }
-                    echo "<td>".$parcial."</td>
+                    echo "<td>".$data['oc']."</td>
+                    <td>".$parcial."</td>
                     <td>".$falta."</td>
                     <td>".$data['obs_corte']."</td>
                     <td>".$data['estado']."</td>
