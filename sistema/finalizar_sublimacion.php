@@ -4,12 +4,12 @@ session_start();
 include "../conexion.php";
 date_default_timezone_set('America/Bogota');
 if(!empty($_POST)){
-$id = $_POST['idbodega'];
+$id = $_POST['idsublimacion'];
 $obs = $_POST['obs'];
 $parcial = $_POST['unds'];
-$query_delete=mysqli_query($conexion, "UPDATE bodega SET estado= 4, obs_bodega='$obs', parcial='$parcial'
-                                        WHERE idbodega=$id ");
-$sql=mysqli_query($conexion, "SELECT * FROM bodega WHERE idbodega=$id");
+$query_delete=mysqli_query($conexion, "UPDATE sublimacion SET estado= 4, obs_sublimacion='$obs', parcial='$parcial'
+                                        WHERE idsublimacion=$id ");
+$sql=mysqli_query($conexion, "SELECT * FROM sublimacion WHERE idsublimacion=$id");
 $sqlselect=mysqli_fetch_array($sql);
 $idpedido=$sqlselect['pedido'];
 $sql_estado = mysqli_query($conexion, "UPDATE pedidos SET estado=1 WHERE idpedido='$idpedido'");
@@ -22,34 +22,34 @@ if($query_delete){
  
 
 if(empty($_REQUEST['id'])){
-    header("location: listabodegageneral.php");
+    header("location: listasublimaciongeneral.php");
 }else{
     
-    $idbodega=$_REQUEST['id'];
+    $idsublimacion=$_REQUEST['id'];
 
     $query=mysqli_query($conexion, "SELECT pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
     pe.fecha_fin as 'finpedido', pe.dias_habiles as 'diaspedido', pe.unds, pe.fecha_ingreso, pe.usuario,
-    bo.idbodega, bo.iniciofecha as 'iniciobodega', bo.finfecha as 'finbodega', bo.dias as 'diasbodega',
-    bo.inicioprocesofecha, bo.finprocesofecha, bo.parcial, us.usuario, bo.obs_bodega, pr.siglas, es.estado, es.id_estado
+    su.idsublimacion, su.iniciofecha as 'iniciosublimacion', su.finfecha as 'finsublimacion', su.dias as 'diassublimacion',
+    su.inicioprocesofecha, su.finprocesofecha, su.parcial, us.usuario, su.obs_sublimacion, pr.siglas, es.estado, es.id_estado
     FROM pedidos pe 
     INNER JOIN procesos pr ON pe.procesos=pr.idproceso
-    INNER JOIN bodega bo ON pe.idpedido=bo.pedido
+    INNER JOIN sublimacion su ON pe.idpedido=su.pedido
     INNER JOIN usuario us on pe.usuario=us.idusuario
-    INNER JOIN estado es ON bo.estado=es.id_estado WHERE bo.idbodega=$idbodega");
+    INNER JOIN estado es ON su.estado=es.id_estado WHERE su.idsublimacion=$idsublimacion");
     $result = mysqli_num_rows($query);
 
     if($result>0){
         $data = mysqli_fetch_array($query);
-            $id= $data['idbodega'];
+            $id= $data['idsublimacion'];
             $pedido= $data['num_pedido'];
             $iniciopedido=$data['iniciopedido'];
             $finpedido=$data['finpedido'];
             $siglas=$data['siglas'];
             $unds=$data['unds'];
-            $iniciobodega=$data['iniciobodega'];
-            $finbodega=$data['finbodega'];
+            $iniciosublimacion=$data['iniciosublimacion'];
+            $finsublimacion=$data['finsublimacion'];
             $parcial=$data['parcial'];
-            $obs=$data['obs_bodega'];
+            $obs=$data['obs_sublimacion'];
             $estado=$data['estado'];
             $idestado=$data['id_estado'];
         }else{
@@ -83,8 +83,8 @@ if (empty($_SESSION['active'])){
 include "includes/header.php"?>
 	<section id="container">
 
-    <a href="listabodegageneral.php" class="btn_new" style="position:fixed ; top:150px; left: 0px;">General</a>
-    <a href="reporte_bodega.php" class="btn_new" style="position:fixed ; top:150px; left: 200px;">Reporte</a>
+    <a href="listasublimaciongeneral.php" class="btn_new" style="position:fixed ; top:150px; left: 0px;">General</a>
+    <a href="reporte_sublimacion.php" class="btn_new" style="position:fixed ; top:150px; left: 200px;">Reporte</a>
 
         <div class="data_delete">
         
@@ -93,7 +93,7 @@ include "includes/header.php"?>
             <div class="alert"><?php echo isset($alert) ? $alert : '';?></div>
             <hr>
             <div style="border: 1px solid #00a8a8; border-radius: 10px; ">
-            <input type="hidden" name="idbodega" id="idbodega" value="<?php echo $idbodega;?>">
+            <input type="hidden" name="idsublimacion" id="idsublimacion" value="<?php echo $idsublimacion;?>">
             <input type="hidden" name="unds" id="unds" value="<?php echo $unds?>">
         <center> <h3 style="text-transform: uppercase; ">pedido: <?php echo $pedido?></h3>
        
@@ -112,13 +112,13 @@ include "includes/header.php"?>
         </center>
         </div>
         <div style="border: 1px solid #00a8a8; border-radius: 10px; ">
-        <center> <h3 style="text-transform: uppercase; ">Info Bodega</h3>
+        <center> <h3 style="text-transform: uppercase; ">Info Sublimación</h3>
         
         <div>
-            Fecha Inicio: <?php echo $iniciobodega?>
+            Fecha Inicio: <?php echo $iniciosublimacion?>
         </div>
         <div>
-            Fecha Entrega: <?php echo $finbodega?>
+            Fecha Entrega: <?php echo $finsublimacion?>
         </div>
         
         <div>
@@ -131,7 +131,7 @@ include "includes/header.php"?>
             
             <input type="submit" value="Confirmar" class="btn_ok glyphicon glyphicon-remove">
             
-            <a href="listabodegageneral.php" class="btn_cancel"><span >Cancelar</span> </a>
+            <a href="listasublimaciongeneral.php" class="btn_cancel"><span >Cancelar</span> </a>
                
             </form>
         </div>

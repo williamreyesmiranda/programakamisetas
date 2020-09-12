@@ -19,6 +19,11 @@
 					echo "<li >
 					<a href=\"listaconfecciongeneral.php\">Confección</a>
 				</li>";}
+				if($_SESSION['idrol']==1 || $_SESSION['idrol']==5){//confeccion
+					echo "<li >
+					<a href=\"listasublimaciongeneral.php\">Sublimación</a>
+				</li>";}
+				
 				
 				if($_SESSION['idrol']==1){
 					echo "

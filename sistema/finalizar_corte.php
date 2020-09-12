@@ -9,7 +9,7 @@ $obs = $_POST['obs'];
 $parcial = $_POST['unds'];
 $query_delete=mysqli_query($conexion, "UPDATE corte SET estado= 4, obs_corte='$obs', parcial='$parcial'
                                         WHERE idcorte=$id ");
-$sql=mysqli_query($conexion, "SELECT * FROM corte WHERE idcorte=$idcorte");
+$sql=mysqli_query($conexion, "SELECT * FROM corte WHERE idcorte=$id");
 $sqlselect=mysqli_fetch_array($sql);
 $idpedido=$sqlselect['pedido'];
 $sql_estado = mysqli_query($conexion, "UPDATE pedidos SET estado=1 WHERE idpedido='$idpedido'");
