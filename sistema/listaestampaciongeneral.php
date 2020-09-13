@@ -12,7 +12,7 @@ include "../conexion.php";
 	
     <?php include "includes/scripts.php"?>
     
-	<title>CONFECCIÓN</title>
+	<title>ESTAMPACIÓN</title>
 	<link rel="shortcut icon" href="img/kamisetas-icono.png" type="image/x-icon">
 	<style>
 		
@@ -27,12 +27,12 @@ if (empty($_SESSION['active'])){
 include "includes/header.php"?>
 <section id="container">
 
-<a href="reporte_confeccion.php" class="btn_new" style="position:fixed ; top:150px; left: 0px;">Reporte</a>
+<a href="reporte_estampacion.php" class="btn_new" style="position:fixed ; top:150px; left: 0px;">Reporte</a>
 
 
 <center><div style="width:100%">
 
-<h1>Lista General de Pedidos para CONFECCIÓN</h1>
+<h1>Lista General de Pedidos para ESTAMPACIÓN</h1>
         
        
         <table id="tabla" class="display" >
@@ -40,7 +40,7 @@ include "includes/header.php"?>
             <tr class="titulo">
                 <th style="border-right: 1px solid #9ecaca"colspan="10">Información Pedido</th>
                 
-                <th colspan="9"> Información confección</th>
+                <th colspan="9"> Información estampación</th>
             </tr>   
              <tr class="titulo">
                 <th>Pedido</th>
@@ -60,7 +60,6 @@ include "includes/header.php"?>
                 <th>Días Falta</th>
                 <th>Unds Parcial</th>
                 <th>Unds Falta</th>
-                <th>Entrega Prod</th>
                 <th>Observaciones</th>
                 <th>Estado</th>
                 <th>Acciones</th>
@@ -91,16 +90,16 @@ include "includes/header.php"?>
             }
 
             $query=mysqli_query($conexion, "SELECT pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
-            pe.fecha_fin as 'finpedido', pe.dias_habiles as 'diaspedido', pe.unds, pe.fecha_ingreso, pe.usuario, con.entrega,
-            con.idconfeccion, con.iniciofecha as 'inicioconfeccion', con.finfecha as 'finconfeccion', con.dias as 'diasconfeccion',
-            con.inicioprocesofecha, con.finprocesofecha, con.parcial, us.usuario, con.obs_confeccion, pr.siglas, es.estado, est.estado as 'estadopedido'
+            pe.fecha_fin as 'finpedido', pe.dias_habiles as 'diaspedido', pe.unds, pe.fecha_ingreso, pe.usuario,
+            estam.idestampacion, estam.iniciofecha as 'inicioestampacion', estam.finfecha as 'finestampacion', estam.dias as 'diasestampacion',
+            estam.inicioprocesofecha, estam.finprocesofecha, estam.parcial, us.usuario, estam.obs_estampacion, pr.siglas, es.estado, est.estado as 'estadopedido'
             FROM pedidos pe 
             INNER JOIN procesos pr ON pe.procesos=pr.idproceso
-            INNER JOIN confeccion con ON pe.idpedido=con.pedido
+            INNER JOIN estampacion estam ON pe.idpedido=estam.pedido
             INNER JOIN usuario us on pe.usuario=us.idusuario
-            INNER JOIN estado es ON con.estado=es.id_estado
+            INNER JOIN estado es ON estam.estado=es.id_estado
             INNER JOIN estado est ON pe.estado=est.id_estado
-            WHERE con.estado<=2");
+            WHERE estam.estado<=2");
             
             $result=mysqli_num_rows($query);
 
@@ -113,7 +112,7 @@ include "includes/header.php"?>
                     $falta=$unds-$parcial;
                     $hoy=date('Y-m-d');
                     $diapedido=$data['finpedido'];
-                    $diaconfeccion=$data['finconfeccion'];
+                    $diaestampacion=$data['finestampacion'];
                     $estadopedido=$data['estadopedido'];
                     $diafaltapedido=  number_of_working_days($hoy, $diapedido)-1;
                     if($diafaltapedido<0){
@@ -121,9 +120,9 @@ include "includes/header.php"?>
                         
                     }
                     
-                    $diafaltaconfeccion=  number_of_working_days($hoy, $diaconfeccion)-1;   
-                    if($diafaltaconfeccion<0){
-                        $diafaltaconfeccion=  -(number_of_working_days($diaconfeccion, $hoy)-1);
+                    $diafaltaestampacion=  number_of_working_days($hoy, $diaestampacion)-1;   
+                    if($diafaltaestampacion<0){
+                        $diafaltaestampacion=  -(number_of_working_days($diaestampacion, $hoy)-1);
                     }
                     echo "
                     <tr>
@@ -145,25 +144,24 @@ include "includes/header.php"?>
                     <td>".$estadopedido."</td>
                     <td style=\"border-right: 1px solid #00a8a8\">".$unds."</td>
                    
-                    <td>".$data['inicioconfeccion']."</td>
-                    <td>".$data['finconfeccion']."</td>
-                    <td>".$data['diasconfeccion']."</td>";
-                    if($diafaltaconfeccion>3){
-                        echo "<td class=\"greentable\">".$diafaltaconfeccion."</td>";
-                     }elseif($diafaltaconfeccion>=0){
-                         echo "<td class=\"yellowtable\">".$diafaltaconfeccion."</td>";  
+                    <td>".$data['inicioestampacion']."</td>
+                    <td>".$data['finestampacion']."</td>
+                    <td>".$data['diasestampacion']."</td>";
+                    if($diafaltaestampacion>3){
+                        echo "<td class=\"greentable\">".$diafaltaestampacion."</td>";
+                     }elseif($diafaltaestampacion>=0){
+                         echo "<td class=\"yellowtable\">".$diafaltaestampacion."</td>";  
                      }else{
-                         echo "<td class=\"redtable\">".$diafaltaconfeccion."</td>"; 
+                         echo "<td class=\"redtable\">".$diafaltaestampacion."</td>"; 
                      }
                     echo "<td>".$parcial."</td>
                     <td>".$falta."</td>
-                    <td>".$data['entrega']."</td>
-                    <td>".$data['obs_confeccion']."</td>
+                    <td>".$data['obs_estampacion']."</td>
                     <td>".$data['estado']."</td>
                     <td><div>
-                    <a title=\"Editar\"class=\"link_edit\"href=\"editar_confeccion.php?id=".$data['idconfeccion']."\"><span class=\"glyphicon glyphicon-pencil\" aria-hidden=\"true\"></span></a>
-                    <a title=\"Finalizar\"class=\"link_edit\"href=\"finalizar_confeccion.php?id=".$data['idconfeccion']."\"><span class=\"glyphicon glyphicon-ok\" aria-hidden=\"true\"></span></a>
-                    <a title=\"Anular\"class=\"link_delete\"href=\"anular_confeccion.php?id=".$data['idconfeccion']."\"><span class=\"glyphicon glyphicon-trash\" aria-hidden=\"true\"></span></a>
+                    <a title=\"Editar\"class=\"link_edit\"href=\"editar_estampacion.php?id=".$data['idestampacion']."\"><span class=\"glyphicon glyphicon-pencil\" aria-hidden=\"true\"></span></a>
+                    <a title=\"Finalizar\"class=\"link_edit\"href=\"finalizar_estampacion.php?id=".$data['idestampacion']."\"><span class=\"glyphicon glyphicon-ok\" aria-hidden=\"true\"></span></a>
+                    <a title=\"Anular\"class=\"link_delete\"href=\"anular_estampacion.php?id=".$data['idestampacion']."\"><span class=\"glyphicon glyphicon-trash\" aria-hidden=\"true\"></span></a>
                     
                     </div>
                     </td>                   
