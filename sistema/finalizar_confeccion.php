@@ -53,7 +53,7 @@ if(empty($_REQUEST['id'])){
             $estado=$data['estado'];
             $idestado=$data['id_estado'];
         }else{
-            header("location: lista_usuario.php");
+            header("location: listaconfecciongeneral.php");
         }
     }
 

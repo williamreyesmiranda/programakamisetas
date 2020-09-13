@@ -24,7 +24,10 @@
 					<a href=\"listasublimaciongeneral.php\">Sublimación</a>
 				</li><li >
 				<a href=\"listaestampaciongeneral.php\">Estampación</a></li>";}
-				
+				if($_SESSION['idrol']==1 || $_SESSION['idrol']==6){//confeccion
+					echo "<li >
+					<a href=\"listabordadogeneral.php\">Bordado</a>
+				</li>";}
 				
 				
 				if($_SESSION['idrol']==1){

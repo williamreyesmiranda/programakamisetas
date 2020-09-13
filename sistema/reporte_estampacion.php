@@ -51,7 +51,7 @@ function sumasdiasemana($fecha,$dias)
 	
     <?php include "includes/scripts.php"?>
     
-	<title>estampacion</title>
+	<title>ESTAMPACIÓN</title>
 	<link rel="shortcut icon" href="img/kamisetas-icono.png" type="image/x-icon">
 	<style>
   
@@ -73,7 +73,7 @@ if (empty($_SESSION['active'])){
 
 <center><div style="width:99%">
 
-<h1 style="font-size:50px; font-weight:bold; color: #00a8a8">REPORTE DE estampacion <?php echo date('d-m-Y');?></h1>
+<h1 style="font-size:50px; font-weight:bold; color: #00a8a8">REPORTE DE ESTAMPACIÓN <?php echo date('d-m-Y');?></h1>
         <table style="width:50% !important; ">
             <thead>
                 <tr >
