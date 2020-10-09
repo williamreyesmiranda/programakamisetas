@@ -28,18 +28,15 @@
 					echo "<li >
 					<a href=\"listabordadogeneral.php\">Bordado</a>
 				</li>";}
-				
+				echo "<li >
+				<a href=\"listaterminaciongeneral.php\">Terminación</a></li>";
 				
 				if($_SESSION['idrol']==1){
 					echo "
 					<li class=\"derecha\">
 					<a href=\"\">Administrador</a>
 						<ul>
-							<li><a href=\"lista_empleados.php\">Lista Empleados</a></li>
-							<li><a href=\"lista_entidades.php\">Lista Entidades</a></li>
-							<li><a href=\"lista_estudios.php\">Lista Estudios</a></li>
-							<li><a href=\"eliminar_citas.php\">Eliminar Citas</a></li>
-							<li><a href=\"menu.php\">Editar Menú</a></li>
+							 
 						</ul> 
 					</li>
 					";
