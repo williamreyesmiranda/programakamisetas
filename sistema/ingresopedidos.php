@@ -5,7 +5,7 @@ include "../conexion.php";
     if(!empty($_POST)){
         $alert='';
         
-        if(empty($_POST['nropedido']) || empty($_POST['nombrecliente']) || empty($_POST['asesor'])
+        if(empty($_POST['nropedido']) || empty($_POST['nombrecliente']) 
         || empty($_POST['fechainicio'])  || empty($_POST['fechafin']) || empty($_POST['procesos']) || empty($_POST['unds'])){
             $alert ='<p class="msg_error">Todos los campos son obligatorios</p>';
             
@@ -15,7 +15,6 @@ include "../conexion.php";
 
             $nropedido= $_POST['nropedido'];
             $nombre = $_POST['nombrecliente'];
-            $asesor= $_POST['asesor'];
             $fechainicio=$_POST['fechainicio'];
             $fechafin= $_POST['fechafin'];
             $procesos= $_POST['procesos'];
@@ -45,16 +44,19 @@ include "../conexion.php";
                 return $days;
             }   
            
-
             $diashabiles=  number_of_working_days($fechainicio, $fechafin);
             
+            
          
-                $query_insert = mysqli_query($conexion,"INSERT INTO pedidos(num_pedido,cliente, asesor, fecha_inicio, fecha_fin, dias_habiles, procesos, unds, usuario )
-                                                            values('$nropedido','$nombre','$asesor','$fechainicio','$fechafin',$diashabiles,$procesos,$unds,$usuario_id)");
+                $query_insert = mysqli_query($conexion,"INSERT INTO pedidos(num_pedido,cliente, fecha_inicio, fecha_fin, dias_habiles, procesos, unds, usuario )
+                                                            values('$nropedido','$nombre','$fechainicio','$fechafin',$diashabiles,$procesos,$unds,$usuario_id)");
                 $query_max = mysqli_query($conexion,"SELECT max(idpedido) as 'maxpedido' FROM pedidos");
                 $data=mysqli_fetch_array($query_max);
-    
-                
+                //busqueda de asesor e ingreso
+                $consulta_asesor=mysqli_query($conexion,"SELECT asesor FROM clientes WHERE nombre='$nombre'");
+                $data_asesor=mysqli_fetch_array($consulta_asesor);
+                $asesor=$data_asesor['asesor'];
+                $update_asesor=mysqli_query($conexion,"UPDATE pedidos SET asesor='$asesor'");
                 $maxpedido=$data['maxpedido'];
                 if($query_insert){
                     $alert ='<label class="msg_save alert">Pedido Ingresado Correctamente</label>';
@@ -66,7 +68,7 @@ include "../conexion.php";
         $idproceso=$_POST['procesos'] ;
         $query=mysqli_query($conexion,"SELECT * FROM procesos WHERE idproceso =$idproceso");
         $result=mysqli_fetch_array($query);
-        $diaspedido=$diashabiles;
+        $diaspedido=number_of_working_days($fechainicio, $fechafin);
         function sumasdiasemana($fecha,$dias)
         {
             $datestart= strtotime($fecha);
@@ -189,14 +191,28 @@ if (empty($_SESSION['active'])){
             <label for="nropedido">Nro Pedido (*)</label>
             <input value="" type="text" name="nropedido" id="nropedido" placeholder="Ingrese N° Pedido" autocomplete="off" autofocus required>
         </div>
-        <div>
-            <label for="nombrecliente">Nombre Cliente(*)</label>
-            <input value=""type="text" name="nombrecliente" id="nombrecliente" placeholder="Ingrese el Nombre del Cliente" autocomplete="on" required>
-        </div>
-        <div>
-            <label for="asesor">Asesor(*)</label>
-            <input value=""type="text" name="asesor" id="asesor" placeholder="Ingrese el Nombre del Comercial" autocomplete="on" required>
-        </div>
+        <div class="regcliente">
+           
+           <?php
+           $query_idcliente =mysqli_query($conexion,"SELECT * FROM clientes order by nombre asc");
+           $result_idcliente = mysqli_num_rows($query_idcliente);
+           
+           ?>
+           <label>Nombre Cliente (*)   
+         <input list="nombrecliente" name="nombrecliente" class="nombrecliente" placeholder="Ingrese el nombre del Cliente"/></label>
+         <datalist name="nombrecliente"id="nombrecliente">
+           <?php 
+           if ($result_idcliente>0){
+               while($idcliente =mysqli_fetch_array($query_idcliente)){
+                   
+                 echo "  <option value=\"".$idcliente['nombre']."\">";
+           }
+           } ?>
+         
+         </datalist>
+         
+       </div>
+        <div id="divasesor"></div>
         
         <div>
             <label for="fechainicio">Fecha Inicio(*)</label>
@@ -248,7 +264,33 @@ if (empty($_SESSION['active'])){
 
 
 </section>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.nombrecliente').val();
+		
+		
 
+		$('.nombrecliente').change(function(){
+			asesor();
+			
+			
+		});
+	
+	})
+	function asesor(){
+		$.ajax({
+			type:"POST",
+			url:"php/cargar_asesor.php",
+            data: $("#formulario_pedido").serialize(),
+            
+			success:function(r){
+				$('#divasesor').html(r);
+				
+			}
+		});
+		
+	}
+</script>
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('#procesos').val();

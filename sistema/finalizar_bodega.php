@@ -7,7 +7,9 @@ if(!empty($_POST)){
 $id = $_POST['idbodega'];
 $obs = $_POST['obs'];
 $parcial = $_POST['unds'];
-$query_delete=mysqli_query($conexion, "UPDATE bodega SET estado= 4, obs_bodega='$obs', parcial='$parcial'
+$finproceso = date('Y-m-d');
+$query_delete=mysqli_query($conexion, "UPDATE bodega SET estado= 4, obs_bodega='$obs', parcial='$parcial',
+                                        finprocesofecha='$finproceso', entrega='X'
                                         WHERE idbodega=$id ");
 $sql=mysqli_query($conexion, "SELECT * FROM bodega WHERE idbodega=$id");
 $sqlselect=mysqli_fetch_array($sql);

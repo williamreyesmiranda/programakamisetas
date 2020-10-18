@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="css/style.css" media="all">
+<link rel="stylesheet" type="text/css" href="css/styleee.css" media="all">
 <link rel="stylesheet" type="text/css" href="css/imprimir.css" media="print" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 

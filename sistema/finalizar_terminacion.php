@@ -7,7 +7,8 @@ if(!empty($_POST)){
 $id = $_POST['idterminacion'];
 $obs = $_POST['obs'];
 $parcial = $_POST['unds'];
-$query_delete=mysqli_query($conexion, "UPDATE terminacion SET estado= 4, obs_terminacion='$obs', parcial='$parcial'
+$finproceso = date('Y-m-d');
+$query_delete=mysqli_query($conexion, "UPDATE terminacion SET estado= 4, obs_terminacion='$obs', parcial='$parcial',finprocesofecha='$finproceso'
                                         WHERE idterminacion=$id ");
 $sql=mysqli_query($conexion, "SELECT * FROM terminacion WHERE idterminacion=$id");
 $sqlselect=mysqli_fetch_array($sql);
@@ -21,7 +22,7 @@ if($query_delete){
 $select_estado=mysqli_query($conexion, "SELECT * FROM terminacion WHERE idterminacion=$id");
 $pedido=mysqli_fetch_array($select_estado);
 $nro_pedido=$pedido['pedido'];
-$anular_pedido=mysqli_query($conexion, "UPDATE pedidos SET estado=4 WHERE idpedido=$nro_pedido");
+$finalizar_pedido=mysqli_query($conexion, "UPDATE pedidos SET estado=4 WHERE idpedido=$nro_pedido");
 }
  
 

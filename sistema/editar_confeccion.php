@@ -162,9 +162,9 @@ include "includes/header.php"?>
             
           <select style ="width: 300px" name="entrega" id="entrega" class="itemunico">
               <?php echo "  <option value=\"".$data['entrega']."\">".$data['entrega']."</option>";?>
-          <option value="0" disabled >Selecciones una Opcion</option>  
-          <option value="corte" >corte</option>   
-          <option value="parcial" >parcial</option>
+          <option value="0" disabled >Selecciones una Opción</option>  
+          <option value="confección-parcial" >confe-parcial</option>
+          <option value="corte-completo" >corte-completo</option>
           <option value="corte-parcial" >corte-parcial</option>    
            </select>
         </div>

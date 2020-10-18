@@ -67,6 +67,7 @@ if ($result_sql == 0) {
     $data = mysqli_fetch_array($sql);
     $id = $data['idbordado'];
     $pedido = $data['num_pedido'];
+    $cliente= $data['cliente'];
     $iniciopedido = $data['iniciopedido'];
     $finpedido = $data['finpedido'];
     $siglas = $data['siglas'];
@@ -128,7 +129,9 @@ if ($result_sql == 0) {
                 <div style="border: 1px solid #00a8a8; border-radius: 10px; ">
                     <center>
                         <h3 style="text-transform: uppercase; ">pedido: <?php echo $pedido ?></h3>
-
+                        <div>
+                            Cliente: <?php echo $cliente ?>
+                        </div>
                         <div>
                             Fecha Inicio: <?php echo $iniciopedido ?>
                         </div>
