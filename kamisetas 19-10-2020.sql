@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.1
--- http://www.phpmyadmin.net
+-- version 5.0.2
+-- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-10-2020 a las 21:52:41
--- Versión del servidor: 10.1.19-MariaDB
--- Versión de PHP: 5.6.28
+-- Tiempo de generación: 20-10-2020 a las 05:01:29
+-- Versión del servidor: 10.4.13-MariaDB
+-- Versión de PHP: 7.4.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -35,9 +36,9 @@ CREATE TABLE `bodega` (
   `inicioprocesofecha` date NOT NULL,
   `finprocesofecha` date NOT NULL,
   `obs_bodega` varchar(500) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `parcial` int(11) DEFAULT '0',
+  `parcial` int(11) DEFAULT 0,
   `entrega` varchar(1) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `estado` int(11) NOT NULL DEFAULT '0',
+  `estado` int(11) NOT NULL DEFAULT 0,
   `usuario` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -47,9 +48,9 @@ CREATE TABLE `bodega` (
 
 INSERT INTO `bodega` (`idbodega`, `pedido`, `iniciofecha`, `finfecha`, `dias`, `inicioprocesofecha`, `finprocesofecha`, `obs_bodega`, `parcial`, `entrega`, `estado`, `usuario`) VALUES
 (3, 1, '2020-10-15', '2020-10-21', 5, '0000-00-00', '0000-00-00', NULL, 0, NULL, 0, NULL),
-(4, 2, '2020-10-15', '2020-10-22', 6, '0000-00-00', '0000-00-00', NULL, 0, NULL, 0, NULL),
+(4, 2, '2020-10-15', '2020-10-22', 6, '0000-00-00', '2020-10-18', '', 100, 'X', 4, NULL),
 (5, 5, '2020-10-21', '2020-10-26', 5, '0000-00-00', '2020-10-18', '', 100, 'X', 0, NULL),
-(6, 6, '2020-10-13', '2020-10-14', 2, '0000-00-00', '2020-10-18', '', 10, 'X', 0, NULL);
+(6, 6, '2020-10-13', '2020-10-14', 2, '0000-00-00', '2020-10-18', '', 10, 'X', 4, NULL);
 
 -- --------------------------------------------------------
 
@@ -66,18 +67,23 @@ CREATE TABLE `bordado` (
   `inicioprocesofecha` date NOT NULL,
   `finprocesofecha` date NOT NULL,
   `obs_bordado` varchar(2000) COLLATE utf8_unicode_ci NOT NULL,
-  `parcial` int(11) NOT NULL DEFAULT '0',
-  `estado` int(11) NOT NULL DEFAULT '0',
-  `usuario` int(11) DEFAULT NULL
+  `parcial` int(11) NOT NULL DEFAULT 0,
+  `estado` int(11) NOT NULL DEFAULT 0,
+  `usuario` int(11) DEFAULT NULL,
+  `logo` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `pte_diseno` varchar(2) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `num_bordado` int(11) DEFAULT NULL,
+  `muestra` varchar(4) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `punt_unidad` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `bordado`
 --
 
-INSERT INTO `bordado` (`idbordado`, `pedido`, `iniciofecha`, `finfecha`, `dias`, `inicioprocesofecha`, `finprocesofecha`, `obs_bordado`, `parcial`, `estado`, `usuario`) VALUES
-(1, 2, '2020-10-23', '2020-10-27', 4, '0000-00-00', '0000-00-00', '', 0, 0, NULL),
-(2, 4, '2020-10-16', '2020-10-22', 5, '0000-00-00', '0000-00-00', '', 0, 0, NULL);
+INSERT INTO `bordado` (`idbordado`, `pedido`, `iniciofecha`, `finfecha`, `dias`, `inicioprocesofecha`, `finprocesofecha`, `obs_bordado`, `parcial`, `estado`, `usuario`, `logo`, `pte_diseno`, `num_bordado`, `muestra`, `punt_unidad`) VALUES
+(1, 2, '2020-10-23', '2020-10-27', 4, '0000-00-00', '0000-00-00', '', 0, 0, NULL, NULL, NULL, NULL, NULL, NULL),
+(2, 4, '2020-10-16', '2020-10-22', 5, '2020-10-18', '0000-00-00', '', 5, 1, 3, 'CUALQUIERA', 'SI', 1, 'SI', 15000);
 
 -- --------------------------------------------------------
 
@@ -6667,8 +6673,8 @@ CREATE TABLE `confeccion` (
   `finprocesofecha` date NOT NULL,
   `obs_confeccion` varchar(2000) COLLATE utf8_unicode_ci DEFAULT NULL,
   `entrega` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `parcial` int(11) NOT NULL DEFAULT '0',
-  `estado` int(11) NOT NULL DEFAULT '0',
+  `parcial` int(11) NOT NULL DEFAULT 0,
+  `estado` int(11) NOT NULL DEFAULT 0,
   `usuario` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -6677,7 +6683,8 @@ CREATE TABLE `confeccion` (
 --
 
 INSERT INTO `confeccion` (`idconfeccion`, `pedido`, `iniciofecha`, `finfecha`, `dias`, `inicioprocesofecha`, `finprocesofecha`, `obs_confeccion`, `entrega`, `parcial`, `estado`, `usuario`) VALUES
-(1, 3, '2020-10-19', '2020-10-21', 3, '2020-10-18', '2020-10-18', '', 'X', 100, 4, 3);
+(1, 3, '2020-10-19', '2020-10-21', 3, '2020-10-18', '2020-10-18', '', 'X', 100, 4, 3),
+(2, 7, '2020-10-22', '2020-10-28', 6, '2020-10-18', '2020-10-18', '', 'X', 200, 4, 3);
 
 -- --------------------------------------------------------
 
@@ -6695,8 +6702,8 @@ CREATE TABLE `corte` (
   `finprocesofecha` int(11) NOT NULL,
   `obs_corte` varchar(2000) COLLATE utf8_unicode_ci NOT NULL,
   `oc` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `parcial` int(11) DEFAULT '0',
-  `estado` int(11) NOT NULL DEFAULT '0',
+  `parcial` int(11) DEFAULT 0,
+  `estado` int(11) NOT NULL DEFAULT 0,
   `usuario` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -6705,7 +6712,8 @@ CREATE TABLE `corte` (
 --
 
 INSERT INTO `corte` (`idcorte`, `pedido`, `iniciofecha`, `finfecha`, `dias`, `inicioprocesofecha`, `finprocesofecha`, `obs_corte`, `oc`, `parcial`, `estado`, `usuario`) VALUES
-(1, 3, '2020-10-15', '2020-10-16', 2, '0000-00-00', 0, '', NULL, 0, 0, NULL);
+(1, 3, '2020-10-15', '2020-10-16', 2, '0000-00-00', 0, '', NULL, 0, 0, NULL),
+(2, 7, '2020-10-16', '2020-10-21', 4, '2020-10-18', 2020, '', 'OC5698', 200, 0, 3);
 
 -- --------------------------------------------------------
 
@@ -6744,8 +6752,8 @@ CREATE TABLE `estampacion` (
   `inicioprocesofecha` date NOT NULL,
   `finprocesofecha` date DEFAULT NULL,
   `obs_estampacion` varchar(2000) COLLATE utf8_unicode_ci NOT NULL,
-  `parcial` int(11) NOT NULL DEFAULT '0',
-  `estado` int(11) NOT NULL DEFAULT '0',
+  `parcial` int(11) NOT NULL DEFAULT 0,
+  `estado` int(11) NOT NULL DEFAULT 0,
   `usuario` int(11) DEFAULT NULL,
   `tecnica` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `nro_diseno` int(11) DEFAULT NULL,
@@ -6756,9 +6764,9 @@ CREATE TABLE `estampacion` (
   `fren` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `esp` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `otro` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `prep` int(11) NOT NULL DEFAULT '0',
-  `est` int(11) NOT NULL DEFAULT '0',
-  `sub` int(11) NOT NULL DEFAULT '0'
+  `prep` int(11) NOT NULL DEFAULT 0,
+  `est` int(11) NOT NULL DEFAULT 0,
+  `sub` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -6766,9 +6774,10 @@ CREATE TABLE `estampacion` (
 --
 
 INSERT INTO `estampacion` (`idestampacion`, `pedido`, `iniciofecha`, `finfecha`, `dias`, `inicioprocesofecha`, `finprocesofecha`, `obs_estampacion`, `parcial`, `estado`, `usuario`, `tecnica`, `nro_diseno`, `posicion`, `seda`, `grabacion`, `nro_plancha`, `fren`, `esp`, `otro`, `prep`, `est`, `sub`) VALUES
-(1, 3, '2020-10-22', '2020-10-22', 1, '2020-10-17', '2020-10-17', '', 60, 2, 3, 'TEXTIL', 1, 1, 55, 'si', 2, '2pfre', '2pesp', 'opi', 90, 17, 1),
+(1, 3, '2020-10-22', '2020-10-22', 1, '2020-10-17', '2020-10-17', '', 0, 2, 3, 'TEXTIL', 1, 1, 55, 'si', 2, '2pfre', '2pesp', 'opi', 90, 17, 1),
 (2, 5, '2020-10-27', '2020-10-29', 3, '0000-00-00', NULL, '', 50, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0),
-(3, 6, '2020-10-15', '2020-10-15', 1, '0000-00-00', NULL, '', 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0);
+(3, 6, '2020-10-15', '2020-10-15', 1, '2020-10-18', NULL, '', 5, 0, 3, 'PLASTISOL', 1, 1, 64, 'si', 4, 'ddd', 'sd', 'fg', 90, 17, 1),
+(4, 7, '2020-10-29', '2020-11-02', 3, '0000-00-00', NULL, '', 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -6786,10 +6795,10 @@ CREATE TABLE `pedidos` (
   `dias_habiles` int(11) NOT NULL,
   `procesos` int(11) NOT NULL,
   `unds` int(11) NOT NULL,
-  `fecha_ingreso` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `fecha_ingreso` datetime NOT NULL DEFAULT current_timestamp(),
   `usuario` int(11) NOT NULL,
   `area_inicio` varchar(13) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
-  `estado` int(11) NOT NULL DEFAULT '0'
+  `estado` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -6797,12 +6806,13 @@ CREATE TABLE `pedidos` (
 --
 
 INSERT INTO `pedidos` (`idpedido`, `num_pedido`, `cliente`, `asesor`, `fecha_inicio`, `fecha_fin`, `dias_habiles`, `procesos`, `unds`, `fecha_ingreso`, `usuario`, `area_inicio`, `estado`) VALUES
-(1, '10', '15 MINUTOS DE FAMA', 'ALMACEN ADMON', '2020-10-15', '2020-10-22', 6, 1, 100, '2020-10-16 21:18:34', 3, '0', 0),
-(2, '10', '1029 SAS', 'ALMACEN ADMON', '2020-10-15', '2020-10-30', 12, 4, 100, '2020-10-16 21:22:04', 3, '0', 0),
-(3, '10', '20 MISSION BREWING S.A.S', 'ALMACEN ADMON', '2020-10-15', '2020-10-23', 7, 10, 120, '2020-10-16 21:43:32', 3, '0', 1),
-(4, '10', '1029 SAS', 'ALMACEN ADMON', '2020-10-16', '2020-10-24', 6, 17, 10, '2020-10-17 21:44:29', 3, '0', 0),
-(5, '50', '24 CUADROS PRODUCTOS AUDIOVISUALES S.A.S', 'ALMACEN ADMON', '2020-10-21', '2020-11-03', 10, 2, 120, '2020-10-18 00:24:22', 3, '0', 1),
-(6, '5695', 'A-MAQ SA', 'ALMACEN ADMON', '2020-10-13', '2020-10-16', 4, 2, 10, '2020-10-18 11:41:46', 3, '0', 1);
+(1, '10', '15 MINUTOS DE FAMA', 'COMERCIAL M', '2020-10-15', '2020-10-22', 6, 1, 100, '2020-10-16 21:18:34', 3, '0', 0),
+(2, '10', '1029 SAS', 'COMERCIAL M', '2020-10-15', '2020-10-30', 12, 4, 100, '2020-10-16 21:22:04', 3, '0', 1),
+(3, '10', '20 MISSION BREWING S.A.S', 'COMERCIAL M', '2020-10-15', '2020-10-23', 7, 10, 120, '2020-10-16 21:43:32', 3, '0', 1),
+(4, '10', '1029 SAS', 'COMERCIAL M', '2020-10-16', '2020-10-24', 6, 17, 10, '2020-10-17 21:44:29', 3, '0', 1),
+(5, '50', '24 CUADROS PRODUCTOS AUDIOVISUALES S.A.S', 'COMERCIAL M', '2020-10-21', '2020-11-03', 10, 2, 120, '2020-10-18 00:24:22', 3, '0', 1),
+(6, '5695', 'A-MAQ SA', 'COMERCIAL M', '2020-10-13', '2020-10-16', 4, 2, 10, '2020-10-18 11:41:46', 3, '0', 1),
+(7, '1023', 'COSECHAS BEBIDAS NATURALES S.A.S.', 'COMERCIAL M', '2020-10-16', '2020-11-05', 15, 10, 200, '2020-10-18 15:36:11', 3, '0', 1);
 
 -- --------------------------------------------------------
 
@@ -6894,8 +6904,8 @@ CREATE TABLE `sublimacion` (
   `inicioprocesofecha` date NOT NULL,
   `finprocesofecha` date NOT NULL,
   `obs_sublimacion` varchar(2000) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `parcial` int(11) NOT NULL DEFAULT '0',
-  `estado` int(11) NOT NULL DEFAULT '0',
+  `parcial` int(11) NOT NULL DEFAULT 0,
+  `estado` int(11) NOT NULL DEFAULT 0,
   `usuario` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -6914,8 +6924,8 @@ CREATE TABLE `terminacion` (
   `inicioprocesofecha` date DEFAULT NULL,
   `finprocesofecha` date DEFAULT NULL,
   `obs_terminacion` varchar(2000) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `parcial` int(11) NOT NULL DEFAULT '0',
-  `estado` int(11) NOT NULL DEFAULT '0',
+  `parcial` int(11) NOT NULL DEFAULT 0,
+  `estado` int(11) NOT NULL DEFAULT 0,
   `usuario` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -6929,7 +6939,8 @@ INSERT INTO `terminacion` (`idterminacion`, `pedido`, `iniciofecha`, `finfecha`,
 (5, 3, '2020-10-23', '2020-10-23', 1, NULL, NULL, NULL, 0, 0, NULL),
 (6, 4, '2020-10-23', '2020-10-23', 1, NULL, NULL, NULL, 0, 0, NULL),
 (7, 5, '2020-10-30', '2020-11-02', 2, NULL, NULL, NULL, 0, 0, NULL),
-(8, 6, '2020-10-16', '2020-10-16', 1, NULL, NULL, NULL, 0, 0, NULL);
+(8, 6, '2020-10-16', '2020-10-16', 1, NULL, NULL, NULL, 0, 0, NULL),
+(9, 7, '2020-11-03', '2020-11-04', 2, NULL, NULL, NULL, 0, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -7074,56 +7085,67 @@ ALTER TABLE `usuario`
 --
 ALTER TABLE `bodega`
   MODIFY `idbodega` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
 --
 -- AUTO_INCREMENT de la tabla `bordado`
 --
 ALTER TABLE `bordado`
   MODIFY `idbordado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT de la tabla `confeccion`
 --
 ALTER TABLE `confeccion`
-  MODIFY `idconfeccion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idconfeccion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT de la tabla `corte`
 --
 ALTER TABLE `corte`
-  MODIFY `idcorte` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idcorte` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT de la tabla `estampacion`
 --
 ALTER TABLE `estampacion`
-  MODIFY `idestampacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idestampacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
 --
 -- AUTO_INCREMENT de la tabla `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `idpedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `idpedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
 --
 -- AUTO_INCREMENT de la tabla `procesos`
 --
 ALTER TABLE `procesos`
   MODIFY `idproceso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
 --
 -- AUTO_INCREMENT de la tabla `rol`
 --
 ALTER TABLE `rol`
   MODIFY `idrol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
 --
 -- AUTO_INCREMENT de la tabla `sublimacion`
 --
 ALTER TABLE `sublimacion`
   MODIFY `idsublimacion` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `terminacion`
 --
 ALTER TABLE `terminacion`
-  MODIFY `idterminacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `idterminacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
   MODIFY `idusuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
 --
 -- Restricciones para tablas volcadas
 --
@@ -7197,6 +7219,7 @@ ALTER TABLE `terminacion`
 --
 ALTER TABLE `usuario`
   ADD CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`rol`) REFERENCES `rol` (`idrol`);
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

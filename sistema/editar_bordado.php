@@ -8,6 +8,11 @@ if (!empty($_POST)) {
 
 
     $idbordado = $_POST['idbordado'];
+    $logo = $_POST['logo'];
+    $pte_diseno = $_POST['pte_diseno'];
+    $num_bordado = $_POST['num_bordado'];
+    $muestra = $_POST['muestra'];
+    $punt_unidad = $_POST['punt_unidad'];
     $parcial = $_POST['parcial'];
     $obs = $_POST['obs'];
     $estado = $_POST['estado'];
@@ -19,7 +24,7 @@ if (!empty($_POST)) {
 
     if ($sql_result > 0) {
         $sql_update = mysqli_query($conexion, "UPDATE bordado SET parcial= '$parcial', obs_bordado='$obs',
-                                            usuario='$usuario', estado='$estado', inicioprocesofecha='$inicioproceso'
+                                            usuario='$usuario', estado='$estado', inicioprocesofecha='$inicioproceso', logo='$logo', pte_diseno='$pte_diseno', num_bordado='$num_bordado', muestra='$muestra', punt_unidad='$punt_unidad'
                                             WHERE idbordado=$idbordado ");
         $sql = mysqli_query($conexion, "SELECT * FROM bordado WHERE idbordado=$idbordado");
         $sqlselect = mysqli_fetch_array($sql);
@@ -28,7 +33,7 @@ if (!empty($_POST)) {
     } else {
 
         $sql_update = mysqli_query($conexion, "UPDATE bordado SET parcial= '$parcial', obs_bordado='$obs',
-                                            usuario='$usuario', estado='$estado'
+                                            usuario='$usuario', estado='$estado',  logo='$logo', pte_diseno='$pte_diseno', num_bordado='$num_bordado', muestra='$muestra', punt_unidad='$punt_unidad'
                                             WHERE idbordado=$idbordado");
         $sql = mysqli_query($conexion, "SELECT * FROM bordado WHERE idbordado=$idbordado");
         $sqlselect = mysqli_fetch_array($sql);
@@ -52,7 +57,8 @@ $idbordado = $_GET['id'];
 $sql = mysqli_query($conexion, "SELECT pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
 pe.fecha_fin as 'finpedido', pe.dias_habiles as 'diaspedido', pe.unds, pe.fecha_ingreso, pe.usuario,
 bor.idbordado, bor.iniciofecha as 'iniciobordado', bor.finfecha as 'finbordado', bor.dias as 'diasbordado',
-bor.inicioprocesofecha, bor.finprocesofecha, bor.parcial, us.usuario, bor.obs_bordado, pr.siglas, es.estado, es.id_estado
+bor.inicioprocesofecha, bor.finprocesofecha, bor.parcial, us.usuario, bor.obs_bordado, pr.siglas, es.estado, es.id_estado,
+bor.logo, bor.pte_diseno, bor.num_bordado, bor.muestra, bor.punt_unidad
 FROM pedidos pe 
 INNER JOIN procesos pr ON pe.procesos=pr.idproceso
 INNER JOIN bordado bor ON pe.idpedido=bor.pedido
@@ -65,6 +71,11 @@ if ($result_sql == 0) {
     header('location listabordadogeneral.php');
 } else {
     $data = mysqli_fetch_array($sql);
+    $logo=$data['logo'];
+    $pte_diseno=$data['pte_diseno'];
+    $num_bordado=$data['num_bordado'];
+    $muestra=$data['muestra'];
+    $punt_unidad=$data['punt_unidad'];
     $id = $data['idbordado'];
     $pedido = $data['num_pedido'];
     $cliente= $data['cliente'];
@@ -156,7 +167,27 @@ if ($result_sql == 0) {
                         <div>
                             Fecha Entrega: <?php echo $finbordado ?>
                         </div>
-                        <div>
+                        <div>                            
+                            <label for="logo">Logo</label>
+                            <input style="width: 300px" type="text" name="logo" id="logo" autocomplete="off" value="<?php echo $logo; ?>">
+                        </div>
+                        <div>                            
+                            <label for="pte_diseno">Pte diseño</label>
+                            <input style="width: 300px" type="text" name="pte_diseno" id="pte_diseno" autocomplete="off" value="<?php echo $pte_diseno; ?>">
+                        </div>
+                        <div>                            
+                            <label for="num_bordado">Numero bordado</label>
+                            <input style="width: 300px" type="number" name="num_bordado" id="num_bordado" autocomplete="off" value="<?php echo $num_bordado; ?>">
+                        </div>
+                        <div>                            
+                            <label for="muestra">Muestra</label>
+                            <input style="width: 300px" type="text" name="muestra" id="muestra" autocomplete="off" value="<?php echo $muestra; ?>">
+                        </div>
+                        <div>                            
+                            <label for="punt_unidad">Puntada unidad</label>
+                            <input style="width: 300px" type="number" name="punt_unidad" id="punt_unidad" autocomplete="off" value="<?php echo $punt_unidad; ?>">
+                        </div>
+                        <div>                            
                             <label for="parcial">Unds Parcial</label>
                             <input style="width: 50px" type="text" name="parcial" id="parcial" autocomplete="off" value="<?php echo $parcial; ?>">
                         </div>

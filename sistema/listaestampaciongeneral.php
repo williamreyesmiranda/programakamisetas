@@ -126,14 +126,14 @@ include "../conexion.php";
                         if ($result > 0) {
                             while ($data = mysqli_fetch_array($query)) {
 
-                                $nro_pedido=$data['num_pedido'];
-                                $pedido=$data['pedido'];
-                            $prod_confe=mysqli_query($conexion,"SELECT * FROM confeccion WHERE pedido=$pedido");
-                            $consult_confec=mysqli_fetch_array($prod_confe);
-                                $prod_confec=$consult_confec['entrega'];
-                                $prod_bod=mysqli_query($conexion,"SELECT * FROM bodega WHERE pedido=$pedido");
-                                $consult_bod=mysqli_fetch_array($prod_bod);
-                                    $prod_bod=$consult_bod['entrega'];
+                                $nro_pedido = $data['num_pedido'];
+                                $pedido = $data['pedido'];
+                                $prod_confe = mysqli_query($conexion, "SELECT * FROM confeccion WHERE pedido=$pedido");
+                                $consult_confec = mysqli_fetch_array($prod_confe);
+                                $prod_confec = $consult_confec['entrega'];
+                                $prod_bod = mysqli_query($conexion, "SELECT * FROM bodega WHERE pedido=$pedido");
+                                $consult_bod =  mysqli_fetch_array($prod_bod);
+                                $prod_bod = $consult_bod['entrega'];
 
                                 $unds = $data['unds'];
                                 $parcial = $data['parcial'];
@@ -194,7 +194,7 @@ include "../conexion.php";
                                     echo "<td class=\"redtable\">" . $diafaltaestampacion . "</td>";
                                 }
                                 echo "
-                    <td>" . $prod_confec .$prod_bod. "</td>
+                    <td>" . $prod_confec . $prod_bod . "</td>
                     <td>" . $tecnica . "</td>
                     <td>" . $nro_diseno . "</td>
                     <td>" . $posicion . "</td>
@@ -207,7 +207,7 @@ include "../conexion.php";
                     <td>" . $prep . "</td>
                     <td>" . $est . "</td>
                     <td>" . $sub . "</td>
-                    <td>" . round(($prep + $est + $sub)*$falta/$unds/60,2) . "</td></td>
+                    <td>" . round(($prep + $est + $sub) * $falta / $unds / 60, 2) . "</td></td>
                     <td>" . $parcial . "</td>
                     <td>" . $falta . "</td>
                     <td>" . $data['obs_estampacion'] . "</td>

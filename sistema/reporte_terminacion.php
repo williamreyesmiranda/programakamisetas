@@ -51,7 +51,7 @@ function sumasdiasemana($fecha,$dias)
 	
     <?php include "includes/scripts.php"?>
     
-	<title>terminacion</title>
+	<title>TERMINACIÓN</title>
 	<link rel="shortcut icon" href="img/kamisetas-icono.png" type="image/x-icon">
 	<style>
   

@@ -43,7 +43,7 @@ include "../conexion.php";
                         <tr class="titulo">
                             <th style="border-right: 1px solid #9ecaca" colspan="10">Información Pedido</th>
 
-                            <th colspan="9"> Información Bordado</th>
+                            <th colspan="18"> Información Bordado</th>
                         </tr>
                         <tr class="titulo">
                             <th>Pedido</th>
@@ -52,7 +52,7 @@ include "../conexion.php";
                             <th>Fecha Inicio </th>
                             <th>Fecha Entrega</th>
                             <th>Días Hab</th>
-                            <th>Días Falta</th>
+                            <th>Días Falta</th>                            
                             <th>Proc</th>
                             <th>Estado Pedido</th>
                             <th style="border-right: 1px solid #9ecaca">Unds</th>
@@ -61,6 +61,15 @@ include "../conexion.php";
                             <th>Fecha Entrega</th>
                             <th>Días Hab</th>
                             <th>Días Falta</th>
+                            <th>Producto</th>
+                            <th>Logo</th>
+                            <th>Pendiente diseño</th>
+                            <th>Numero bordado</th>
+                            <th>Muestra</th>
+                            <th>Total bordados</th>
+                            <th>Puntadas x unidad</th>
+                            <th>Total puntadas</th>
+                            <th>Horas estimadas</th>
                             <th>Unds Parcial</th>
                             <th>Unds Falta</th>
                             <th>Observaciones</th>
@@ -94,7 +103,8 @@ include "../conexion.php";
                         $query = mysqli_query($conexion, "SELECT pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
             pe.fecha_fin as 'finpedido', pe.dias_habiles as 'diaspedido', pe.unds, pe.fecha_ingreso, pe.usuario,
             bor.idbordado, bor.iniciofecha as 'iniciobordado', bor.finfecha as 'finbordado', bor.dias as 'diasbordado',
-            bor.inicioprocesofecha, bor.finprocesofecha, bor.parcial, us.usuario, bor.obs_bordado, pr.siglas, es.estado, est.estado as 'estadopedido'
+            bor.inicioprocesofecha, bor.finprocesofecha, bor.parcial, us.usuario, bor.obs_bordado, pr.siglas, es.estado, est.estado as 
+            'estadopedido', bor.logo, bor.pte_diseno, bor.num_bordado, bor.muestra, bor.punt_unidad, bor.pedido
             FROM pedidos pe 
             INNER JOIN procesos pr ON pe.procesos=pr.idproceso
             INNER JOIN bordado bor ON pe.idpedido=bor.pedido
@@ -107,7 +117,15 @@ include "../conexion.php";
 
                         if ($result > 0) {
                             while ($data = mysqli_fetch_array($query)) {
-
+                                $nro_pedido = $data['num_pedido'];
+                                $pedido = $data['pedido'];
+                                $prod_confe = mysqli_query($conexion, "SELECT * FROM confeccion WHERE pedido=$pedido");
+                                $consult_confec = mysqli_fetch_array($prod_confe);
+                                $prod_confec = $consult_confec['entrega'];
+                                
+                                $prod_bod = mysqli_query($conexion, "SELECT * FROM bodega WHERE pedido=$pedido");
+                                $consult_bod = mysqli_fetch_array($prod_bod);
+                                $prod_bode = $consult_bod['entrega'];
 
                                 $unds = $data['unds'];
                                 $parcial = $data['parcial'];
@@ -116,6 +134,16 @@ include "../conexion.php";
                                 $diapedido = $data['finpedido'];
                                 $diabordado = $data['finbordado'];
                                 $estadopedido = $data['estadopedido'];
+                                $logo=$data['logo'];
+                                $pte_diseno=$data['pte_diseno'];
+                                $num_bordado=$data['num_bordado'];
+                                $muestra=$data['muestra'];
+                                $punt_unidad=$data['punt_unidad'];
+                                $total_bordados=$falta * $num_bordado;
+                                $total_puntadas=$falta * $punt_unidad;
+                                $horas_estimadas=$total_puntadas/60000;
+
+
                                 $diafaltapedido =  number_of_working_days($hoy, $diapedido) - 1;
                                 if ($diafaltapedido < 0) {
                                     $diafaltapedido =  - (number_of_working_days($diapedido, $hoy) - 1);
@@ -155,7 +183,17 @@ include "../conexion.php";
                                 } else {
                                     echo "<td class=\"redtable\">" . $diafaltabordado . "</td>";
                                 }
-                                echo "<td>" . $parcial . "</td>
+                                echo "
+                                <td>" . $prod_confec . $prod_bode . "</td>
+                                <td>".$logo."</td>
+                                <td>".$pte_diseno."</td>
+                                <td>".$num_bordado."</td>
+                                <td>".$muestra."</td>
+                                <td>".$total_bordados."</td>
+                                <td>".$punt_unidad."</td>                                
+                                <td>".$total_puntadas."</td>
+                                <td>".$horas_estimadas." </td>
+                    <td>" . $parcial . "</td>
                     <td>" . $falta . "</td>
                     <td>" . $data['obs_bordado'] . "</td>
                     <td>" . $data['estado'] . "</td>
@@ -183,7 +221,7 @@ include "../conexion.php";
 
 
 
-        <!-- ************************************* -->
+        <!-- ************* -->
 
         <script>
         $('#tabla').DataTable({
@@ -198,8 +236,3 @@ include "../conexion.php";
         })
         </script>
 
-
-
-</body>
-
-</html>

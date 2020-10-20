@@ -67,7 +67,7 @@ $cuatrodias = sumasdiasemana($hoy, 4);
         header('location: ../');
     }
     ?>
-    <img id="logo" src="../img/kamisetas.png" alt="" style="display:block; width:200px; position:fixed ; top:90px; left:0px;">
+    <!-- <img id="logo" src="../img/kamisetas.png" alt="" style="display:block; width:200px; position:fixed ; top:90px; left:0px;"> -->
 
     <a href="listaestampaciongeneral.php" class="btn_new" style="position:fixed ; top:0px; left: 0px;"><input style="display:block; width:150px; position:fixed ; top:0px; left: 0%;;" class="btn_new" type='button' href="listaestampaciongeneral.php" value='MENÚ' /></a>
 
@@ -97,47 +97,104 @@ $cuatrodias = sumasdiasemana($hoy, 4);
                     <th class="titulo">Fechas Vencidas</th>
 
                     <td><?php $query = mysqli_query($conexion, "SELECT * FROM estampacion WHERE finfecha<'$hoy' AND estado<=2");
-                        echo mysqli_num_rows($query)?></td>
+                        echo mysqli_num_rows($query) ?></td>
                     <td><?php $query = mysqli_query($conexion, "SELECT SUM(parcial) as 'suma' FROM estampacion WHERE finfecha<'$hoy' AND estado<=2");
                         $result = mysqli_fetch_array($query);
                         echo $result['suma'] ?></td>
                     <td><?php $query = mysqli_query($conexion, "SELECT SUM(pe.unds-estam.parcial) as 'resta' FROM estampacion estam INNER JOIN pedidos pe ON estam.pedido=pe.idpedido
                                                             WHERE estam.estado<=2 AND estam.finfecha<'$hoy'");
-                        $result = mysqli_fetch_array($query);
-                        echo $result['resta'] ?></td>
+                        $result_falta = mysqli_fetch_array($query);
+                        echo $falta=$result_falta['resta'] ?></td>
                     <td><?php $query = mysqli_query($conexion, "SELECT SUM(pe.unds) as 'suma' FROM estampacion estam INNER JOIN pedidos pe ON estam.pedido=pe.idpedido
                                                             WHERE estam.estado<=2 AND estam.finfecha<'$hoy'");
                         $result = mysqli_fetch_array($query);
-                        echo $result['suma']?></td>
-                    <td><?php $query=mysqli_query($conexion,"SELECT pedido FROM estampacion WHERE estado<=2 AND finfecha<'$hoy'");
-                             $condicion=mysqli_num_rows($query);
-                             if($condicion >0){
-                                 echo $condicion;
-                                while ($fetch=mysqli_fetch_array($query)){
-                                    
+                        echo $unds=$result['suma'] ?></td>
+                    <td><?php $query_prod = mysqli_query($conexion, "SELECT pedido FROM estampacion WHERE estado<=2 AND finfecha<'$hoy'");
+                        $condicion = mysqli_num_rows($query_prod);
+                        $producto = 0;
+                        if ($condicion > 0) {
+                            while ($fetch_bod = mysqli_fetch_array($query_prod)) {
+                                $pedido = $fetch_bod['pedido'];
+                                $query_bode = mysqli_query($conexion, "SELECT pedido FROM bodega WHERE pedido=$pedido AND entrega<>''");
+                                $resp_bode = mysqli_num_rows($query_bode);
+                                if ($resp_bode > 0) {
+                                    $producto++;
                                 }
-                             }
-                             
-                    ?></td>
-                    <td><?php $query = mysqli_query($conexion, "SELECT * FROM estampacion WHERE  estado<=2");
-                        echo mysqli_num_rows($query) ?></td>
+                                $query_confe = mysqli_query($conexion, "SELECT pedido FROM confeccion WHERE pedido=$pedido AND entrega<>''");
+                                $resp_confe = mysqli_num_rows($query_confe);
+                                if ($resp_confe > 0) {
+                                    $producto++;
+                                }
+                            }
+                        }
+
+                        echo $producto;
+
+                        ?></td>
+                        <td><?php $query = mysqli_query($conexion, "SELECT SUM(prep) as 'prep' FROM estampacion WHERE finfecha<'$hoy' AND estado<=2");
+                        $result = mysqli_fetch_array($query);
+                        echo round($result['prep']/60,2) ?></td>
+                        <td><?php $query = mysqli_query($conexion, "SELECT SUM(est) as 'est' FROM estampacion WHERE finfecha<'$hoy' AND estado<=2");
+                        $result = mysqli_fetch_array($query);
+                        echo round($result['est']/60,2) ?></td>
+                        <td><?php $query = mysqli_query($conexion, "SELECT SUM(sub) as 'sub' FROM estampacion WHERE finfecha<'$hoy' AND estado<=2");
+                        $result = mysqli_fetch_array($query);
+                        echo round($result['sub']/60,2) ?></td>
+                        <td><?php $query = mysqli_query($conexion, "SELECT SUM(sub+prep+est) as 'total' FROM estampacion WHERE finfecha<'$hoy' AND estado<=2");
+                        $result = mysqli_fetch_array($query);
+                        echo round($result['total']/60,2) ?></td>
+                    
                     </tr>
                     <tr>
 
                         <th class="titulo">0 a 3 días</th>
                         <td><?php $query = mysqli_query($conexion, "SELECT * FROM estampacion WHERE estado<=2 AND finfecha BETWEEN'$hoy' AND '$tresdias' ");
-                            echo mysqli_num_rows($query)?></td>
+                            echo mysqli_num_rows($query) ?></td>
                         <td><?php $query = mysqli_query($conexion, "SELECT SUM(parcial) as 'suma' FROM estampacion WHERE estado<=2 AND finfecha BETWEEN'$hoy' AND '$tresdias'");
                             $result = mysqli_fetch_array($query);
-                            echo $result['suma']?></td>
+                            echo $result['suma'] ?></td>
                         <td><?php $query = mysqli_query($conexion, "SELECT SUM(pe.unds-estam.parcial) as 'resta' FROM estampacion estam INNER JOIN pedidos pe ON estam.pedido=pe.idpedido
                                                             WHERE estam.estado<=2 AND estam.finfecha BETWEEN'$hoy' AND '$tresdias'");
-                            $result = mysqli_fetch_array($query);
-                            echo $result['resta']?></td>
+                            $result_falta = mysqli_fetch_array($query);
+                            echo $falta=$result_falta['resta'] ?></td>
                         <td><?php $query = mysqli_query($conexion, "SELECT SUM(pe.unds) as 'suma' FROM estampacion estam INNER JOIN pedidos pe ON estam.pedido=pe.idpedido
                                                             WHERE estam.estado<=2 AND estam.finfecha BETWEEN'$hoy' AND '$tresdias'");
                             $result = mysqli_fetch_array($query);
-                            echo $result['suma']?></td>
+                            echo $unds=$result['suma'] ?></td>
+                            <td><?php $query_prod = mysqli_query($conexion, "SELECT pedido FROM estampacion WHERE estado<=2 AND finfecha BETWEEN'$hoy' AND '$tresdias'");
+                        $condicion = mysqli_num_rows($query_prod);
+                        $producto = 0;
+                        if ($condicion > 0) {
+                            while ($fetch_bod = mysqli_fetch_array($query_prod)) {
+                                $pedido = $fetch_bod['pedido'];
+                                $query_bode = mysqli_query($conexion, "SELECT pedido FROM bodega WHERE pedido=$pedido AND entrega<>''");
+                                $resp_bode = mysqli_num_rows($query_bode);
+                                if ($resp_bode > 0) {
+                                    $producto++;
+                                }
+                                $query_confe = mysqli_query($conexion, "SELECT pedido FROM confeccion WHERE pedido=$pedido AND entrega<>''");
+                                $resp_confe = mysqli_num_rows($query_confe);
+                                if ($resp_confe > 0) {
+                                    $producto++;
+                                }
+                            }
+                        }
+
+                        echo $producto;
+
+                        ?></td>
+                        <td><?php $query = mysqli_query($conexion, "SELECT SUM(prep) as 'prep' FROM estampacion WHERE estado<=2 AND finfecha BETWEEN'$hoy' AND '$tresdias'");
+                            $result = mysqli_fetch_array($query);
+                            echo round($result['prep']/60,2) ?></td>
+                            <td><?php $query = mysqli_query($conexion, "SELECT SUM(est) as 'est' FROM estampacion WHERE estado<=2 AND finfecha BETWEEN'$hoy' AND '$tresdias'");
+                            $result = mysqli_fetch_array($query);
+                            echo round($result['est']/60,2) ?></td>
+                            <td><?php $query = mysqli_query($conexion, "SELECT SUM(sub) as 'sub' FROM estampacion WHERE estado<=2 AND finfecha BETWEEN'$hoy' AND '$tresdias'");
+                            $result = mysqli_fetch_array($query);
+                            echo round($result['sub']/60,2) ?></td>
+                            <td><?php $query = mysqli_query($conexion, "SELECT SUM(sub+prep+est) as 'total' FROM estampacion WHERE estado<=2 AND finfecha BETWEEN'$hoy' AND '$tresdias'");
+                            $result = mysqli_fetch_array($query);
+                            echo round($result['total']/60,2) ?></td>
 
 
                     </tr>
@@ -146,33 +203,103 @@ $cuatrodias = sumasdiasemana($hoy, 4);
 
 
                         <td><?php $query = mysqli_query($conexion, "SELECT * FROM estampacion WHERE finfecha>='$cuatrodias' AND estado<=2");
-                            echo mysqli_num_rows($query)?></td>
+                            echo mysqli_num_rows($query) ?></td>
                         <td><?php $query = mysqli_query($conexion, "SELECT SUM(parcial) as 'suma' FROM estampacion WHERE finfecha>='$cuatrodias' AND estado<=2");
                             $result = mysqli_fetch_array($query);
-                            echo $result['suma']?></td>
+                            echo $result['suma'] ?></td>
                         <td><?php $query = mysqli_query($conexion, "SELECT SUM(pe.unds-estam.parcial) as 'resta' FROM estampacion estam INNER JOIN pedidos pe ON estam.pedido=pe.idpedido
                                                             WHERE estam.estado<=2 AND estam.finfecha>='$cuatrodias'");
+                            $result_falta = mysqli_fetch_array($query);
+                            echo $result_falta['resta'] ?></td>
+                        <td><?php $query = mysqli_query($conexion, "SELECT SUM(pe.unds) as 'suma' FROM estampacion estam INNER JOIN pedidos pe ON estam.pedido=pe.idpedido
+                                                            WHERE estam.estado<=2 AND estam.finfecha>='$cuatrodias'");
                             $result = mysqli_fetch_array($query);
-                            echo $result['resta']?></td>
-                            <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds) as 'suma' FROM estampacion estam INNER JOIN pedidos pe ON estam.pedido=pe.idpedido
-                                                            WHERE estam.estado<=2 AND estam.finfecha>='$cuatrodias'"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
+                            echo $result['suma']; ?></td>
+                            <td><?php $query_prod = mysqli_query($conexion, "SELECT pedido FROM estampacion WHERE estado<=2 AND finfecha>='$cuatrodias'");
+                        $condicion = mysqli_num_rows($query_prod);
+                        $producto = 0;
+                        if ($condicion > 0) {
+                            while ($fetch_bod = mysqli_fetch_array($query_prod)) {
+                                $pedido = $fetch_bod['pedido'];
+                                $query_bode = mysqli_query($conexion, "SELECT pedido FROM bodega WHERE pedido=$pedido AND entrega<>''");
+                                $resp_bode = mysqli_num_rows($query_bode);
+                                if ($resp_bode > 0) {
+                                    $producto++;
+                                }
+                                $query_confe = mysqli_query($conexion, "SELECT pedido FROM confeccion WHERE pedido=$pedido AND entrega<>''");
+                                $resp_confe = mysqli_num_rows($query_confe);
+                                if ($resp_confe > 0) {
+                                    $producto++;
+                                }
+                            }
+                        }
 
+                        echo $producto;
+
+                        ?></td>
+                    <td><?php $query = mysqli_query($conexion, "SELECT SUM(prep) as 'prep' FROM estampacion WHERE finfecha>='$cuatrodias' AND estado<=2");
+                            $result = mysqli_fetch_array($query);
+                            echo round($result['prep']/60,2) ?></td>
+                            <td><?php $query = mysqli_query($conexion, "SELECT SUM(est) as 'est' FROM estampacion WHERE finfecha>='$cuatrodias' AND estado<=2");
+                            $result = mysqli_fetch_array($query);
+                            echo round($result['est']/60,2) ?></td>
+                            <td><?php $query = mysqli_query($conexion, "SELECT SUM(sub) as 'sub' FROM estampacion WHERE finfecha>='$cuatrodias' AND estado<=2");
+                            $result = mysqli_fetch_array($query);
+                            echo round($result['sub']/60,2) ?></td>
+                            <td><?php $query = mysqli_query($conexion, "SELECT SUM(sub+prep+est) as 'total' FROM estampacion WHERE finfecha>='$cuatrodias' AND estado<=2");
+                            $result = mysqli_fetch_array($query);
+                            echo round($result['total']/60,2) ?></td>
                     </tr>
                     <tr>
                         <th class="titulo">Total</th>
                         <td><?php $query = mysqli_query($conexion, "SELECT * FROM estampacion WHERE  estado<=2");
-                            echo mysqli_num_rows($query)?></td>
+                            echo mysqli_num_rows($query) ?></td>
                         <td><?php $query = mysqli_query($conexion, "SELECT SUM(parcial) as 'suma' FROM estampacion WHERE  estado<=2");
                             $result = mysqli_fetch_array($query);
-                            echo $result['suma']?></td>
+                            echo $result['suma'] ?></td>
                         <td><?php $query = mysqli_query($conexion, "SELECT SUM(pe.unds-estam.parcial) as 'resta' FROM estampacion estam INNER JOIN pedidos pe ON estam.pedido=pe.idpedido
                                                             WHERE estam.estado<=2");
-                            $result = mysqli_fetch_array($query);
-                            echo $result['resta']?></td>
+                            $result_falta = mysqli_fetch_array($query);
+                            echo $result_falta['resta'] ?></td>
                         <td><?php $query = mysqli_query($conexion, "SELECT SUM(pe.unds) as 'suma' FROM estampacion estam INNER JOIN pedidos pe ON estam.pedido=pe.idpedido
                                                             WHERE estam.estado<=2");
                             $result = mysqli_fetch_array($query);
-                            echo $result['suma']?></td>
+                            echo $result['suma'] ?></td>
+                            <td><?php $query_prod = mysqli_query($conexion, "SELECT pedido FROM estampacion WHERE estado<=2");
+                        $condicion = mysqli_num_rows($query_prod);
+                        $producto = 0;
+                        if ($condicion > 0) {
+                            while ($fetch_bod = mysqli_fetch_array($query_prod)) {
+                                $pedido = $fetch_bod['pedido'];
+                                $query_bode = mysqli_query($conexion, "SELECT pedido FROM bodega WHERE pedido=$pedido AND entrega<>''");
+                                $resp_bode = mysqli_num_rows($query_bode);
+                                if ($resp_bode > 0) {
+                                    $producto++;
+                                }
+                                $query_confe = mysqli_query($conexion, "SELECT pedido FROM confeccion WHERE pedido=$pedido AND entrega<>''");
+                                $resp_confe = mysqli_num_rows($query_confe);
+                                if ($resp_confe > 0) {
+                                    $producto++;
+                                }
+                            }
+                        }
+
+                        echo $producto."/".$condicion;
+
+                        ?></td>
+                        <td><?php $query = mysqli_query($conexion, "SELECT SUM(prep) as 'prep' FROM estampacion WHERE estado<=2");
+                            $result = mysqli_fetch_array($query);
+                            echo round($result['prep']/60,2) ?></td>
+                            <td><?php $query = mysqli_query($conexion, "SELECT SUM(est) as 'est' FROM estampacion WHERE estado<=2");
+                            $result = mysqli_fetch_array($query);
+                            echo round($result['est']/60,2) ?></td>
+                            <td><?php $query = mysqli_query($conexion, "SELECT SUM(sub) as 'sub' FROM estampacion WHERE estado<=2");
+                            $result = mysqli_fetch_array($query);
+                            echo round($result['sub']/60,2) ?></td>
+                            <td><?php $query = mysqli_query($conexion, "SELECT SUM(sub+prep+est) as 'total' FROM estampacion WHERE estado<=2");
+                            $result = mysqli_fetch_array($query);
+                            echo round($result['total']/60,2) ?></td>
+                            
                     </tr>
                 </tbody>
             </table>
@@ -229,7 +356,7 @@ $cuatrodias = sumasdiasemana($hoy, 4);
                 </thead>
                 <tbody>
                     <?php
-                    
+
 
                     $query = mysqli_query($conexion, "SELECT pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
                     pe.fecha_fin as 'finpedido', pe.dias_habiles as 'diaspedido', pe.unds, pe.fecha_ingreso, pe.usuario,
@@ -249,7 +376,7 @@ $cuatrodias = sumasdiasemana($hoy, 4);
 
                     if ($result > 0) {
                         while ($data = mysqli_fetch_array($query)) {
-                            
+
                             $nro_pedido = $data['num_pedido'];
                             $pedido = $data['pedido'];
                             $prod_confe = mysqli_query($conexion, "SELECT * FROM confeccion WHERE pedido=$pedido");
