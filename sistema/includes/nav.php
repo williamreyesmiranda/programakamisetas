@@ -36,7 +36,7 @@
 					<li class=\"derecha\">
 					<a href=\"\">Administrador</a>
 						<ul>
-							 
+						<li><a href=\"lista_usuarios.php\">Lista Usuarios</a></li>
 						</ul> 
 					</li>
 					";}

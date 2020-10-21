@@ -172,7 +172,7 @@ include "../conexion.php";
                     <td>" . $data['finpedido'] . "</td>
                     <td>" . $data['diaspedido'] . "</td>";
                                 if ($diafaltapedido > 3) {
-                                    echo "<td class=\"greentable\">" . $diafaltapedido . "</td>";
+                                    echo "<td class=\"greentable\">-" . $diafaltapedido . "</td>";
                                 } elseif ($diafaltapedido >= 0) {
                                     echo "<td class=\"yellowtable\">" . $diafaltapedido . "</td>";
                                 } else {
