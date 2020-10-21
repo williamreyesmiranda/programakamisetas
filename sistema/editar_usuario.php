@@ -83,7 +83,7 @@ if ($result_sql==0){
 	
 	<?php include "includes/scripts.php"?>
     <title>ACTUALIZACION USUARIO</title>
-    <link rel="shortcut icon" href="../img/cedimed-icono.png" type="image/x-icon">
+    <link rel="shortcut icon" href="img/kamisetas-icono.png" type="image/x-icon">
 	<style>
 		
 	</style>

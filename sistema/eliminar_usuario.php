@@ -56,7 +56,7 @@ if (empty($_REQUEST['id'])) {
 
     <?php include "includes/scripts.php" ?>
     <title>ARCHIVAR REGISTRO</title>
-    <link rel="shortcut icon" href="../img/cedimed-icono.png" type="image/x-icon">
+    <link rel="shortcut icon" href="img/kamisetas-icono.png" type="image/x-icon">
     <style>
 
     </style>

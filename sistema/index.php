@@ -22,17 +22,17 @@ if (empty($_SESSION['active'])){
 }
 include "includes/header.php";
 	
-	/* $query1=mysqli_query($conexion, "SELECT * FROM menu WHERE id=1");
+	$query1=mysqli_query($conexion, "SELECT * FROM menu WHERE id=1");
 	$data1=mysqli_fetch_array($query1);
 	$query2=mysqli_query($conexion, "SELECT * FROM menu WHERE id=2");
 	$data2=mysqli_fetch_array($query2);
 	$query3=mysqli_query($conexion, "SELECT * FROM menu WHERE id=3");
-	$data3=mysqli_fetch_array($query3); */
+	$data3=mysqli_fetch_array($query3);
 ?>
 	<section id="container">
 	 	<center><h1 style="text-transform: uppercase;"> <?php  if ($_SESSION['sexo']=='hombre'){echo 'Bienvenido '.$_SESSION['nombre'].' al sistema de producción';}else{echo 'Bienvenida '.$_SESSION['nombre'].' al sistema de producción';};?></h1>
 		<br><br>
-		<!--<table style=" width: 100%;">
+		<table style=" width: 100%;">
 			<tr style=" font-size: 50px; width: 90%;">
 				<th style=" font-size: 50px; width: 30%; text-transform: uppercase;"><?php echo $data1['titulo']; ?></th>
 				<th style=" font-size: 50px; width: 30%; text-transform: uppercase;"><?php echo $data2['titulo']; ?></th>
@@ -44,7 +44,7 @@ include "includes/header.php";
 				<td valign="top" style=" font-size: 20px; width: 30%; color:#196783; text-align: justify; text-transform: none;"><?php echo $data3['descripcion']; ?></td>
 			</tr>
 
-		</table></center> -->
+		</table></center>
 	
 	</section>
 </body>

@@ -53,7 +53,7 @@ if (!empty($_POST)) {
 
     <?php include "includes/scripts.php" ?>
     <title>REGISTRO EMPLEADOS</title>
-    <link rel="shortcut icon" href="../img/cedimed-icono.png" type="image/x-icon">
+    <link rel="shortcut icon" href="img/kamisetas-icono.png" type="image/x-icon">
     <style>
 
     </style>
