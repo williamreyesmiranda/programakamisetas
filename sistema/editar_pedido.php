@@ -2,6 +2,38 @@
 session_start();
 
 include "../conexion.php";
+if (empty($_GET['id'])) {
+    header('location lista_pedidos.php');
+}
+$idpedido = $_GET['id'];
+
+$sql = mysqli_query($conexion, "SELECT pe.idpedido, pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
+pe.fecha_fin as 'finpedido', pe.dias_habiles, pro.siglas, pro.idproceso,pe.unds, us.nombre as 'usuario', est.estado FROM pedidos pe 
+INNER JOIN procesos pro 
+ON pe.procesos=pro.idproceso
+INNER JOIN usuario us 
+ON pe.usuario=us.idusuario
+INNER JOIN estado est 
+ON pe.estado=est.id_estado WHERE pe.idpedido=$idpedido");
+
+$result_sql = mysqli_num_rows($sql);
+
+if ($result_sql == 0) {
+    header('location lista:pedidos.php');
+} else {
+    $data = mysqli_fetch_array($sql);
+    $id = $data['idpedido'];
+    $asesor = $data['asesor'];
+    $pedido = $data['num_pedido'];
+    $cliente = $data['cliente'];
+    $iniciopedido = $data['iniciopedido'];
+    $finpedido = $data['finpedido'];
+    $idproceso=$data['idproceso'];
+    $siglas = $data['siglas'];
+    $unds = $data['unds'];
+    $dias = $data['dias_habiles'];
+    
+}
     if(!empty($_POST)){
         $alert='';
         
@@ -12,7 +44,7 @@ include "../conexion.php";
         }else{
             
 
-
+            $idpedido=$_POST['idpedido'];
             $nropedido= $_POST['nropedido'];
             $nombre = $_POST['nombrecliente'];
             $fechainicio=$_POST['fechainicio'];
@@ -58,19 +90,16 @@ include "../conexion.php";
             }
             $diashabiles=  number_of_working_days($fechainicio, $fechafin);
             
-                $query_insert = mysqli_query($conexion,"INSERT INTO pedidos(num_pedido,cliente, fecha_inicio, fecha_fin, dias_habiles, procesos, unds, asesor, usuario)
-                                                            values('$nropedido','$nombre','$fechainicio','$fechafin','$diashabiles','$procesos',$unds, '$asesor', '$usuario_id')");
-                if($query_insert){
-                    $alert .='<label class="msg_save alert">Pedido Ingresado Correctamente</label>';
-                }else{
-                    $alert .='<label class="msg_error alert">Error al ingresar el Pedido</label>';
-                }  
+                
+                $query_insert = mysqli_query($conexion,"UPDATE pedidos SET num_pedido='$nropedido',cliente='$nombre', 
+                fecha_inicio='$fechainicio', fecha_fin='$fechafin', dias_habiles='$diashabiles',  unds=$unds, 
+                asesor='$asesor', usuario='$usuario_id', actualizacion=current_timestamp() WHERE idpedido='$idpedido'");
 
-                $query_max = mysqli_query($conexion,"SELECT max(idpedido) as 'maxpedido' FROM pedidos");
-                $data=mysqli_fetch_array($query_max);
-                $maxpedido=$data['maxpedido'];
-                     
-            
+                if($query_insert){
+                    $alert .='<label class="msg_save alert">Pedido Actualizado Correctamente</label>';
+                }else{
+                    $alert .='<label class="msg_error alert">Error al actualizar el Pedido</label>';
+                }  
                 $query=mysqli_query($conexion,"SELECT * FROM procesos WHERE idproceso =$procesos");
                 $result=mysqli_fetch_array($query);
                 $diaspedido=number_of_working_days($fechainicio, $fechafin);
@@ -81,12 +110,12 @@ include "../conexion.php";
         $dias1= round($diaspedido*$tiempo1);
         $inicio1=sumasdiasemana($fechainicio,0);
         $final1= sumasdiasemana($inicio1,$dias1-1);
-        $insert_1=mysqli_query($conexion,"INSERT INTO $dato1(pedido, iniciofecha, finfecha, dias) VALUES ('$maxpedido','$inicio1','$final1', $dias1)");
+        $insert_1=mysqli_query($conexion,"UPDATE $dato1 SET iniciofecha='$inicio1', finfecha='$final1', dias=$dias1 WHERE pedido=$idpedido");
         if($insert_1){
-            $alert .="<label class=\"msg_save alert\">Ingresado a ".$dato1."</label>";
+            $alert .="<label class=\"msg_save alert\">".$dato1." actualizado</label>";
             
         }else{
-            $alert .="<label class=\"msg_error alert\">Error al ingresar en ".$dato1."</label>";
+            $alert .="<label class=\"msg_error alert\">Error al actualizar en ".$dato1."</label>";
         } 
         
         #comparacion celda2
@@ -96,12 +125,13 @@ include "../conexion.php";
         $inicio2=sumasdiasemana($final1,1);
         $final2= sumasdiasemana($inicio2,$dias2-1);
         if($dato2!=''){
-            $insert_2=mysqli_query($conexion,"INSERT INTO $dato2(pedido, iniciofecha, finfecha, dias) VALUES ('$maxpedido','$inicio2','$final2', $dias2)");
-            if($insert_2){
-                $alert .="<label class=\"msg_save alert\">Ingresado a ".$dato2."</label>";
-            }else{
-                $alert .="<label class=\"msg_error alert\">Error al ingresar en ".$dato2."</label>";
-            } 
+            $insert_2=mysqli_query($conexion,"UPDATE $dato2 SET iniciofecha='$inicio2', finfecha='$final2', dias=$dias2 WHERE pedido=$idpedido");
+        if($insert_2){
+            $alert .="<label class=\"msg_save alert\">".$dato2." actualizado</label>";
+            
+        }else{
+            $alert .="<label class=\"msg_error alert\">Error al actualizar en ".$dato2."</label>";
+        } 
            }
        
         #comparacion celda3
@@ -111,12 +141,13 @@ include "../conexion.php";
         $inicio3=sumasdiasemana($final2,1);
         $final3= sumasdiasemana($inicio3,$dias3-1);
         if($dato3!=''){
-            $insert_3=mysqli_query($conexion,"INSERT INTO $dato3(pedido, iniciofecha, finfecha, dias) VALUES ('$maxpedido','$inicio3','$final3', $dias3)");
-            if($insert_3){
-                $alert .="<label class=\"msg_save alert\">Ingresado a ".$dato3."</label>";
-            }else{
-                $alert .="<label class=\"msg_error alert\">Error al ingresar en ".$dato3."</label>";
-            } 
+            $insert_3=mysqli_query($conexion,"UPDATE $dato3 SET iniciofecha='$inicio3', finfecha='$final3', dias=$dias3 WHERE pedido=$idpedido");
+        if($insert_3){
+            $alert .="<label class=\"msg_save alert\">".$dato3." actualizado</label>";
+            
+        }else{
+            $alert .="<label class=\"msg_error alert\">Error al actualizar en ".$dato3."</label>";
+        } 
         }
             
         #comparacion celda4
@@ -126,12 +157,13 @@ include "../conexion.php";
         $inicio4=sumasdiasemana($final3,1);
         $final4= sumasdiasemana($inicio4,$dias4-1);
         if($dato4!=''){
-            $insert_4=mysqli_query($conexion,"INSERT INTO $dato4(pedido, iniciofecha, finfecha, dias) VALUES ('$maxpedido','$inicio4','$final4', $dias4)");
-            if($insert_4){
-                $alert .="<label class=\"msg_save alert\">Ingresado a ".$dato4."</label>";
-            }else{
-                $alert .="<label class=\"msg_error alert\">Error al ingresar en ".$dato4."</label>";
-            } 
+            $insert_4=mysqli_query($conexion,"UPDATE $dato4 SET iniciofecha='$inicio4', finfecha='$final4', dias=$dias4 WHERE pedido=$idpedido");
+        if($insert_4){
+            $alert .="<label class=\"msg_save alert\">".$dato4." actualizado</label>";
+            
+        }else{
+            $alert .="<label class=\"msg_error alert\">Error al actualizar en ".$dato4."</label>";
+        } 
         }
 
         #comparacion celda5
@@ -141,12 +173,13 @@ include "../conexion.php";
         $inicio5=sumasdiasemana($final4,1);
         $final5= sumasdiasemana($inicio5,$dias5-1);
         if($dato5!=''){
-            $insert_5=mysqli_query($conexion,"INSERT INTO $dato5(pedido, iniciofecha, finfecha, dias) VALUES ('$maxpedido','$inicio5','$final5', $dias5)");
-            if($insert_4){
-                $alert .="<label class=\"msg_save alert\">Ingresado a ".$dato5."</label>";
-            }else{
-                $alert .="<label class=\"msg_error alert\">Error al ingresar en ".$dato5."</label>";
-            } 
+            $insert_5=mysqli_query($conexion,"UPDATE $dato5 SET iniciofecha='$inicio5', finfecha='$final5', dias=$dias5 WHERE pedido=$idpedido");
+        if($insert_5){
+            $alert .="<label class=\"msg_save alert\">".$dato5." actualizado</label>";
+            
+        }else{
+            $alert .="<label class=\"msg_error alert\">Error al actualizar en ".$dato5."</label>";
+        } 
         }
 
         #comparacion celda6
@@ -156,11 +189,12 @@ include "../conexion.php";
         $inicio6=sumasdiasemana($final5,1);
         $final6= sumasdiasemana($inicio6,$dias6-1);
         if($dato6!=''){
-            $insert_6=mysqli_query($conexion,"INSERT INTO $dato6(pedido, iniciofecha, finfecha, dias) VALUES ('$maxpedido','$inicio6','$final6', $dias6)");
+            $insert_6=mysqli_query($conexion,"UPDATE $dato6 SET iniciofecha='$inicio6', finfecha='$final6', dias=$dias6 WHERE pedido=$idpedido");
             if($insert_6){
-                $alert .="<label class=\"msg_save alert\">Ingresado a ".$dato6."</label>";
+                $alert .="<label class=\"msg_save alert\">".$dato6." actualizado</label>";
+                
             }else{
-                $alert .="<label class=\"msg_error alert\">Error al ingresar en ".$dato6."</label>";
+                $alert .="<label class=\"msg_error alert\">Error al actualizar en ".$dato6."</label>";
             } 
         }
 
@@ -169,7 +203,10 @@ include "../conexion.php";
         
     
     }#FIN DEL POST
-?>
+
+    
+        ?>
+
 
 
 
@@ -198,12 +235,13 @@ if (empty($_SESSION['active'])){
 
 
 <section id="container">
+<a href="lista_pedidos.php" class="btn_new" style="position:fixed ; top:150px; left: 0px;">Lista Pedidos</a>
 <div class="form-register">
         
         
 
         <form action="" method="post" id="formulario_pedido">
-       <h1>Registro de Pedidos</h1>
+       <h1>Actualización de Pedido</h1>
         <center>(*) campos requeridos</center> 
         <?php echo isset($alert) ? $alert : '';?>
          <hr>
@@ -211,9 +249,10 @@ if (empty($_SESSION['active'])){
        
         <div>
             <label for="nropedido">Nro Pedido (*)</label>
-            <input value="" type="text" name="nropedido" id="nropedido" placeholder="Ingrese N° Pedido" autocomplete="off" autofocus required>
+            <input type="text" name="nropedido" id="nropedido" value="<?php echo $pedido?>">
         </div>
         <div class="regcliente">
+            <input type="hidden" name="idpedido" id="idpedido" value="<?php echo $idpedido?>">
            
            <?php
            $query_idcliente =mysqli_query($conexion,"SELECT * FROM clientes order by nombre asc");
@@ -221,8 +260,9 @@ if (empty($_SESSION['active'])){
            
            ?>
            <label>Nombre Cliente (*)   
-         <input list="nombrecliente" name="nombrecliente" class="nombrecliente" placeholder="Ingrese el nombre del Cliente"/></label>
+         <input list="nombrecliente" name="nombrecliente" class="nombrecliente" value="<?php echo $cliente?>"></label>
          <datalist name="nombrecliente"id="nombrecliente">
+             
            <?php 
            if ($result_idcliente>0){
                while($idcliente =mysqli_fetch_array($query_idcliente)){
@@ -236,42 +276,36 @@ if (empty($_SESSION['active'])){
        </div>
         <div >
             <label for="asesor">Asesor (*)</label>
-            <input type="text" name="asesor" id="asesor" placeholder="Ingrese el nombre del Comercial" value="">
+            <input type="text" name="asesor" id="asesor" value="<?php echo $asesor?>">
         </div>
         
         <div>
             <label for="fechainicio">Fecha Inicio(*)</label>
-            <input type="date" name="fechainicio" id="fechainicio" required>
+            <input type="date" name="fechainicio" id="fechainicio" value="<?php echo $iniciopedido?>" required>
         </div>
         <div>
             <label for="fechafin">Fecha Entrega(*)</label>
-            <input type="date" name="fechafin" id="fechafin" required>
+            <input type="date" name="fechafin" id="fechafin" value="<?php echo $finpedido?>"required>
         </div>
         <div>
             <label for="diashabiles">Días hábiles(Automático)</label>
             
-            <div id="diashabiles" style="font-size:30px" ></div>
+            <div id="diashabiles" style="font-size:30px" ><?php echo $dias?></div>
         </div>
         <div>
             <label for="unds">Unidades(*)</label>
-            <input type="text" name="unds" id="unds" autocomplete="off" required>
+            <input type="text" name="unds" id="unds" autocomplete="off" value="<?php echo $unds?>"required>
         </div>
         <div>
-            <label for="procesos">Procesos Implicados(*)</label>
+            <label for="procesos">Procesos Implicados( Desactivado)</label>
             <?php
             $query_procesos =mysqli_query($conexion,"SELECT * FROM procesos");
             $result_procesos= mysqli_num_rows($query_procesos);
             
             ?>
           <select name="procesos" id="procesos" class="select2" required>
-          <option value="0" disabled selected>Seleccione una Opción</option> 
-            <?php 
-            if ($result_procesos>0){
-                while($procesos =mysqli_fetch_array($query_procesos)){
-                    
-                  echo "<option value=\"".$procesos['idproceso']."\">".$procesos['siglas']."</option>";
-            }
-            } ?>
+          <?php echo "  <option value=\"" . $idproceso . "\">" . $siglas . "</option>"; ?>
+          
           
           
           </select>
@@ -290,33 +324,7 @@ if (empty($_SESSION['active'])){
 
 </section>
 
-<script type="text/javascript">
-	$(document).ready(function(){
-		$('#procesos').val();
-		
-		
 
-		$('#procesos').change(function(){
-			diasproceso();
-			
-			
-		});
-	
-	})
-	function diasproceso(){
-		$.ajax({
-			type:"POST",
-			url:"php/cargar_diasproceso.php",
-            data: $("#formulario_pedido").serialize(),
-            
-			success:function(r){
-				$('#diasprocesos').html(r);
-				
-			}
-		});
-		
-	}
-</script>
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('#fechafin').val();
@@ -324,10 +332,11 @@ if (empty($_SESSION['active'])){
 		
 
 		$('#fechafin').change(function(){
-			fechafin();
+            fechafin();
+            diasproceso();
 			document.getElementById("fecha").value = "";
-            document.getElementById("procesos");
-            document.getElementById('diasprocesos').innerHTML = "";
+            
+            
             
 		});
 	
@@ -341,6 +350,19 @@ if (empty($_SESSION['active'])){
 			success:function(r){
                 $('#diashabiles').html(r);
                 
+				
+			}
+		});
+		
+    }
+    function diasproceso(){
+		$.ajax({
+			type:"POST",
+			url:"php/cargar_diasproceso.php",
+            data: $("#formulario_pedido").serialize(),
+            
+			success:function(r){
+				$('#diasprocesos').html(r);
 				
 			}
 		});

@@ -12,7 +12,7 @@ include "../conexion.php";
 	
     <?php include "includes/scripts.php"?>
     
-	<title>CONFECCIÓN</title>
+	<title>BODEGA</title>
 	<link rel="shortcut icon" href="img/kamisetas-icono.png" type="image/x-icon">
 	<style>
 		
@@ -27,20 +27,20 @@ if (empty($_SESSION['active'])){
 include "includes/header.php"?>
 <section id="container">
 
-<a href="reporte_confeccion.php" class="btn_new" style="position:fixed ; top:200px; left: 0px;">Reporte</a>
+<a href="ingresopedidos.php" class="btn_new" style="position:fixed ; top:150px; left: 0px;">Ingresar Pedidos</a>
 
 
 <center><div style="width:100%">
 
-<h1>Lista General de Pedidos para CONFECCIÓN</h1>
+<h1>Lista de Pedidos</h1>
         
        
         <table id="tabla" class="display" >
          <thead>   
             <tr class="titulo">
-                <th style="border-right: 1px solid #9ecaca"colspan="10">Información Pedido</th>
+                <th style="border-right: 1px solid #9ecaca"colspan="12">Información Pedido</th>
                 
-                <th colspan="9"> Información confección</th>
+                
             </tr>   
              <tr class="titulo">
                 <th>Pedido</th>
@@ -52,18 +52,9 @@ include "includes/header.php"?>
                 <th>Días Falta</th>
                 <th>Proc</th>
                 <th>Estado Pedido</th>
-                <th style="border-right: 1px solid #9ecaca">Unds</th>
-                
-                <th>Fecha Inicio  </th>
-                <th>Fecha Entrega</th>
-                <th>Días Hab</th>
-                <th>Días Falta</th>
-                <th>Unds Parcial</th>
-                <th>Unds Falta</th>
-                <th>Entrega Prod</th>
-                <th>Observaciones</th>
-                <th>Estado</th>
-                <th>Acciones</th>
+                <th >Unds</th>
+                <th>Usuario</th>
+                <th>Editar</th>
                
 
             </tr>
@@ -90,41 +81,32 @@ include "includes/header.php"?>
                 return $days;
             }
 
-            $query=mysqli_query($conexion, "SELECT pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
-            pe.fecha_fin as 'finpedido', pe.dias_habiles as 'diaspedido', pe.unds, pe.fecha_ingreso, pe.usuario, con.entrega,
-            con.idconfeccion, con.iniciofecha as 'inicioconfeccion', con.finfecha as 'finconfeccion', con.dias as 'diasconfeccion',
-            con.inicioprocesofecha, con.finprocesofecha, con.parcial, us.usuario, con.obs_confeccion, pr.siglas, es.estado, est.estado as 'estadopedido'
-            FROM pedidos pe 
-            INNER JOIN procesos pr ON pe.procesos=pr.idproceso
-            INNER JOIN confeccion con ON pe.idpedido=con.pedido
-            INNER JOIN usuario us on pe.usuario=us.idusuario
-            INNER JOIN estado es ON con.estado=es.id_estado
-            INNER JOIN estado est ON pe.estado=est.id_estado
-            WHERE con.estado<=2");
+            $query=mysqli_query($conexion, "SELECT pe.idpedido, pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
+            pe.fecha_fin as 'finpedido', pe.dias_habiles, pro.siglas, pe.unds, us.nombre as 'usuario', est.estado FROM pedidos pe 
+            INNER JOIN procesos pro 
+            ON pe.procesos=pro.idproceso
+            INNER JOIN usuario us 
+            ON pe.usuario=us.idusuario
+            INNER JOIN estado est 
+            ON pe.estado=est.id_estado
+            WHERE pe.estado<=2");
             
             $result=mysqli_num_rows($query);
 
             if ($result>0){
                 while($data=mysqli_fetch_array($query)){
 
-                    
+                    $idpedido=$data['idpedido'];
                     $unds=$data['unds'];
-                    $parcial=$data['parcial'];
-                    $falta=$unds-$parcial;
                     $hoy=date('Y-m-d');
                     $diapedido=$data['finpedido'];
-                    $diaconfeccion=$data['finconfeccion'];
-                    $estadopedido=$data['estadopedido'];
+                    $estadopedido=$data['estado'];
                     $diafaltapedido=  number_of_working_days($hoy, $diapedido)-1;
                     if($diafaltapedido<0){
                         $diafaltapedido=  -(number_of_working_days($diapedido, $hoy)-1);
                         
                     }
                     
-                    $diafaltaconfeccion=  number_of_working_days($hoy, $diaconfeccion)-1;   
-                    if($diafaltaconfeccion<0){
-                        $diafaltaconfeccion=  -(number_of_working_days($diaconfeccion, $hoy)-1);
-                    }
                     echo "
                     <tr>
                     <td>".$data['num_pedido']."</td>
@@ -132,7 +114,7 @@ include "includes/header.php"?>
                     <td>".$data['asesor']."</td>
                     <td>".$data['iniciopedido']."</td>
                     <td>".$data['finpedido']."</td>
-                    <td>".$data['diaspedido']."</td>";
+                    <td>".$data['dias_habiles']."</td>";
                     if($diafaltapedido>3){
                        echo "<td class=\"greentable\">".$diafaltapedido."</td>";
                     }elseif($diafaltapedido>=0){
@@ -143,28 +125,16 @@ include "includes/header.php"?>
                     
                    echo " <td>".$data['siglas']."</td>
                     <td>".$estadopedido."</td>
-                    <td style=\"border-right: 1px solid #00a8a8\">".$unds."</td>
+                    <td >".$unds."</td>
                    
-                    <td>".$data['inicioconfeccion']."</td>
-                    <td>".$data['finconfeccion']."</td>
-                    <td>".$data['diasconfeccion']."</td>";
-                    if($diafaltaconfeccion>3){
-                        echo "<td class=\"greentable\">".$diafaltaconfeccion."</td>";
-                     }elseif($diafaltaconfeccion>=0){
-                         echo "<td class=\"yellowtable\">".$diafaltaconfeccion."</td>";  
-                     }else{
-                         echo "<td class=\"redtable\">".$diafaltaconfeccion."</td>"; 
-                     }
-                    echo "<td>".$parcial."</td>
-                    <td>".$falta."</td>
-                    <td>".$data['entrega']."</td>
-                    <td>".$data['obs_confeccion']."</td>
-                    <td>".$data['estado']."</td>
-                    <td><div>
-                    <a title=\"Editar\"class=\"link_edit\"href=\"editar_confeccion.php?id=".$data['idconfeccion']."\"><span class=\"glyphicon glyphicon-pencil\" aria-hidden=\"true\"></span></a>
-                    <a title=\"Finalizar\"class=\"link_edit\"href=\"finalizar_confeccion.php?id=".$data['idconfeccion']."\"><span class=\"glyphicon glyphicon-ok\" aria-hidden=\"true\"></span></a>
-                    <a title=\"Anular\"class=\"link_delete\"href=\"anular_confeccion.php?id=".$data['idconfeccion']."\"><span class=\"glyphicon glyphicon-trash\" aria-hidden=\"true\"></span></a>
+                    <td >".$data['usuario']."</td>
+                    <td><div>";
+                    if($data['usuario']==$_SESSION['nombre'] || $_SESSION['idrol']==1){
+                        echo "<a title=\"Editar\"class=\"link_edit\"href=\"editar_pedido.php?id=".$idpedido."\"><span class=\"glyphicon glyphicon-edit\" aria-hidden=\"true\"></span></a>";
+                    }
                     
+                    
+                    echo "
                     </div>
                     </td>                   
                     </tr>                    ";
@@ -188,7 +158,7 @@ include "includes/header.php"?>
     <script>
          $('#tabla').DataTable({
             
-        "order": [[ 13, "asc" ]],
+        "order": [[ 6, "asc" ]],
         "pageLength": 50,
         "language": {
               "url": "https://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"

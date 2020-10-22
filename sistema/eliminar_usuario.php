@@ -12,7 +12,6 @@ if (!empty($_POST)) {
 
     if ($query_delete) {
         header("location: lista_usuarios.php");
-        
     } else {
         $alert = '<p class="msg_error">Error al eliminar el registro</p>';
     }
@@ -72,11 +71,8 @@ if (empty($_REQUEST['id'])) {
     include "includes/header.php" ?>
     <section id="container">
 
-        <a href="lista_usuarios.php" class="btn_new" style="position:fixed ; top:150px; left: 0;">Lista Usuarios</a>
-        <a href="lista_entidades.php" class="btn_new" style="position:fixed ; top:250px; left: 0;">Lista Entidades</a>
-        <a href="lista_estudios.php" class="btn_new" style="position:fixed ; top:350px; left: 0;">Lista Estudios</a>
-        <a href="eliminar_citas.php" class="btn_new" style="position:fixed ; top:450px; left: 0;">Eliminar Citas</a>
-        <a href="menu.php" class="btn_new" style="position:fixed ; top:550px; left: 0;">Editar Menú</a>
+        <a href="lista_usuarios.php" class="btn_new" style="position:fixed ; top:200px; left: 0;">Lista Usuarios</a>
+        <a href="menu.php" class="btn_new" style="position:fixed ; top:300px; left: 0;">Editar Menú</a>
 
         <div class="data_delete">
             <h1>Nota: El usuario del empleado quedará inactivo</h1>

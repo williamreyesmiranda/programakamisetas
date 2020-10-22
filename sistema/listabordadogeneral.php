@@ -29,7 +29,7 @@ include "../conexion.php";
     include "includes/header.php" ?>
     <section id="container">
 
-        <a href="reporte_bordado.php" class="btn_new" style="position:fixed ; top:150px; left: 0px;">Reporte</a>
+        <a href="reporte_bordado.php" class="btn_new" style="position:fixed ; top:200px; left: 0px;">Reporte</a>
 
 
         <center>

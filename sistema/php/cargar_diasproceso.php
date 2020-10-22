@@ -31,7 +31,6 @@ $fechafin=$_POST['fechafin'] ;
 
  
  $idproceso=$_POST['procesos'] ; 
-
 $query=mysqli_query($conexion,"SELECT * FROM procesos WHERE idproceso =$idproceso");
 $result=mysqli_fetch_array($query);
 

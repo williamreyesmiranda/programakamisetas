@@ -78,19 +78,21 @@ if ($result_sql==0){
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="UTF-8">
-	
-	<?php include "includes/scripts.php"?>
+    <meta charset="UTF-8">
+
+    <?php include "includes/scripts.php"?>
     <title>ACTUALIZACION USUARIO</title>
     <link rel="shortcut icon" href="img/kamisetas-icono.png" type="image/x-icon">
-	<style>
-		
-	</style>
+    <style>
+
+    </style>
 </head>
+
 <body>
 
-<?php 
+    <?php 
 
 if (empty($_SESSION['active'])){
   header('location: ../');
@@ -99,41 +101,42 @@ include "includes/header.php"?>
 
 
 
-<section id="container">
+    <section id="container">
 
-    <div class="form-register">
-        
-<a href="lista_usuarios.php" class="btn_new" style="position:fixed ; top:150px; left: 0;">Lista Usuarios</a>
-<a href="lista_entidades.php" class="btn_new" style="position:fixed ; top:250px; left: 0;">Lista Entidades</a>
-<a href="lista_estudios.php" class="btn_new" style="position:fixed ; top:350px; left: 0;">Lista Estudios</a>
-<a href="eliminar_citas.php" class="btn_new" style="position:fixed ; top:450px; left: 0;">Eliminar Citas</a>
-<a href="menu.php" class="btn_new" style="position:fixed ; top:550px; left: 0;">Editar Menú</a>
-  
+        <div class="form-register">
 
-        <form action="" method="post">
-       <h1>Actualización de Usuarios</h1>
-        <hr>
-        <div class="alert"><?php echo isset($alert) ? $alert : '';?></div>
-        <div>
-            <input type="hidden" name="idusuario" id="idusuario" value="<?php echo $iduser;?>">
-            <label for="nombre">Nombre</label>
-            <input type="text" name="nombre" id="nombre" placeholder="Ingrese Nombre y Apellido" autocomplete="off" value="<?php echo $nombre;?>">
-        </div>
-        <div>
-            <label for="identificacion">Identificación</label>
-            <input type="text" name="identificacion" id="identidicacion" placeholder="Ingrese N° Identificación" autocomplete="off" value="<?php echo $identificacion;?>">
-        </div>
-        <div>
-            <label for="usuario">Usuario</label>
-            <input type="text" name="usuario" id="nombre" placeholder="Ingrese el Usuario" autocomplete="off" value="<?php echo $usuario;?>">
-        </div>
-        <div>
-            <label for="clave">Clave</label>
-            <input type="password" name="clave" id="nombre" placeholder="Renovar Clave de Acceso (opcional)" autocomplete="off" value="">
-        </div>
-        <div>
-            
-            <?php
+            <a href="lista_usuarios.php" class="btn_new" style="position:fixed ; top:200px; left: 0;">Lista Usuarios</a>
+            <a href="menu.php" class="btn_new" style="position:fixed ; top:300px; left: 0;">Editar Menú</a>
+
+
+            <form action="" method="post">
+                <h1>Actualización de Usuarios</h1>
+                <hr>
+                <div class="alert"><?php echo isset($alert) ? $alert : '';?></div>
+                <div>
+                    <input type="hidden" name="idusuario" id="idusuario" value="<?php echo $iduser;?>">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" name="nombre" id="nombre" placeholder="Ingrese Nombre y Apellido"
+                        autocomplete="off" value="<?php echo $nombre;?>">
+                </div>
+                <div>
+                    <label for="identificacion">Identificación</label>
+                    <input type="text" name="identificacion" id="identidicacion" placeholder="Ingrese N° Identificación"
+                        autocomplete="off" value="<?php echo $identificacion;?>">
+                </div>
+                <div>
+                    <label for="usuario">Usuario</label>
+                    <input type="text" name="usuario" id="nombre" placeholder="Ingrese el Usuario" autocomplete="off"
+                        value="<?php echo $usuario;?>">
+                </div>
+                <div>
+                    <label for="clave">Clave</label>
+                    <input type="password" name="clave" id="nombre" placeholder="Renovar Clave de Acceso (opcional)"
+                        autocomplete="off" value="">
+                </div>
+                <div>
+
+                    <?php
             $query_rol =mysqli_query($conexion,"SELECT * FROM rol ");
             $result_rol = mysqli_num_rows($query_rol);
             
@@ -141,11 +144,11 @@ include "includes/header.php"?>
 
             }else{
             ?>
-            <label for="rol">Tipo de Usuario</label>
-          <select name="rol" id="" class="itemunico">
-              <?php echo "  <option value=\"".$idrol."\">".$rol."</option>";?>
-          <option value="0" disabled >Selecciones una Opcion</option>  
-            <?php 
+                    <label for="rol">Tipo de Usuario</label>
+                    <select name="rol" id="" class="itemunico">
+                        <?php echo "  <option value=\"".$idrol."\">".$rol."</option>";?>
+                        <option value="0" disabled>Selecciones una Opcion</option>
+                        <?php 
            
             if ($result_rol>0){
                 while($rol =mysqli_fetch_array($query_rol)){
@@ -153,20 +156,21 @@ include "includes/header.php"?>
                   echo "  <option value=\"".$rol['idrol']."\">".$rol['rol']."</option>";
             }
             } ?>
-          
-           
-          </select>
-          <?php } ?>
+
+
+                    </select>
+                    <?php } ?>
+                </div>
+                <input type="submit" value="Editar Usuario" class="btn-save">
+
+            </form>
+
+
         </div>
-        <input type="submit" value="Editar Usuario" class="btn-save">
-
-        </form>
 
 
-    </div>
+    </section>
 
-
-</section>
-	
 </body>
+
 </html>

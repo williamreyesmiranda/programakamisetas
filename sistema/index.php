@@ -7,7 +7,7 @@ include "../conexion.php";?>
 	<meta charset="UTF-8">
 	
 	<?php include "includes/scripts.php"?>
-	<title>INICIO PRODUCCION</title>
+	<title>INICIO PRODUCCIÓN</title>
 	<link rel="shortcut icon" href="img/kamisetas-icono.png" type="image/x-icon">
 	<style>
 		
@@ -21,7 +21,6 @@ if (empty($_SESSION['active'])){
   header('location: ../');
 }
 include "includes/header.php";
-	
 	$query1=mysqli_query($conexion, "SELECT * FROM menu WHERE id=1");
 	$data1=mysqli_fetch_array($query1);
 	$query2=mysqli_query($conexion, "SELECT * FROM menu WHERE id=2");
@@ -30,18 +29,18 @@ include "includes/header.php";
 	$data3=mysqli_fetch_array($query3);
 ?>
 	<section id="container">
-	 	<center><h1 style="text-transform: uppercase;"> <?php  if ($_SESSION['sexo']=='hombre'){echo 'Bienvenido '.$_SESSION['nombre'].' al sistema de producción';}else{echo 'Bienvenida '.$_SESSION['nombre'].' al sistema de producción';};?></h1>
+		<center><h1 style="text-transform: uppercase;"> <?php if ($_SESSION['sexo']=='hombre'){echo 'Bienvenido '.$_SESSION['nombre'].' al sistema de PRODUCCION';}else{echo 'Bienvenida '.$_SESSION['nombre'].' al sistema de pRODUCCION';};?></h1>
 		<br><br>
 		<table style=" width: 100%;">
 			<tr style=" font-size: 50px; width: 90%;">
-				<th style=" font-size: 50px; width: 30%; text-transform: uppercase;"><?php echo $data1['titulo']; ?></th>
-				<th style=" font-size: 50px; width: 30%; text-transform: uppercase;"><?php echo $data2['titulo']; ?></th>
-				<th style=" font-size: 50px; width: 30%; text-transform: uppercase;"><?php echo $data3['titulo']; ?></th>
+				<th style=" font-size: 50px; width: 30%; text-transform: uppercase;padding:20px; background-color: #00a8a8;color: #9ecaca;"><?php echo $data1['titulo']; ?></th>
+				<th style=" font-size: 50px; width: 30%; text-transform: uppercase;padding:20px; background-color: #00a8a8;color: #9ecaca;"><?php echo $data2['titulo']; ?></th>
+				<th style=" font-size: 50px; width: 30%; text-transform: uppercase;padding:20px; background-color: #00a8a8;color: #9ecaca;"><?php echo $data3['titulo']; ?></th>
 			</tr>
 			<tr style="font-size: 17px; width: 90%;">
-				<td valign="top" style=" font-size: 20px; width: 30%; color:#196783; text-align: justify;text-transform: none;"><?php echo $data1['descripcion']; ?></td>
-				<td valign="top" style=" font-size: 20px; width: 30%; color:#196783; text-align: justify;text-transform: none;"><?php echo $data2['descripcion']; ?></td>
-				<td valign="top" style=" font-size: 20px; width: 30%; color:#196783; text-align: justify; text-transform: none;"><?php echo $data3['descripcion']; ?></td>
+				<td valign="top" style=" font-size: 20px; width: 30%; color:#196783; text-align: justify;text-transform: none; padding:20px"><?php echo $data1['descripcion']; ?></td>
+				<td valign="top" style=" font-size: 20px; width: 30%; color:#196783; text-align: justify;text-transform: none;padding:20px"><?php echo $data2['descripcion']; ?></td>
+				<td valign="top" style=" font-size: 20px; width: 30%; color:#196783; text-align: justify; text-transform: none;padding:20px"><?php echo $data3['descripcion']; ?></td>
 			</tr>
 
 		</table></center>

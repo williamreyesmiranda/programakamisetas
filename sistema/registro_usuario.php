@@ -73,11 +73,8 @@ if (!empty($_POST)) {
     <section id="container">
 
         <div class="form-register">
-            <a href="lista_usuarios.php" class="btn_new" style="position:fixed ; top:150px; left: 0;">Lista Usuarios</a>
-            <a href="lista_entidades.php" class="btn_new" style="position:fixed ; top:250px; left: 0;">Lista Entidades</a>
-            <a href="lista_estudios.php" class="btn_new" style="position:fixed ; top:350px; left: 0;">Lista Estudios</a>
-            <a href="eliminar_citas.php" class="btn_new" style="position:fixed ; top:450px; left: 0;">Eliminar Citas</a>
-            <a href="menu.php" class="btn_new" style="position:fixed ; top:550px; left: 0;">Editar Menú</a>
+            <a href="lista_usuarios.php" class="btn_new" style="position:fixed ; top:200px; left: 0;">Lista Usuarios</a>
+            <a href="menu.php" class="btn_new" style="position:fixed ; top:300px; left: 0;">Editar Menú</a>
 
 
 
@@ -87,11 +84,14 @@ if (!empty($_POST)) {
                 <div class="alert"><?php echo isset($alert) ? $alert : ''; ?></div>
                 <div>
                     <label for="nombre">Nombre Empleado</label>
-                    <input type="text" name="nombre" id="nombre" placeholder="Ingrese Nombre y Apellido" autocomplete="off" value="<?php if(!empty($_POST)){ echo $_POST['nombre'];}?>">
+                    <input type="text" name="nombre" id="nombre" placeholder="Ingrese Nombre y Apellido"
+                        autocomplete="off" value="<?php if(!empty($_POST)){ echo $_POST['nombre'];}?>">
                 </div>
                 <div>
                     <label for="identificacion">Identificación</label>
-                    <input type="text" name="identificacion" id="identidicacion" value="<?php if(!empty($_POST)){ echo $_POST['identificacion'];}?>"placeholder="Ingrese N° Identificación" autocomplete="off">
+                    <input type="text" name="identificacion" id="identidicacion"
+                        value="<?php if(!empty($_POST)){ echo $_POST['identificacion'];}?>"
+                        placeholder="Ingrese N° Identificación" autocomplete="off">
                 </div>
                 <div>
                     <label for="sexo">Sexo</label>
@@ -103,11 +103,15 @@ if (!empty($_POST)) {
                 </div>
                 <div>
                     <label for="usuario">Usuario</label>
-                    <input type="text" name="usuario" id="usuario" value="<?php if(!empty($_POST)){ echo $_POST['usuario'];}?>"placeholder="Ingrese el Usuario" autocomplete="off">
+                    <input type="text" name="usuario" id="usuario"
+                        value="<?php if(!empty($_POST)){ echo $_POST['usuario'];}?>" placeholder="Ingrese el Usuario"
+                        autocomplete="off">
                 </div>
                 <div>
                     <label for="clave">Clave</label>
-                    <input type="password" name="clave" id="clave" value="<?php if(!empty($_POST)){ echo $_POST['clave'];}?>"placeholder="Clave de Acceso" autocomplete="off">
+                    <input type="password" name="clave" id="clave"
+                        value="<?php if(!empty($_POST)){ echo $_POST['clave'];}?>" placeholder="Clave de Acceso"
+                        autocomplete="off">
                 </div>
                 <div>
                     <label for="rol">Cargo</label>

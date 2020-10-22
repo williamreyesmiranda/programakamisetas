@@ -5,7 +5,11 @@
 				<?php
 				if($_SESSION['idrol']==1 || $_SESSION['idrol']==4 || $_SESSION['idrol']==3){//bodega
 					echo "<li >
-					<a href=\"ingresopedidos.php\">Ingreso Pedidos</a>
+					<a >Pedidos</a>
+					<ul>
+						<li><a href=\"ingresopedidos.php\">Ingreso Pedidos</a></li>
+						<li><a href=\"lista_pedidos.php\">Lista Pedidos</a></li>
+						</ul>
 				</li>";}
 				if($_SESSION['idrol']==1 || $_SESSION['idrol']==4){//bodega
 					echo "<li >
@@ -25,10 +29,10 @@
 				</li><li >
 				<a href=\"listaestampaciongeneral.php\">Estampación</a></li>";}
 				if($_SESSION['idrol']==1 || $_SESSION['idrol']==6){//confeccion
-					echo "<li >
+					echo "<li>
 					<a href=\"listabordadogeneral.php\">Bordado</a>
 				</li>";}
-				echo "<li >
+				echo "<li>
 				<a href=\"listaterminaciongeneral.php\">Terminación</a></li>";
 				
 				if($_SESSION['idrol']==1){
@@ -37,7 +41,8 @@
 					<a href=\"\">Administrador</a>
 						<ul>
 						<li><a href=\"lista_usuarios.php\">Lista Usuarios</a></li>
-						</ul> 
+						<li><a href=\"menu.php\">Editar Menú</a></li>
+						</ul>
 					</li>
 					";}
 			    ?>
