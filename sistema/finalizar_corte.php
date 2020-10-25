@@ -4,11 +4,12 @@ session_start();
 include "../conexion.php";
 date_default_timezone_set('America/Bogota');
 if(!empty($_POST)){
+$oc=$_POST['oc'];
 $id = $_POST['idcorte'];
 $obs = $_POST['obs'];
 $parcial = $_POST['unds'];
 $finproceso = date('Y-m-d');
-$query_delete=mysqli_query($conexion, "UPDATE corte SET estado= 4, obs_corte='$obs', parcial='$parcial', parcial='$parcial',finprocesofecha='$finproceso'
+$query_delete=mysqli_query($conexion, "UPDATE corte SET estado= 4, obs_corte='$obs', parcial='$parcial', parcial='$parcial',finprocesofecha='$finproceso', oc='$oc'
                                         WHERE idcorte=$id ");
 $sql=mysqli_query($conexion, "SELECT * FROM corte WHERE idcorte=$id");
 $sqlselect=mysqli_fetch_array($sql);
@@ -31,7 +32,7 @@ if(empty($_REQUEST['id'])){
     $query=mysqli_query($conexion, "SELECT pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
     pe.fecha_fin as 'finpedido', pe.dias_habiles as 'diaspedido', pe.unds, pe.fecha_ingreso, pe.usuario,
     co.idcorte, co.iniciofecha as 'iniciocorte', co.finfecha as 'fincorte', co.dias as 'diascorte',
-    co.inicioprocesofecha, co.finprocesofecha, co.parcial, us.usuario, co.obs_corte, pr.siglas, es.estado, es.id_estado
+    co.inicioprocesofecha, co.oc, co.finprocesofecha, co.parcial, us.usuario, co.obs_corte, pr.siglas, es.estado, es.id_estado
     FROM pedidos pe 
     INNER JOIN procesos pr ON pe.procesos=pr.idproceso
     INNER JOIN corte co ON pe.idpedido=co.pedido
@@ -41,6 +42,7 @@ if(empty($_REQUEST['id'])){
 
     if($result>0){
         $data = mysqli_fetch_array($query);
+            $oc=$data['oc'];
             $id= $data['idcorte'];
             $pedido= $data['num_pedido'];
             $iniciopedido=$data['iniciopedido'];
@@ -121,7 +123,10 @@ include "includes/header.php"?>
         <div>
             Fecha Entrega: <?php echo $fincorte?>
         </div>
-        
+        <div>
+                            <label for="oc">OC</label>
+                            <input style="width: 200px" type="text" name="oc" id="oc" autocomplete="off" value="<?php echo $oc; ?>">
+                        </div>
         <div>
             <label for="obs">Observaciones (opcional)</label>
             <textarea  style ="width: 300px" name="obs" id="obs" rows="4" cols="45"></textarea> 

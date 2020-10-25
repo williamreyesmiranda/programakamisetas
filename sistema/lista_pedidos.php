@@ -12,7 +12,7 @@ include "../conexion.php";
 	
     <?php include "includes/scripts.php"?>
     
-	<title>BODEGA</title>
+	<title>PEDIDOS</title>
 	<link rel="shortcut icon" href="img/kamisetas-icono.png" type="image/x-icon">
 	<style>
 		
@@ -30,9 +30,9 @@ include "includes/header.php"?>
 <a href="ingresopedidos.php" class="btn_new" style="position:fixed ; top:150px; left: 0px;">Ingresar Pedidos</a>
 
 
-<center><div style="width:100%">
+<center><div style="width:85%">
 
-<h1>Lista de Pedidos</h1>
+<h1>Lista de Pedidos Pendientes</h1>
         
        
         <table id="tabla" class="display" >

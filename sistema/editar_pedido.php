@@ -216,7 +216,7 @@ if ($result_sql == 0) {
 	<meta charset="UTF-8">
 	
 	<?php include "includes/scripts.php"?>
-    <title>REGISTRO PEDIDOS</title>
+    <title>ACTUALIACIÓN</title>
     <link rel="shortcut icon" href="img/kamisetas-icono.png" type="image/x-icon">
 	<style>
 		
@@ -376,15 +376,26 @@ if (empty($_SESSION['active'])){
 		
 
 		$('#fechainicio').change(function(){
-            document.getElementById("fechafin").value = "";
-            document.getElementById('diashabiles').innerHTML = "";
-            document.getElementById("procesos").value="0";
-            document.getElementById('diasprocesos').innerHTML = "";
+            fechafin();
             
 			
 		});
 	
-	})
+    })
+    function fechafin(){
+		$.ajax({
+			type:"POST",
+			url:"php/cargar_diashabiles.php",
+            data: $("#formulario_pedido").serialize(),
+            
+			success:function(r){
+                $('#diashabiles').html(r);
+                
+				
+			}
+		});
+		
+    }
 	
 </script>
     

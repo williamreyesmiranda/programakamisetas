@@ -425,17 +425,17 @@ tr {
 }
 
 .redtable {
-    background-color: #ff000088 !important;
+    background-color: rgba(255, 0, 0, 0.533) !important;
     padding: 0px;
 }
 
 .yellowtable {
-    background-color: #fbff0088 !important;
+    background-color: rgba(251, 255, 0, 0.533) !important;
     padding: 0px;
 }
 
 .greentable {
-    background-color: #00ff1588 !important;
+    background-color: rgba(0, 255, 21, 0.533) !important;
     padding: 0px;
 }
 

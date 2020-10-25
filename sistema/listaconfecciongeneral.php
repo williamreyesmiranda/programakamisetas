@@ -40,7 +40,7 @@ include "includes/header.php"?>
             <tr class="titulo">
                 <th style="border-right: 1px solid #9ecaca"colspan="10">Información Pedido</th>
                 
-                <th colspan="9"> Información confección</th>
+                <th colspan="10"> Información confección</th>
             </tr>   
              <tr class="titulo">
                 <th>Pedido</th>
@@ -58,6 +58,7 @@ include "includes/header.php"?>
                 <th>Fecha Entrega</th>
                 <th>Días Hab</th>
                 <th>Días Falta</th>
+                <th>OC</th>
                 <th>Unds Parcial</th>
                 <th>Unds Falta</th>
                 <th>Entrega Prod</th>
@@ -90,7 +91,7 @@ include "includes/header.php"?>
                 return $days;
             }
 
-            $query=mysqli_query($conexion, "SELECT pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
+            $query=mysqli_query($conexion, "SELECT pe.idpedido, pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
             pe.fecha_fin as 'finpedido', pe.dias_habiles as 'diaspedido', pe.unds, pe.fecha_ingreso, pe.usuario, con.entrega,
             con.idconfeccion, con.iniciofecha as 'inicioconfeccion', con.finfecha as 'finconfeccion', con.dias as 'diasconfeccion',
             con.inicioprocesofecha, con.finprocesofecha, con.parcial, us.usuario, con.obs_confeccion, pr.siglas, es.estado, est.estado as 'estadopedido'
@@ -107,7 +108,7 @@ include "includes/header.php"?>
             if ($result>0){
                 while($data=mysqli_fetch_array($query)){
 
-                    
+                    $idpedido=$data['idpedido'];
                     $unds=$data['unds'];
                     $parcial=$data['parcial'];
                     $falta=$unds-$parcial;
@@ -115,6 +116,9 @@ include "includes/header.php"?>
                     $diapedido=$data['finpedido'];
                     $diaconfeccion=$data['finconfeccion'];
                     $estadopedido=$data['estadopedido'];
+                    $query_oc=mysqli_query($conexion,"SELECT * FROM corte WHERE pedido=$idpedido");
+                    $consult_oc=mysqli_fetch_array($query_oc);
+                    $oc=$consult_oc['oc'];
                     $diafaltapedido=  number_of_working_days($hoy, $diapedido)-1;
                     if($diafaltapedido<0){
                         $diafaltapedido=  -(number_of_working_days($diapedido, $hoy)-1);
@@ -155,7 +159,8 @@ include "includes/header.php"?>
                      }else{
                          echo "<td class=\"redtable\">".$diafaltaconfeccion."</td>"; 
                      }
-                    echo "<td>".$parcial."</td>
+                    echo "<td>".$oc."</td>
+                    <td>".$parcial."</td>
                     <td>".$falta."</td>
                     <td>".$data['entrega']."</td>
                     <td>".$data['obs_confeccion']."</td>

@@ -1,8 +1,17 @@
-<?php
-session_start();
-
-include "../conexion.php";
+<?php 
 date_default_timezone_set('America/Bogota');
+header("Pragma: public");
+header("Expires: 0");
+$filename = "Reporte_Confeccion ".date('Y-m-d H-i-s').".xls";
+header("Content-type: application/x-msdownload");
+header("Content-Disposition: attachment; filename=$filename");
+header("Pragma: no-cache");
+header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+
+
+
+include "../../conexion.php";
+
 //fechas a dias
 function number_of_working_days($from, $to) {
     $workingDays = [1, 2, 3, 4, 5]; # formato = N (1 = lunes, ...)
@@ -49,31 +58,45 @@ function sumasdiasemana($fecha,$dias)
 <head>
 	<meta charset="UTF-8">
 	
-    <?php include "includes/scripts.php"?>
+    
     
 	<title>CONFECCIÓN</title>
-	<link rel="shortcut icon" href="img/kamisetas-icono.png" type="image/x-icon">
-	<style>
-  
+    <link rel="shortcut icon" href="img/kamisetas-icono.png" type="image/x-icon">
+    <style>
+        .redtable {
+    background-color: rgb(255, 83, 83);
+    padding: 0px;
+}
+
+.yellowtable {
+    background-color: rgb(232, 258, 78);
+    padding: 0px;
+}
+
+.greentable {
+    background-color: rgb(21, 251, 59);
+    padding: 0px;
+}
+.titulo {
+    padding: 0px;
+    text-align: center;
+    background-color: #00a8a8;
+    color: #9ecaca;
+    font-size: 20px;
+    border-top: 1px solid #9ecaca3d;
+    text-transform: uppercase;
+}
+
+.titulo th {
+    text-align: center;
+}
     </style>
 </head>
 <body>
-<?php 
-
-if (empty($_SESSION['active'])){
-  header('location: ../');
-}
-?>
-
-
-<a href="listaconfecciongeneral.php" class="btn_new" style="position:fixed ; top:0px; left: 0px;"><input style="display:block; width:150px; position:fixed ; top:0px; left: 0%;;" class="btn_new" type='button' href="listaconfecciongeneral.php" value='MENÚ' /></a>
-<a href="toexcel/exportar_reporteConfeccion.php" style="display:block;  position:fixed ; top:0px; left: 85%;;" title="Exportar a Excel"><img width="55px" src="img/excel.png" ></a>
-<input style="display:block; width:150px; position:fixed ; top:0px; left: 90%;;" class="btn_new" type='button' onclick='window.print();' value='Imprimir' />
-
-<img style="display:block;  position:fixed" src="img/kamisetas.png" alt="">
+<img src="../img/kamisetas.png" alt="">
 <center><div style="width:99%">
 
-<h1 style="font-size:50px; font-weight:bold; color: #00a8a8; width:60%">REPORTE DE CONFECCIÓN <?php echo date('d-m-Y');?></h1>
+<h1 style="font-size:50px; font-weight:bold; color: #00a8a8">REPORTE DE CONFECCIÓN <?php echo date('d-m-Y');?></h1>
         <table style="width:50% !important; ">
             <thead>
                 <tr >

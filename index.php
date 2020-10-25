@@ -18,7 +18,7 @@
             
             
             $query = mysqli_query($conexion, "SELECT u.idusuario, u.nombre, u.usuario, u.cedula, u.sexo , u.rol as 'idrol' ,r.rol FROM usuario u INNER JOIN rol r on u.rol = r.idrol 
-                                         WHERE u.usuario= '$user' AND u.clave= '$pass' AND u.estatus=1");
+                                         WHERE u.usuario= '$user' AND u.clave= '$pass' AND u.estatus>=1");
             $result= mysqli_num_rows($query);
     
             if ($result >0){
