@@ -130,7 +130,8 @@ include "includes/header.php"?>
                     <td >".$data['usuario']."</td>
                     <td><div>";
                     if($data['usuario']==$_SESSION['nombre'] || $_SESSION['idrol']==1){
-                        echo "<a title=\"Editar\"class=\"link_edit\"href=\"editar_pedido.php?id=".$idpedido."\"><span class=\"glyphicon glyphicon-edit\" aria-hidden=\"true\"></span></a>";
+                        echo "<a title=\"Editar\"class=\"link_edit\"href=\"editar_pedido.php?id=".$idpedido."\"><span class=\"glyphicon glyphicon-edit\" aria-hidden=\"true\"></span></a> &nbsp&nbsp&nbsp
+                        <a title=\"Modificar proceso\"class=\"link_edit\"href=\"editar_proceso.php?id=".$idpedido."\"><span class=\"glyphicon glyphicon-share\" aria-hidden=\"true\"></span></a>";
                     }
                     
                     

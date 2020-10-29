@@ -67,8 +67,8 @@ if (empty($_SESSION['active'])){
 
 
 <a href="listacortegeneral.php" class="btn_new" style="position:fixed ; top:0px; left: 0px;"><input style="display:block; width:150px; position:fixed ; top:0px; left: 0%;;" class="btn_new" type='button' href="listacortegeneral.php" value='MENÚ' /></a>
-
-<input style="display:block; width:150px; position:fixed ; top:0px; left: 85%;;" class="btn_new" type='button' onclick='window.print();' value='Imprimir' />
+<a href="toexcel/exportar_reporteCorte.php" style="display:block;  position:fixed ; top:0px; left: 85%;;" title="Exportar a Excel"><img width="55px" src="img/excel.png" ></a>
+<input style="display:block; width:150px; position:fixed ; top:0px; left: 90%;;" class="btn_new" type='button' onclick='window.print();' value='Imprimir' />
 
 
 <center><div style="width:99%">

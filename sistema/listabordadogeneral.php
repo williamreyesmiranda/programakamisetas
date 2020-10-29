@@ -29,7 +29,8 @@ include "../conexion.php";
     include "includes/header.php" ?>
     <section id="container">
 
-        <a href="reporte_bordado.php" class="btn_new" style="position:fixed ; top:200px; left: 0px;">Reporte</a>
+        <a href="reporte_bordado.php" class="btn_new" style="position:fixed ; top:150px; left: 0px;">Reporte</a>
+        <a href="listabordadoterminado.php" class="btn_new" style="position:fixed ; top:150px; left: 200px;">Restaurar Pedido</a>
 
 
         <center>
@@ -141,7 +142,7 @@ include "../conexion.php";
                                 $punt_unidad=$data['punt_unidad'];
                                 $total_bordados=$falta * $num_bordado;
                                 $total_puntadas=$falta * $punt_unidad;
-                                $horas_estimadas=$total_puntadas/60000;
+                                $horas_estimadas=round($total_puntadas/66600,2);
 
 
                                 $diafaltapedido =  number_of_working_days($hoy, $diapedido) - 1;

@@ -64,17 +64,17 @@ function sumasdiasemana($fecha,$dias)
     <link rel="shortcut icon" href="img/kamisetas-icono.png" type="image/x-icon">
     <style>
         .redtable {
-    background-color: rgb(255, 83, 83);
+    background-color: rgb(245, 180, 173);
     padding: 0px;
 }
 
 .yellowtable {
-    background-color: rgb(232, 258, 78);
+    background-color: rgb(247, 255, 171);
     padding: 0px;
 }
 
 .greentable {
-    background-color: rgb(21, 251, 59);
+    background-color: rgb(173, 253, 181);
     padding: 0px;
 }
 .titulo {
@@ -93,7 +93,7 @@ function sumasdiasemana($fecha,$dias)
     </style>
 </head>
 <body>
-<img src="../img/kamisetas.png" alt="">
+
 <center><div style="width:99%">
 
 <h1 style="font-size:50px; font-weight:bold; color: #00a8a8">REPORTE DE CONFECCIÓN <?php echo date('d-m-Y');?></h1>

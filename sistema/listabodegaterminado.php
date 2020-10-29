@@ -3,6 +3,19 @@ session_start();
 
 include "../conexion.php";
 
+if (empty($_GET['id'])) {
+    header('location listabodegageneral.php');
+}else{
+    $idbodega = $_GET['id'];
+    $update=mysqli_query($conexion, "UPDATE bodega SET estado=1 WHERE idbodega=$idbodega");
+
+    if($update){
+        $alert = '<p class="msg_save">Pedido Restaurado Correctamente</p>';
+    }else{
+        $alert = '<p class="msg_error">No se pudo restaurar el pedido Correctamente</p>';
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -27,14 +40,13 @@ if (empty($_SESSION['active'])){
 include "includes/header.php"?>
 <section id="container">
 
-<a href="reporte_bodega.php" class="btn_new" style="position:fixed ; top:150px; left: 0px;">Reporte</a>
-<a href="listabodegaterminado.php" class="btn_new" style="position:fixed ; top:150px; left: 200px;">Restaurar Pedido</a>
+<a href="listabodegageneral.php" class="btn_new" style="position:fixed ; top:150px; left: 0px;">Lista Bodega</a>
 
 
 <center><div style="width:100%">
 
-<h1>Lista General de Pedidos para BODEGA</h1>
-        
+<h1>Lista de pedidos Terminados y Anulados para BODEGA</h1>
+<div class="alert"><?php echo isset($alert) ? $alert : ''; ?></div>
        
         <table id="tabla" class="display" >
          <thead>   
@@ -100,7 +112,7 @@ include "includes/header.php"?>
             INNER JOIN usuario us on pe.usuario=us.idusuario
             INNER JOIN estado es ON bo.estado=es.id_estado
             INNER JOIN estado est ON pe.estado=est.id_estado
-            WHERE bo.estado<=2");
+            WHERE bo.estado>2");
             
             $result=mysqli_num_rows($query);
 
@@ -160,9 +172,8 @@ include "includes/header.php"?>
                     <td>".$data['obs_bodega']."</td>
                     <td>".$data['estado']."</td>
                     <td><div>
-                    <a title=\"Editar\"class=\"link_edit\"href=\"editar_bodega.php?id=".$data['idbodega']."\"><span class=\"glyphicon glyphicon-pencil\" aria-hidden=\"true\"></span></a>
-                    <a title=\"Finalizar\"class=\"link_edit\"href=\"finalizar_bodega.php?id=".$data['idbodega']."\"><span class=\"glyphicon glyphicon-ok\" aria-hidden=\"true\"></span></a>
-                    <a title=\"Anular\"class=\"link_delete\"href=\"anular_bodega.php?id=".$data['idbodega']."\"><span class=\"glyphicon glyphicon-trash\" aria-hidden=\"true\"></span></a>
+                    <a title=\"Resturar Pedido\"class=\"link_edit\"href=\"listabodegaterminado.php?id=".$data['idbodega']."\"><span class=\"glyphicon glyphicon-share\" aria-hidden=\"true\"></span></a>
+                    
                     
                     </div>
                     </td>                   

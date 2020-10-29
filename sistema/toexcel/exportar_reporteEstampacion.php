@@ -1,11 +1,19 @@
-<?php
-session_start();
-
-include "../conexion.php";
+<?php 
 date_default_timezone_set('America/Bogota');
+header("Pragma: public");
+header("Expires: 0");
+$filename = "Reporte_Estampacion ".date('Y-m-d H-i-s').".xls";
+header("Content-type: application/x-msdownload");
+header("Content-Disposition: attachment; filename=$filename");
+header("Pragma: no-cache");
+header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+
+
+
+include "../../conexion.php";
+
 //fechas a dias
-function number_of_working_days($from, $to)
-{
+function number_of_working_days($from, $to) {
     $workingDays = [1, 2, 3, 4, 5]; # formato = N (1 = lunes, ...)
     $holidayDays = ['', '*', '']; # fechas festivas
 
@@ -25,56 +33,68 @@ function number_of_working_days($from, $to)
     return $days;
 }
 //dias a fechas
-function sumasdiasemana($fecha, $dias)
-{
-    $datestart = strtotime($fecha);
-    $datesuma = 15 * 86400;
-    $diasemana = date('N', $datestart);
-    $totaldias = $diasemana + $dias;
-    $findesemana = intval($totaldias / 5) * 2;
-    $diasabado = $totaldias % 5;
-    if ($diasabado == 6) $findesemana++;
-    if ($diasabado == 0) $findesemana = $findesemana - 2;
-
-    $total = (($dias + $findesemana) * 86400) + $datestart;
-    return $fechafinal = date('Y-m-d', $total);
-}
-$hoy = date('Y-m-d');
-$tresdias = sumasdiasemana($hoy, 3);
-$cuatrodias = sumasdiasemana($hoy, 4);
+function sumasdiasemana($fecha,$dias)
+        {
+            $datestart= strtotime($fecha);
+            $datesuma = 15 * 86400;
+            $diasemana = date('N',$datestart);
+            $totaldias = $diasemana+$dias;
+            $findesemana = intval( $totaldias/5) *2 ; 
+            $diasabado = $totaldias % 5 ; 
+            if ($diasabado==6) $findesemana++;
+            if ($diasabado==0) $findesemana=$findesemana-2;
+         
+            $total = (($dias+$findesemana) * 86400)+$datestart ; 
+            return $fechafinal = date('Y-m-d', $total);
+        }
+        $hoy=date('Y-m-d');
+        $tresdias=sumasdiasemana($hoy, 3);
+        $cuatrodias=sumasdiasemana($hoy, 4);
 
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8">
-
-    <?php include "includes/scripts.php" ?>
-
-    <title>ESTAMPACIÓN</title>
+	<meta charset="UTF-8">
+	
+    
+    
+	<title>CONFECCIÓN</title>
     <link rel="shortcut icon" href="img/kamisetas-icono.png" type="image/x-icon">
     <style>
+        .redtable {
+    background-color: rgb(245, 180, 173);
+    padding: 0px;
+}
 
+.yellowtable {
+    background-color: rgb(247, 255, 171);
+    padding: 0px;
+}
+
+.greentable {
+    background-color: rgb(173, 253, 181);
+    padding: 0px;
+}
+.titulo {
+    padding: 0px;
+    text-align: center;
+    background-color: #00a8a8;
+    color: #9ecaca;
+    font-size: 20px;
+    border-top: 1px solid #9ecaca3d;
+    text-transform: uppercase;
+}
+
+.titulo th {
+    text-align: center;
+}
     </style>
 </head>
-
 <body>
-    <?php
 
-    if (empty($_SESSION['active'])) {
-        header('location: ../');
-    }
-    ?>
-    <!-- <img id="logo" src="../img/kamisetas.png" alt="" style="display:block; width:200px; position:fixed ; top:90px; left:0px;"> -->
-
-    <a href="listaestampaciongeneral.php" class="btn_new" style="position:fixed ; top:0px; left: 0px;"><input style="display:block; width:150px; position:fixed ; top:0px; left: 0%;;" class="btn_new" type='button' href="listaestampaciongeneral.php" value='MENÚ' /></a>
-    <a href="toexcel/exportar_reporteEstampacion.php" style="display:block;  position:fixed ; top:0px; left: 85%;;" title="Exportar a Excel"><img width="55px" src="img/excel.png" ></a>
-<input style="display:block; width:150px; position:fixed ; top:0px; left: 90%;;" class="btn_new" type='button' onclick='window.print();' value='Imprimir' />
-
-
-    <center>
+<center>
         <div style="width:99%">
 
             <h1 style="font-size:50px; font-weight:bold; color: #00a8a8">REPORTE DE ESTAMPACIÓN <?php echo date('d-m-Y'); ?></h1>
@@ -695,25 +715,22 @@ $cuatrodias = sumasdiasemana($hoy, 4);
 
 
 
+       
 
-
-    <!-- ************************************* -->
+<!-- ************************************* -->
 
     <script>
-        $('#tabla').DataTable({
-
-            "order": [
-                [12, "asc"]
-            ],
-            "pageLength": 50,
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
-            },
-        })
+         $('#tabla').DataTable({
+            
+        "order": [[ 12, "asc" ]],
+        "pageLength": 50,
+        "language": {
+              "url": "https://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+        },
+   })
     </script>
-
-
-
+   
+     
+    
 </body>
-
 </html>

@@ -3,6 +3,7 @@ session_start();
 
 include "../conexion.php";
 
+
 ?>
 
 <!DOCTYPE html>
@@ -12,7 +13,7 @@ include "../conexion.php";
 	
     <?php include "includes/scripts.php"?>
     
-	<title>BODEGA</title>
+	<title>TERMINACIÓN</title>
 	<link rel="shortcut icon" href="img/kamisetas-icono.png" type="image/x-icon">
 	<style>
 		
@@ -20,6 +21,18 @@ include "../conexion.php";
 </head>
 <body>
 <?php 
+if (empty($_GET['id'])) {
+    header('location listaterminaciongeneral.php');
+}else{
+    $idterminacion = $_GET['id'];
+    $update=mysqli_query($conexion, "UPDATE terminacion SET estado=1 WHERE idterminacion=$idterminacion");
+
+    if($update){
+        $alert = '<p class="msg_save">Pedido Restaurado Correctamente</p>';
+    }else{
+        $alert = '<p class="msg_error">No se pudo resturar el pedido Correctamente</p>';
+    }
+}
 
 if (empty($_SESSION['active'])){
   header('location: ../');
@@ -27,13 +40,13 @@ if (empty($_SESSION['active'])){
 include "includes/header.php"?>
 <section id="container">
 
-<a href="reporte_bodega.php" class="btn_new" style="position:fixed ; top:150px; left: 0px;">Reporte</a>
-<a href="listabodegaterminado.php" class="btn_new" style="position:fixed ; top:150px; left: 200px;">Restaurar Pedido</a>
+<a href="listaterminaciongeneral.php" class="btn_new" style="position:fixed ; top:200px; left: 0px;">Lista Terminación</a>
 
 
 <center><div style="width:100%">
 
-<h1>Lista General de Pedidos para BODEGA</h1>
+<h1>Lista de pedidos Terminados y Anulados para TERMINACIÓN</h1>
+<div class="alert"><?php echo isset($alert) ? $alert : ''; ?></div>
         
        
         <table id="tabla" class="display" >
@@ -41,7 +54,7 @@ include "includes/header.php"?>
             <tr class="titulo">
                 <th style="border-right: 1px solid #9ecaca"colspan="10">Información Pedido</th>
                 
-                <th colspan="9"> Información Bodega</th>
+                <th colspan="11"> Información terminación</th>
             </tr>   
              <tr class="titulo">
                 <th>Pedido</th>
@@ -61,6 +74,8 @@ include "includes/header.php"?>
                 <th>Días Falta</th>
                 <th>Unds Parcial</th>
                 <th>Unds Falta</th>
+                <th>Tiempo Total (min)</th>
+                <th>Tiempo Total (hrs)</th>
                 <th>Observaciones</th>
                 <th>Estado</th>
                 <th>Acciones</th>
@@ -92,15 +107,15 @@ include "includes/header.php"?>
 
             $query=mysqli_query($conexion, "SELECT pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
             pe.fecha_fin as 'finpedido', pe.dias_habiles as 'diaspedido', pe.unds, pe.fecha_ingreso, pe.usuario,
-            bo.idbodega, bo.iniciofecha as 'iniciobodega', bo.finfecha as 'finbodega', bo.dias as 'diasbodega',
-            bo.inicioprocesofecha, bo.finprocesofecha, bo.parcial, us.usuario, bo.obs_bodega, pr.siglas, es.estado, est.estado as 'estadopedido'
+            ter.idterminacion, ter.iniciofecha as 'inicioterminacion', ter.finfecha as 'finterminacion', ter.dias as 'diasterminacion',
+            ter.inicioprocesofecha, ter.finprocesofecha, ter.parcial, us.usuario, ter.obs_terminacion, pr.siglas, es.estado, est.estado as 'estadopedido', ter.tiempo
             FROM pedidos pe 
             INNER JOIN procesos pr ON pe.procesos=pr.idproceso
-            INNER JOIN bodega bo ON pe.idpedido=bo.pedido
+            INNER JOIN terminacion ter ON pe.idpedido=ter.pedido
             INNER JOIN usuario us on pe.usuario=us.idusuario
-            INNER JOIN estado es ON bo.estado=es.id_estado
+            INNER JOIN estado es ON ter.estado=es.id_estado
             INNER JOIN estado est ON pe.estado=est.id_estado
-            WHERE bo.estado<=2");
+            WHERE ter.estado>2");
             
             $result=mysqli_num_rows($query);
 
@@ -113,17 +128,19 @@ include "includes/header.php"?>
                     $falta=$unds-$parcial;
                     $hoy=date('Y-m-d');
                     $diapedido=$data['finpedido'];
-                    $diabodega=$data['finbodega'];
+                    $diaterminacion=$data['finterminacion'];
                     $estadopedido=$data['estadopedido'];
+                    $tiempo=$data['tiempo'];
+                    $total_tiempo=round($tiempo*$falta,2);
                     $diafaltapedido=  number_of_working_days($hoy, $diapedido)-1;
                     if($diafaltapedido<0){
                         $diafaltapedido=  -(number_of_working_days($diapedido, $hoy)-1);
                         
                     }
                     
-                    $diafaltabodega=  number_of_working_days($hoy, $diabodega)-1;   
-                    if($diafaltabodega<0){
-                        $diafaltabodega=  -(number_of_working_days($diabodega, $hoy)-1);
+                    $diafaltaterminacion=  number_of_working_days($hoy, $diaterminacion)-1;   
+                    if($diafaltaterminacion<0){
+                        $diafaltaterminacion=  -(number_of_working_days($diaterminacion, $hoy)-1);
                     }
                     echo "
                     <tr>
@@ -145,24 +162,25 @@ include "includes/header.php"?>
                     <td>".$estadopedido."</td>
                     <td style=\"border-right: 1px solid #00a8a8\">".$unds."</td>
                    
-                    <td>".$data['iniciobodega']."</td>
-                    <td>".$data['finbodega']."</td>
-                    <td>".$data['diasbodega']."</td>";
-                    if($diafaltabodega>3){
-                        echo "<td class=\"greentable\">".$diafaltabodega."</td>";
-                     }elseif($diafaltabodega>=0){
-                         echo "<td class=\"yellowtable\">".$diafaltabodega."</td>";  
+                    <td>".$data['inicioterminacion']."</td>
+                    <td>".$data['finterminacion']."</td>
+                    <td>".$data['diasterminacion']."</td>";
+                    if($diafaltaterminacion>3){
+                        echo "<td class=\"greentable\">".$diafaltaterminacion."</td>";
+                     }elseif($diafaltaterminacion>=0){
+                         echo "<td class=\"yellowtable\">".$diafaltaterminacion."</td>";  
                      }else{
-                         echo "<td class=\"redtable\">".$diafaltabodega."</td>"; 
+                         echo "<td class=\"redtable\">".$diafaltaterminacion."</td>"; 
                      }
                     echo "<td>".$parcial."</td>
                     <td>".$falta."</td>
-                    <td>".$data['obs_bodega']."</td>
+                    <td>".$total_tiempo."</td>
+                    <td>".round($total_tiempo/60,2)."</td>
+                    <td>".$data['obs_terminacion']."</td>
                     <td>".$data['estado']."</td>
                     <td><div>
-                    <a title=\"Editar\"class=\"link_edit\"href=\"editar_bodega.php?id=".$data['idbodega']."\"><span class=\"glyphicon glyphicon-pencil\" aria-hidden=\"true\"></span></a>
-                    <a title=\"Finalizar\"class=\"link_edit\"href=\"finalizar_bodega.php?id=".$data['idbodega']."\"><span class=\"glyphicon glyphicon-ok\" aria-hidden=\"true\"></span></a>
-                    <a title=\"Anular\"class=\"link_delete\"href=\"anular_bodega.php?id=".$data['idbodega']."\"><span class=\"glyphicon glyphicon-trash\" aria-hidden=\"true\"></span></a>
+                    <a title=\"Restaurar Pedido\"class=\"link_edit\"href=\"listaterminacionterminado.php?id=".$data['idterminacion']."\"><span class=\"glyphicon glyphicon-share\" aria-hidden=\"true\"></span></a>
+                    
                     
                     </div>
                     </td>                   

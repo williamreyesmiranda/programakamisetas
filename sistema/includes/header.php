@@ -19,7 +19,7 @@ if (empty($_SESSION['active'])){
 				<p>Medellin, <?php echo fechaC() ;?></p>
 				<span>|</span>
 				<span class="user"><?php echo $_SESSION['nombre'].' ('.$_SESSION['rol'].')'; ?></span>
-				<a style="color: #9ecaca; font-weight:bold; font-size: 20px; text-decoration: none;"title="Cerrar Sesión"href="../salir.php">SALIR</a>
+				<a style="color: #9ecaca; font-weight:bold; font-size: 20px; text-decoration: none;"title="Cerrar Sesión"href="../salir.php"><img  id="" src="./img/salir.png" alt="" style="width: 40px; color: #9ecaca;"></a>
 			</div>
 		</div>
 		<?php include "nav.php"?>

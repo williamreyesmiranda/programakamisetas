@@ -27,8 +27,8 @@ if (empty($_SESSION['active'])){
 include "includes/header.php"?>
 <section id="container">
 
-<a href="reporte_terminacion.php" class="btn_new" style="position:fixed ; top:200px; left: 0px;">Reporte</a>
-
+<a href="reporte_terminacion.php" class="btn_new" style="position:fixed ; top:150px; left: 0px;">Reporte</a>
+<a href="listaterminacionterminado.php" class="btn_new" style="position:fixed ; top:150px; left: 200px;">Restaurar Pedido</a>
 
 <center><div style="width:100%">
 
@@ -40,7 +40,7 @@ include "includes/header.php"?>
             <tr class="titulo">
                 <th style="border-right: 1px solid #9ecaca"colspan="10">Información Pedido</th>
                 
-                <th colspan="9"> Información terminación</th>
+                <th colspan="11"> Información terminación</th>
             </tr>   
              <tr class="titulo">
                 <th>Pedido</th>
@@ -60,6 +60,8 @@ include "includes/header.php"?>
                 <th>Días Falta</th>
                 <th>Unds Parcial</th>
                 <th>Unds Falta</th>
+                <th>Tiempo Total (min)</th>
+                <th>Tiempo Total (hrs)</th>
                 <th>Observaciones</th>
                 <th>Estado</th>
                 <th>Acciones</th>
@@ -92,7 +94,7 @@ include "includes/header.php"?>
             $query=mysqli_query($conexion, "SELECT pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
             pe.fecha_fin as 'finpedido', pe.dias_habiles as 'diaspedido', pe.unds, pe.fecha_ingreso, pe.usuario,
             ter.idterminacion, ter.iniciofecha as 'inicioterminacion', ter.finfecha as 'finterminacion', ter.dias as 'diasterminacion',
-            ter.inicioprocesofecha, ter.finprocesofecha, ter.parcial, us.usuario, ter.obs_terminacion, pr.siglas, es.estado, est.estado as 'estadopedido'
+            ter.inicioprocesofecha, ter.finprocesofecha, ter.parcial, us.usuario, ter.obs_terminacion, pr.siglas, es.estado, est.estado as 'estadopedido', ter.tiempo
             FROM pedidos pe 
             INNER JOIN procesos pr ON pe.procesos=pr.idproceso
             INNER JOIN terminacion ter ON pe.idpedido=ter.pedido
@@ -114,6 +116,8 @@ include "includes/header.php"?>
                     $diapedido=$data['finpedido'];
                     $diaterminacion=$data['finterminacion'];
                     $estadopedido=$data['estadopedido'];
+                    $tiempo=$data['tiempo'];
+                    $total_tiempo=round($tiempo*$falta,2);
                     $diafaltapedido=  number_of_working_days($hoy, $diapedido)-1;
                     if($diafaltapedido<0){
                         $diafaltapedido=  -(number_of_working_days($diapedido, $hoy)-1);
@@ -156,6 +160,8 @@ include "includes/header.php"?>
                      }
                     echo "<td>".$parcial."</td>
                     <td>".$falta."</td>
+                    <td>".$total_tiempo."</td>
+                    <td>".round($total_tiempo/60,2)."</td>
                     <td>".$data['obs_terminacion']."</td>
                     <td>".$data['estado']."</td>
                     <td><div>

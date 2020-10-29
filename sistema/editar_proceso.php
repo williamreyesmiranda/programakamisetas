@@ -11,8 +11,14 @@ if (!empty($_POST)) {
     ) {
         $alert = '<p class="msg_error">Todos los campos son obligatorios</p>';
     } else {
-
-
+        $idpedido=$_POST['idpedido'];
+        $delete=mysqli_query($conexion, "DELETE FROM bodega WHERE pedido='$idpedido'");
+        $delete=mysqli_query($conexion, "DELETE FROM corte WHERE pedido='$idpedido'");
+        $delete=mysqli_query($conexion, "DELETE FROM confeccion WHERE pedido='$idpedido'");
+        $delete=mysqli_query($conexion, "DELETE FROM sublimacion WHERE pedido='$idpedido'");
+        $delete=mysqli_query($conexion, "DELETE FROM terminacion WHERE pedido='$idpedido'");
+        $delete=mysqli_query($conexion, "DELETE FROM estampacion WHERE pedido='$idpedido'");
+        $delete=mysqli_query($conexion, "DELETE FROM pedidos WHERE idpedido='$idpedido'");
 
         $nropedido = $_POST['nropedido'];
         $nombre = $_POST['nombrecliente'];
@@ -160,15 +166,49 @@ if (!empty($_POST)) {
                     $alert .= "<label class=\"msg_error alert\">Error al ingresar en " . $dato6 . "</label>";
                 }
             }
-            $select_tiempo=mysqli_query($conexion,"SELECT tiempo_terminacion FROM procesos WHERE idproceso=$procesos");
-            $consult_tiempo=mysqli_fetch_array($select_tiempo);
-            $tiempo=$consult_tiempo['tiempo_terminacion'];
-            $update_tiempo=mysqli_query($conexion,"UPDATE terminacion SET tiempo=$tiempo WHERE pedido=$maxpedido");
+            $select_tiempo = mysqli_query($conexion, "SELECT tiempo_terminacion FROM procesos WHERE idproceso=$procesos");
+            $consult_tiempo = mysqli_fetch_array($select_tiempo);
+            $tiempo = $consult_tiempo['tiempo_terminacion'];
+            $update_tiempo = mysqli_query($conexion, "UPDATE terminacion SET tiempo=$tiempo WHERE pedido=$maxpedido");
         } else {
             $alert .= '<label class="msg_error alert">Error al ingresar el Pedido</label>';
         }
     }
 } #FIN DEL POST
+
+
+#inicio de consulta
+if (empty($_GET['id'])) {
+    header('location lista_pedidos.php');
+}
+$idpedido = $_GET['id'];
+
+$sql = mysqli_query($conexion, "SELECT pe.idpedido, pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
+pe.fecha_fin as 'finpedido', pe.dias_habiles, pro.siglas, pro.idproceso,pe.unds, us.nombre as 'usuario', est.estado FROM pedidos pe 
+INNER JOIN procesos pro 
+ON pe.procesos=pro.idproceso
+INNER JOIN usuario us 
+ON pe.usuario=us.idusuario
+INNER JOIN estado est 
+ON pe.estado=est.id_estado WHERE pe.idpedido=$idpedido");
+
+$result_sql = mysqli_num_rows($sql);
+
+if ($result_sql == 0) {
+    header('location lista:pedidos.php');
+} else {
+    $data = mysqli_fetch_array($sql);
+    $id = $data['idpedido'];
+    $asesor = $data['asesor'];
+    $pedido = $data['num_pedido'];
+    $cliente = $data['cliente'];
+    $iniciopedido = $data['iniciopedido'];
+    $finpedido = $data['finpedido'];
+    $idproceso = $data['idproceso'];
+    $siglas = $data['siglas'];
+    $unds = $data['unds'];
+    $dias = $data['dias_habiles'];
+}
 ?>
 
 
@@ -180,7 +220,7 @@ if (!empty($_POST)) {
     <meta charset="UTF-8">
 
     <?php include "includes/scripts.php" ?>
-    <title>REGISTRO PEDIDOS</title>
+    <title>ACTUALIACIÓN</title>
     <link rel="shortcut icon" href="img/kamisetas-icono.png" type="image/x-icon">
     <style>
 
@@ -200,12 +240,13 @@ if (!empty($_POST)) {
 
 
     <section id="container">
+        <a href="lista_pedidos.php" class="btn_new" style="position:fixed ; top:150px; left: 0px;">Lista Pedidos</a>
         <div class="form-register">
 
 
 
             <form action="" method="post" id="formulario_pedido">
-                <h1>Registro de Pedidos</h1>
+                <h1>Actualización de Pedido</h1>
                 <center>(*) campos requeridos</center>
                 <?php echo isset($alert) ? $alert : ''; ?>
                 <hr>
@@ -213,9 +254,10 @@ if (!empty($_POST)) {
 
                 <div>
                     <label for="nropedido">Nro Pedido (*)</label>
-                    <input value="" type="text" name="nropedido" id="nropedido" placeholder="Ingrese N° Pedido" autocomplete="off" autofocus required>
+                    <input type="text" name="nropedido" id="nropedido" value="<?php echo $pedido ?>">
                 </div>
                 <div class="regcliente">
+                    <input type="hidden" name="idpedido" id="idpedido" value="<?php echo $idpedido ?>">
 
                     <?php
                     $query_idcliente = mysqli_query($conexion, "SELECT * FROM clientes order by nombre asc");
@@ -223,8 +265,9 @@ if (!empty($_POST)) {
 
                     ?>
                     <label>Nombre Cliente (*)
-                        <input list="nombrecliente" name="nombrecliente" class="nombrecliente" placeholder="Ingrese el nombre del Cliente" /></label>
+                        <input list="nombrecliente" name="nombrecliente" class="nombrecliente" value="<?php echo $cliente ?>"></label>
                     <datalist name="nombrecliente" id="nombrecliente">
+
                         <?php
                         if ($result_idcliente > 0) {
                             while ($idcliente = mysqli_fetch_array($query_idcliente)) {
@@ -238,35 +281,36 @@ if (!empty($_POST)) {
                 </div>
                 <div>
                     <label for="asesor">Asesor (*)</label>
-                    <input type="text" name="asesor" id="asesor" placeholder="Ingrese el nombre del Comercial" value="">
+                    <input type="text" name="asesor" id="asesor" value="<?php echo $asesor ?>">
                 </div>
 
                 <div>
                     <label for="fechainicio">Fecha Inicio(*)</label>
-                    <input type="date" name="fechainicio" id="fechainicio" required>
+                    <input type="date" name="fechainicio" id="fechainicio" value="<?php echo $iniciopedido ?>" required>
                 </div>
                 <div>
                     <label for="fechafin">Fecha Entrega(*)</label>
-                    <input type="date" name="fechafin" id="fechafin" required>
+                    <input type="date" name="fechafin" id="fechafin" value="<?php echo $finpedido ?>" required>
                 </div>
                 <div>
                     <label for="diashabiles">Días hábiles(Automático)</label>
 
-                    <div id="diashabiles" style="font-size:30px"></div>
+                    <div id="diashabiles" style="font-size:30px"><?php echo $dias ?></div>
                 </div>
                 <div>
                     <label for="unds">Unidades(*)</label>
-                    <input type="text" name="unds" id="unds" autocomplete="off" required>
+                    <input type="text" name="unds" id="unds" autocomplete="off" value="<?php echo $unds ?>" required>
                 </div>
                 <div>
-                    <label for="procesos">Procesos Implicados(*)</label>
+                    <label for="procesos">Procesos Implicados</label>
                     <?php
                     $query_procesos = mysqli_query($conexion, "SELECT * FROM procesos");
                     $result_procesos = mysqli_num_rows($query_procesos);
 
                     ?>
-                    <select name="procesos" id="procesos" class="select2" required>
-                        <option value="0" disabled selected>Seleccione una Opción</option>
+                    <select name="procesos" id="procesos" class="itemunico select2" required>
+                        <?php echo "  <option value=\"" . $idproceso . "\">" . $siglas . "</option>"; ?>
+                        <option value="0" disabled>Seleccione una Opción</option>
                         <?php
                         if ($result_procesos > 0) {
                             while ($procesos = mysqli_fetch_array($query_procesos)) {

@@ -3,6 +3,17 @@ session_start();
 
 include "../conexion.php";
 
+if (empty($_GET['id'])) {
+    header('location listacortegeneral.php');
+}else{
+    $idcorte = $_GET['id'];
+    $update=mysqli_query($conexion, "UPDATE corte SET estado=1 WHERE idcorte=$idcorte");
+    if($update){
+        $alert = '<p class="msg_save">Pedido Restaurado Correctamente</p>';
+    }else{
+        $alert = '<p class="msg_error">No se pudo restaurar el pedido Correctamente</p>';
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -12,7 +23,7 @@ include "../conexion.php";
 	
     <?php include "includes/scripts.php"?>
     
-	<title>BODEGA</title>
+	<title>CORTE</title>
 	<link rel="shortcut icon" href="img/kamisetas-icono.png" type="image/x-icon">
 	<style>
 		
@@ -27,21 +38,20 @@ if (empty($_SESSION['active'])){
 include "includes/header.php"?>
 <section id="container">
 
-<a href="reporte_bodega.php" class="btn_new" style="position:fixed ; top:150px; left: 0px;">Reporte</a>
-<a href="listabodegaterminado.php" class="btn_new" style="position:fixed ; top:150px; left: 200px;">Restaurar Pedido</a>
+<a href="listacortegeneral.php" class="btn_new" style="position:fixed ; top:150px; left: 0px;">Lista Corte</a>
 
 
 <center><div style="width:100%">
 
-<h1>Lista General de Pedidos para BODEGA</h1>
-        
+<h1>Lista de pedidos Terminados y Anulados para CORTE</h1>
+<div class="alert"><?php echo isset($alert) ? $alert : ''; ?></div>
        
         <table id="tabla" class="display" >
          <thead>   
             <tr class="titulo">
                 <th style="border-right: 1px solid #9ecaca"colspan="10">Información Pedido</th>
                 
-                <th colspan="9"> Información Bodega</th>
+                <th colspan="10"> Información corte</th>
             </tr>   
              <tr class="titulo">
                 <th>Pedido</th>
@@ -59,6 +69,7 @@ include "includes/header.php"?>
                 <th>Fecha Entrega</th>
                 <th>Días Hab</th>
                 <th>Días Falta</th>
+                <th> N° OC</th>
                 <th>Unds Parcial</th>
                 <th>Unds Falta</th>
                 <th>Observaciones</th>
@@ -92,15 +103,15 @@ include "includes/header.php"?>
 
             $query=mysqli_query($conexion, "SELECT pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
             pe.fecha_fin as 'finpedido', pe.dias_habiles as 'diaspedido', pe.unds, pe.fecha_ingreso, pe.usuario,
-            bo.idbodega, bo.iniciofecha as 'iniciobodega', bo.finfecha as 'finbodega', bo.dias as 'diasbodega',
-            bo.inicioprocesofecha, bo.finprocesofecha, bo.parcial, us.usuario, bo.obs_bodega, pr.siglas, es.estado, est.estado as 'estadopedido'
+            co.idcorte, co.iniciofecha as 'iniciocorte', co.finfecha as 'fincorte', co.dias as 'diascorte', co.oc,
+            co.inicioprocesofecha, co.finprocesofecha, co.parcial, us.usuario, co.obs_corte, pr.siglas, es.estado, est.estado as 'estadopedido'
             FROM pedidos pe 
             INNER JOIN procesos pr ON pe.procesos=pr.idproceso
-            INNER JOIN bodega bo ON pe.idpedido=bo.pedido
+            INNER JOIN corte co ON pe.idpedido=co.pedido
             INNER JOIN usuario us on pe.usuario=us.idusuario
-            INNER JOIN estado es ON bo.estado=es.id_estado
+            INNER JOIN estado es ON co.estado=es.id_estado
             INNER JOIN estado est ON pe.estado=est.id_estado
-            WHERE bo.estado<=2");
+            WHERE co.estado>2");
             
             $result=mysqli_num_rows($query);
 
@@ -113,17 +124,18 @@ include "includes/header.php"?>
                     $falta=$unds-$parcial;
                     $hoy=date('Y-m-d');
                     $diapedido=$data['finpedido'];
-                    $diabodega=$data['finbodega'];
+                    $diacorte=$data['fincorte'];
                     $estadopedido=$data['estadopedido'];
+
                     $diafaltapedido=  number_of_working_days($hoy, $diapedido)-1;
                     if($diafaltapedido<0){
                         $diafaltapedido=  -(number_of_working_days($diapedido, $hoy)-1);
                         
                     }
                     
-                    $diafaltabodega=  number_of_working_days($hoy, $diabodega)-1;   
-                    if($diafaltabodega<0){
-                        $diafaltabodega=  -(number_of_working_days($diabodega, $hoy)-1);
+                    $diafaltacorte=  number_of_working_days($hoy, $diacorte)-1;   
+                    if($diafaltacorte<0){
+                        $diafaltacorte=  -(number_of_working_days($diacorte, $hoy)-1);
                     }
                     echo "
                     <tr>
@@ -145,25 +157,24 @@ include "includes/header.php"?>
                     <td>".$estadopedido."</td>
                     <td style=\"border-right: 1px solid #00a8a8\">".$unds."</td>
                    
-                    <td>".$data['iniciobodega']."</td>
-                    <td>".$data['finbodega']."</td>
-                    <td>".$data['diasbodega']."</td>";
-                    if($diafaltabodega>3){
-                        echo "<td class=\"greentable\">".$diafaltabodega."</td>";
-                     }elseif($diafaltabodega>=0){
-                         echo "<td class=\"yellowtable\">".$diafaltabodega."</td>";  
+                    <td>".$data['iniciocorte']."</td>
+                    <td>".$data['fincorte']."</td>
+                    <td>".$data['diascorte']."</td>";
+                    if($diafaltacorte>3){
+                        echo "<td class=\"greentable\">".$diafaltacorte."</td>";
+                     }elseif($diafaltacorte>=0){
+                         echo "<td class=\"yellowtable\">".$diafaltacorte."</td>";  
                      }else{
-                         echo "<td class=\"redtable\">".$diafaltabodega."</td>"; 
+                         echo "<td class=\"redtable\">".$diafaltacorte."</td>"; 
                      }
-                    echo "<td>".$parcial."</td>
+                    echo "<td>".$data['oc']."</td>
+                    <td>".$parcial."</td>
                     <td>".$falta."</td>
-                    <td>".$data['obs_bodega']."</td>
+                    <td>".$data['obs_corte']."</td>
                     <td>".$data['estado']."</td>
                     <td><div>
-                    <a title=\"Editar\"class=\"link_edit\"href=\"editar_bodega.php?id=".$data['idbodega']."\"><span class=\"glyphicon glyphicon-pencil\" aria-hidden=\"true\"></span></a>
-                    <a title=\"Finalizar\"class=\"link_edit\"href=\"finalizar_bodega.php?id=".$data['idbodega']."\"><span class=\"glyphicon glyphicon-ok\" aria-hidden=\"true\"></span></a>
-                    <a title=\"Anular\"class=\"link_delete\"href=\"anular_bodega.php?id=".$data['idbodega']."\"><span class=\"glyphicon glyphicon-trash\" aria-hidden=\"true\"></span></a>
-                    
+                    <a title=\"Restaurar Pedido\"class=\"link_edit\"href=\"listacorteterminado.php?id=".$data['idcorte']."\"><span class=\"glyphicon glyphicon-share\" aria-hidden=\"true\"></span></a>
+                                        
                     </div>
                     </td>                   
                     </tr>                    ";

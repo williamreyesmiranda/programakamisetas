@@ -1,8 +1,17 @@
-<?php
-session_start();
-
-include "../conexion.php";
+<?php 
 date_default_timezone_set('America/Bogota');
+header("Pragma: public");
+header("Expires: 0");
+$filename = "Reporte_Sublimacion ".date('Y-m-d H-i-s').".xls";
+header("Content-type: application/x-msdownload");
+header("Content-Disposition: attachment; filename=$filename");
+header("Pragma: no-cache");
+header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+
+
+
+include "../../conexion.php";
+
 //fechas a dias
 function number_of_working_days($from, $to) {
     $workingDays = [1, 2, 3, 4, 5]; # formato = N (1 = lunes, ...)
@@ -49,31 +58,45 @@ function sumasdiasemana($fecha,$dias)
 <head>
 	<meta charset="UTF-8">
 	
-    <?php include "includes/scripts.php"?>
     
-	<title>BODEGA</title>
-	<link rel="shortcut icon" href="img/kamisetas-icono.png" type="image/x-icon">
-	<style>
-  
+    
+	<title>CONFECCIÓN</title>
+    <link rel="shortcut icon" href="img/kamisetas-icono.png" type="image/x-icon">
+    <style>
+        .redtable {
+    background-color: rgb(245, 180, 173);
+    padding: 0px;
+}
+
+.yellowtable {
+    background-color: rgb(247, 255, 171);
+    padding: 0px;
+}
+
+.greentable {
+    background-color: rgb(173, 253, 181);
+    padding: 0px;
+}
+.titulo {
+    padding: 0px;
+    text-align: center;
+    background-color: #00a8a8;
+    color: #9ecaca;
+    font-size: 20px;
+    border-top: 1px solid #9ecaca3d;
+    text-transform: uppercase;
+}
+
+.titulo th {
+    text-align: center;
+}
     </style>
 </head>
 <body>
-<?php 
-
-if (empty($_SESSION['active'])){
-  header('location: ../');
-}
-?>
-
-
-<a href="listabodegageneral.php" class="btn_new" style="position:fixed ; top:0px; left: 0px;"><input style="display:block; width:150px; position:fixed ; top:0px; left: 0%;;" class="btn_new" type='button' href="listabodegageneral.php" value='MENÚ' /></a>
-<a href="toexcel/exportar_reporteBodega.php" style="display:block;  position:fixed ; top:0px; left: 85%;;" title="Exportar a Excel"><img width="55px" src="img/excel.png" ></a>
-<input style="display:block; width:150px; position:fixed ; top:0px; left: 90%;;" class="btn_new" type='button' onclick='window.print();' value='Imprimir' />
-
 
 <center><div style="width:99%">
 
-<h1 style="font-size:50px; font-weight:bold; color: #00a8a8; width:60%">REPORTE DE BODEGA <?php echo date('d-m-Y');?></h1>
+<h1 style="font-size:50px; font-weight:bold; color: #00a8a8">REPORTE DE SUBLIMACIÓN <?php echo date('d-m-Y');?></h1>
         <table style="width:50% !important; ">
             <thead>
                 <tr >
@@ -87,39 +110,39 @@ if (empty($_SESSION['active'])){
             <tbody>
                 <tr>
                     <th class="titulo">Pedidos</th>
-                    <td background="red"><?php $query=mysqli_query($conexion,"SELECT * FROM bodega WHERE finfecha<'$hoy' AND estado<=2"); echo mysqli_num_rows($query)?></td>
-                    <td><?php $query=mysqli_query($conexion,"SELECT * FROM bodega WHERE estado<=2 AND finfecha BETWEEN'$hoy' AND '$tresdias' "); echo mysqli_num_rows($query)?></td>
-                    <td><?php $query=mysqli_query($conexion,"SELECT * FROM bodega WHERE finfecha>='$cuatrodias' AND estado<=2"); echo mysqli_num_rows($query)?></td>
-                    <td><?php $query=mysqli_query($conexion,"SELECT * FROM bodega WHERE  estado<=2"); echo mysqli_num_rows($query)?></td>
+                    <td background="red"><?php $query=mysqli_query($conexion,"SELECT * FROM sublimacion WHERE finfecha<'$hoy' AND estado<=2"); echo mysqli_num_rows($query)?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT * FROM sublimacion WHERE estado<=2 AND finfecha BETWEEN'$hoy' AND '$tresdias' "); echo mysqli_num_rows($query)?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT * FROM sublimacion WHERE finfecha>='$cuatrodias' AND estado<=2"); echo mysqli_num_rows($query)?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT * FROM sublimacion WHERE  estado<=2"); echo mysqli_num_rows($query)?></td>
                 </tr>
                 <tr>
                     <th class="titulo">Unds Listas</th>
-                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(parcial) as 'suma' FROM bodega WHERE finfecha<'$hoy' AND estado<=2"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
-                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(parcial) as 'suma' FROM bodega WHERE estado<=2 AND finfecha BETWEEN'$hoy' AND '$tresdias'"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
-                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(parcial) as 'suma' FROM bodega WHERE finfecha>='$cuatrodias' AND estado<=2"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
-                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(parcial) as 'suma' FROM bodega WHERE  estado<=2"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(parcial) as 'suma' FROM sublimacion WHERE finfecha<'$hoy' AND estado<=2"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(parcial) as 'suma' FROM sublimacion WHERE estado<=2 AND finfecha BETWEEN'$hoy' AND '$tresdias'"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(parcial) as 'suma' FROM sublimacion WHERE finfecha>='$cuatrodias' AND estado<=2"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(parcial) as 'suma' FROM sublimacion WHERE  estado<=2"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
                 </tr>
                 <tr>
                     <th class="titulo">Unds Faltantes</th>
-                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds-bo.parcial) as 'resta' FROM bodega bo INNER JOIN pedidos pe ON bo.pedido=pe.idpedido
-                                                            WHERE bo.estado<=2 AND bo.finfecha<'$hoy'"); $result=mysqli_fetch_array($query); echo $result['resta'];?></td>
-                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds-bo.parcial) as 'resta' FROM bodega bo INNER JOIN pedidos pe ON bo.pedido=pe.idpedido
-                                                            WHERE bo.estado<=2 AND bo.finfecha BETWEEN'$hoy' AND '$tresdias'"); $result=mysqli_fetch_array($query); echo $result['resta'];?></td>
-                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds-bo.parcial) as 'resta' FROM bodega bo INNER JOIN pedidos pe ON bo.pedido=pe.idpedido
-                                                            WHERE bo.estado<=2 AND bo.finfecha>='$cuatrodias'"); $result=mysqli_fetch_array($query); echo $result['resta'];?></td>
-                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds-bo.parcial) as 'resta' FROM bodega bo INNER JOIN pedidos pe ON bo.pedido=pe.idpedido
-                                                            WHERE bo.estado<=2"); $result=mysqli_fetch_array($query); echo $result['resta'];?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds-su.parcial) as 'resta' FROM sublimacion su INNER JOIN pedidos pe ON su.pedido=pe.idpedido
+                                                            WHERE su.estado<=2 AND su.finfecha<'$hoy'"); $result=mysqli_fetch_array($query); echo $result['resta'];?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds-su.parcial) as 'resta' FROM sublimacion su INNER JOIN pedidos pe ON su.pedido=pe.idpedido
+                                                            WHERE su.estado<=2 AND su.finfecha BETWEEN'$hoy' AND '$tresdias'"); $result=mysqli_fetch_array($query); echo $result['resta'];?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds-su.parcial) as 'resta' FROM sublimacion su INNER JOIN pedidos pe ON su.pedido=pe.idpedido
+                                                            WHERE su.estado<=2 AND su.finfecha>='$cuatrodias'"); $result=mysqli_fetch_array($query); echo $result['resta'];?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds-su.parcial) as 'resta' FROM sublimacion su INNER JOIN pedidos pe ON su.pedido=pe.idpedido
+                                                            WHERE su.estado<=2"); $result=mysqli_fetch_array($query); echo $result['resta'];?></td>
                 </tr>
                 <tr>
                     <th class="titulo">Unds Totales</th>
-                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds) as 'suma' FROM bodega bo INNER JOIN pedidos pe ON bo.pedido=pe.idpedido
-                                                            WHERE bo.estado<=2 AND bo.finfecha<'$hoy'"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
-                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds) as 'suma' FROM bodega bo INNER JOIN pedidos pe ON bo.pedido=pe.idpedido
-                                                            WHERE bo.estado<=2 AND bo.finfecha BETWEEN'$hoy' AND '$tresdias'"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
-                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds) as 'suma' FROM bodega bo INNER JOIN pedidos pe ON bo.pedido=pe.idpedido
-                                                            WHERE bo.estado<=2 AND bo.finfecha>='$cuatrodias'"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
-                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds) as 'suma' FROM bodega bo INNER JOIN pedidos pe ON bo.pedido=pe.idpedido
-                                                            WHERE bo.estado<=2"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds) as 'suma' FROM sublimacion su INNER JOIN pedidos pe ON su.pedido=pe.idpedido
+                                                            WHERE su.estado<=2 AND su.finfecha<'$hoy'"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds) as 'suma' FROM sublimacion su INNER JOIN pedidos pe ON su.pedido=pe.idpedido
+                                                            WHERE su.estado<=2 AND su.finfecha BETWEEN'$hoy' AND '$tresdias'"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds) as 'suma' FROM sublimacion su INNER JOIN pedidos pe ON su.pedido=pe.idpedido
+                                                            WHERE su.estado<=2 AND su.finfecha>='$cuatrodias'"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
+                    <td><?php $query=mysqli_query($conexion,"SELECT SUM(pe.unds) as 'suma' FROM sublimacion su INNER JOIN pedidos pe ON su.pedido=pe.idpedido
+                                                            WHERE su.estado<=2"); $result=mysqli_fetch_array($query); echo $result['suma'];?></td>
                 </tr>
             </tbody>
         </table>
@@ -131,7 +154,7 @@ if (empty($_SESSION['active'])){
               
             <tr class="titulo">
                 <th style="border-right: 1px solid #9ecaca"colspan="9">Información Pedido</th>
-                <th colspan="8"> Información Bodega</th>
+                <th colspan="8"> Información sublimacion</th>
             </tr>   
              <tr class="titulo">
                 <th >Pedido</th>
@@ -166,14 +189,14 @@ if (empty($_SESSION['active'])){
             
             $query=mysqli_query($conexion, "SELECT pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
             pe.fecha_fin as 'finpedido', pe.dias_habiles as 'diaspedido', pe.unds, pe.fecha_ingreso, pe.usuario,
-            bo.idbodega, bo.iniciofecha as 'iniciobodega', bo.finfecha as 'finbodega', bo.dias as 'diasbodega',
-            bo.inicioprocesofecha, bo.finprocesofecha, bo.parcial, us.usuario, bo.obs_bodega, pr.siglas, es.estado
+            su.idsublimacion, su.iniciofecha as 'iniciosublimacion', su.finfecha as 'finsublimacion', su.dias as 'diassublimacion',
+            su.inicioprocesofecha, su.finprocesofecha, su.parcial, us.usuario, su.obs_sublimacion, pr.siglas, es.estado
             FROM pedidos pe 
             INNER JOIN procesos pr ON pe.procesos=pr.idproceso
-            INNER JOIN bodega bo ON pe.idpedido=bo.pedido
+            INNER JOIN sublimacion su ON pe.idpedido=su.pedido
             INNER JOIN usuario us on pe.usuario=us.idusuario
-            INNER JOIN estado es ON bo.estado=es.id_estado
-            WHERE bo.estado<=2 and finfecha<'$hoy'");
+            INNER JOIN estado es ON su.estado=es.id_estado
+            WHERE su.estado<=2 and finfecha<'$hoy'");
             
             $result=mysqli_num_rows($query);
 
@@ -186,14 +209,14 @@ if (empty($_SESSION['active'])){
                     $falta=$unds-$parcial;
                     
                     $diapedido=$data['finpedido'];
-                    $diabodega=$data['finbodega'];
+                    $diasublimacion=$data['finsublimacion'];
                     $diafaltapedido=  number_of_working_days($hoy, $diapedido)-1;
                     if($diafaltapedido<0){
                         $diafaltapedido=  -(number_of_working_days($diapedido, $hoy)-1);
                     }
-                    $diafaltabodega=  number_of_working_days($hoy, $diabodega)-1;   
-                    if($diafaltabodega<0){
-                        $diafaltabodega=  -(number_of_working_days($diabodega, $hoy)-1);
+                    $diafaltasublimacion=  number_of_working_days($hoy, $diasublimacion)-1;   
+                    if($diafaltasublimacion<0){
+                        $diafaltasublimacion=  -(number_of_working_days($diasublimacion, $hoy)-1);
                     }
                     echo "
                     <tr>
@@ -214,19 +237,19 @@ if (empty($_SESSION['active'])){
                    echo " <td class=\"redtable\">".$data['siglas']."</td>
                     <td class=\"redtable\" style=\"border-right: 1px solid #00a8a8\">".$unds."</td>
                    
-                    <td class=\"redtable\">".$data['iniciobodega']."</td>
-                    <td class=\"redtable\">".$data['finbodega']."</td>
-                    <td class=\"redtable\">".$data['diasbodega']."</td>";
-                    if($diafaltabodega>3){
-                        echo "<td class=\"greentable\">".$diafaltabodega."</td>";
-                     }elseif($diafaltabodega>=0){
-                         echo "<td class=\"yellowtable\">".$diafaltabodega."</td>";  
+                    <td class=\"redtable\">".$data['iniciosublimacion']."</td>
+                    <td class=\"redtable\">".$data['finsublimacion']."</td>
+                    <td class=\"redtable\">".$data['diassublimacion']."</td>";
+                    if($diafaltasublimacion>3){
+                        echo "<td class=\"greentable\">".$diafaltasublimacion."</td>";
+                     }elseif($diafaltasublimacion>=0){
+                         echo "<td class=\"yellowtable\">".$diafaltasublimacion."</td>";  
                      }else{
-                         echo "<td class=\"redtable\">".$diafaltabodega."</td>"; 
+                         echo "<td class=\"redtable\">".$diafaltasublimacion."</td>"; 
                      }
                     echo "<td class=\"redtable\">".$parcial."</td>
                     <td class=\"redtable\">".$falta."</td>
-                    <td class=\"redtable\">".$data['obs_bodega']."</td>
+                    <td class=\"redtable\">".$data['obs_sublimacion']."</td>
                     <td class=\"redtable\">".$data['estado']."</td>
                     </tr>                    ";
                 }
@@ -241,14 +264,14 @@ if (empty($_SESSION['active'])){
             
             $query=mysqli_query($conexion, "SELECT pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
             pe.fecha_fin as 'finpedido', pe.dias_habiles as 'diaspedido', pe.unds, pe.fecha_ingreso, pe.usuario,
-            bo.idbodega, bo.iniciofecha as 'iniciobodega', bo.finfecha as 'finbodega', bo.dias as 'diasbodega',
-            bo.inicioprocesofecha, bo.finprocesofecha, bo.parcial, us.usuario, bo.obs_bodega, pr.siglas, es.estado
+            su.idsublimacion, su.iniciofecha as 'iniciosublimacion', su.finfecha as 'finsublimacion', su.dias as 'diassublimacion',
+            su.inicioprocesofecha, su.finprocesofecha, su.parcial, us.usuario, su.obs_sublimacion, pr.siglas, es.estado
             FROM pedidos pe 
             INNER JOIN procesos pr ON pe.procesos=pr.idproceso
-            INNER JOIN bodega bo ON pe.idpedido=bo.pedido
+            INNER JOIN sublimacion su ON pe.idpedido=su.pedido
             INNER JOIN usuario us on pe.usuario=us.idusuario
-            INNER JOIN estado es ON bo.estado=es.id_estado
-            WHERE bo.estado<=2 and finfecha BETWEEN'$hoy' AND '$tresdias'");
+            INNER JOIN estado es ON su.estado=es.id_estado
+            WHERE su.estado<=2 and finfecha BETWEEN'$hoy' AND '$tresdias'");
             
             $result=mysqli_num_rows($query);
 
@@ -261,14 +284,14 @@ if (empty($_SESSION['active'])){
                     $falta=$unds-$parcial;
                     
                     $diapedido=$data['finpedido'];
-                    $diabodega=$data['finbodega'];
+                    $diasublimacion=$data['finsublimacion'];
                     $diafaltapedido=  number_of_working_days($hoy, $diapedido)-1;
                     if($diafaltapedido<0){
                         $diafaltapedido=  -(number_of_working_days($diapedido, $hoy)-1);
                     }
-                    $diafaltabodega=  number_of_working_days($hoy, $diabodega)-1;   
-                    if($diafaltabodega<0){
-                        $diafaltabodega=  -(number_of_working_days($diabodega, $hoy)-1);
+                    $diafaltasublimacion=  number_of_working_days($hoy, $diasublimacion)-1;   
+                    if($diafaltasublimacion<0){
+                        $diafaltasublimacion=  -(number_of_working_days($diasublimacion, $hoy)-1);
                     }
                     echo "
                     <tr>
@@ -289,19 +312,19 @@ if (empty($_SESSION['active'])){
                    echo " <td class=\"yellowtable\">".$data['siglas']."</td>
                     <td class=\"yellowtable\" style=\"border-right: 1px solid #00a8a8\">".$unds."</td>
                    
-                    <td class=\"yellowtable\">".$data['iniciobodega']."</td>
-                    <td class=\"yellowtable\">".$data['finbodega']."</td>
-                    <td class=\"yellowtable\">".$data['diasbodega']."</td>";
-                    if($diafaltabodega>3){
-                        echo "<td class=\"greentable\">".$diafaltabodega."</td>";
-                     }elseif($diafaltabodega>=0){
-                         echo "<td class=\"yellowtable\">".$diafaltabodega."</td>";  
+                    <td class=\"yellowtable\">".$data['iniciosublimacion']."</td>
+                    <td class=\"yellowtable\">".$data['finsublimacion']."</td>
+                    <td class=\"yellowtable\">".$data['diassublimacion']."</td>";
+                    if($diafaltasublimacion>3){
+                        echo "<td class=\"greentable\">".$diafaltasublimacion."</td>";
+                     }elseif($diafaltasublimacion>=0){
+                         echo "<td class=\"yellowtable\">".$diafaltasublimacion."</td>";  
                      }else{
-                         echo "<td class=\"redtable\">".$diafaltabodega."</td>"; 
+                         echo "<td class=\"redtable\">".$diafaltasublimacion."</td>"; 
                      }
                     echo "<td class=\"yellowtable\">".$parcial."</td>
                     <td class=\"yellowtable\">".$falta."</td>
-                    <td class=\"yellowtable\">".$data['obs_bodega']."</td>
+                    <td class=\"yellowtable\">".$data['obs_sublimacion']."</td>
                     <td class=\"yellowtable\">".$data['estado']."</td>
                     </tr>                    ";
                 }
@@ -316,14 +339,14 @@ if (empty($_SESSION['active'])){
            
             $query=mysqli_query($conexion, "SELECT pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
             pe.fecha_fin as 'finpedido', pe.dias_habiles as 'diaspedido', pe.unds, pe.fecha_ingreso, pe.usuario,
-            bo.idbodega, bo.iniciofecha as 'iniciobodega', bo.finfecha as 'finbodega', bo.dias as 'diasbodega',
-            bo.inicioprocesofecha, bo.finprocesofecha, bo.parcial, us.usuario, bo.obs_bodega, pr.siglas, es.estado
+            su.idsublimacion, su.iniciofecha as 'iniciosublimacion', su.finfecha as 'finsublimacion', su.dias as 'diassublimacion',
+            su.inicioprocesofecha, su.finprocesofecha, su.parcial, us.usuario, su.obs_sublimacion, pr.siglas, es.estado
             FROM pedidos pe 
             INNER JOIN procesos pr ON pe.procesos=pr.idproceso
-            INNER JOIN bodega bo ON pe.idpedido=bo.pedido
+            INNER JOIN sublimacion su ON pe.idpedido=su.pedido
             INNER JOIN usuario us on pe.usuario=us.idusuario
-            INNER JOIN estado es ON bo.estado=es.id_estado
-            WHERE bo.estado<=2 and finfecha>='$cuatrodias'");
+            INNER JOIN estado es ON su.estado=es.id_estado
+            WHERE su.estado<=2 and finfecha>='$cuatrodias'");
             
             $result=mysqli_num_rows($query);
 
@@ -336,14 +359,14 @@ if (empty($_SESSION['active'])){
                     $falta=$unds-$parcial;
                     
                     $diapedido=$data['finpedido'];
-                    $diabodega=$data['finbodega'];
+                    $diasublimacion=$data['finsublimacion'];
                     $diafaltapedido=  number_of_working_days($hoy, $diapedido)-1;
                     if($diafaltapedido<0){
                         $diafaltapedido=  -(number_of_working_days($diapedido, $hoy)-1);
                     }
-                    $diafaltabodega=  number_of_working_days($hoy, $diabodega)-1;   
-                    if($diafaltabodega<0){
-                        $diafaltabodega=  -(number_of_working_days($diabodega, $hoy)-1);
+                    $diafaltasublimacion=  number_of_working_days($hoy, $diasublimacion)-1;   
+                    if($diafaltasublimacion<0){
+                        $diafaltasublimacion=  -(number_of_working_days($diasublimacion, $hoy)-1);
                     }
                     echo "
                     <tr>
@@ -364,19 +387,19 @@ if (empty($_SESSION['active'])){
                    echo " <td class=\"greentable\">".$data['siglas']."</td>
                     <td class=\"greentable\" style=\"border-right: 1px solid #00a8a8\">".$unds."</td>
                    
-                    <td class=\"greentable\">".$data['iniciobodega']."</td>
-                    <td class=\"greentable\">".$data['finbodega']."</td>
-                    <td class=\"greentable\">".$data['diasbodega']."</td>";
-                    if($diafaltabodega>3){
-                        echo "<td class=\"greentable\">".$diafaltabodega."</td>";
-                     }elseif($diafaltabodega>=0){
-                         echo "<td class=\"yellowtable\">".$diafaltabodega."</td>";  
+                    <td class=\"greentable\">".$data['iniciosublimacion']."</td>
+                    <td class=\"greentable\">".$data['finsublimacion']."</td>
+                    <td class=\"greentable\">".$data['diassublimacion']."</td>";
+                    if($diafaltasublimacion>3){
+                        echo "<td class=\"greentable\">".$diafaltasublimacion."</td>";
+                     }elseif($diafaltasublimacion>=0){
+                         echo "<td class=\"yellowtable\">".$diafaltasublimacion."</td>";  
                      }else{
-                         echo "<td class=\"redtable\">".$diafaltabodega."</td>"; 
+                         echo "<td class=\"redtable\">".$diafaltasublimacion."</td>"; 
                      }
                     echo "<td class=\"greentable\">".$parcial."</td>
                     <td class=\"greentable\">".$falta."</td>
-                    <td class=\"greentable\"> ".$data['obs_bodega']."</td>
+                    <td class=\"greentable\"> ".$data['obs_sublimacion']."</td>
                     <td class=\"greentable\">".$data['estado']."</td>
                     </tr>                    ";
                 }

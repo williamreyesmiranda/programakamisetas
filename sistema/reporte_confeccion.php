@@ -70,7 +70,7 @@ if (empty($_SESSION['active'])){
 <a href="toexcel/exportar_reporteConfeccion.php" style="display:block;  position:fixed ; top:0px; left: 85%;;" title="Exportar a Excel"><img width="55px" src="img/excel.png" ></a>
 <input style="display:block; width:150px; position:fixed ; top:0px; left: 90%;;" class="btn_new" type='button' onclick='window.print();' value='Imprimir' />
 
-<img style="display:block;  position:fixed" src="img/kamisetas.png" alt="">
+
 <center><div style="width:99%">
 
 <h1 style="font-size:50px; font-weight:bold; color: #00a8a8; width:60%">REPORTE DE CONFECCIÓN <?php echo date('d-m-Y');?></h1>
@@ -131,7 +131,7 @@ if (empty($_SESSION['active'])){
               
             <tr class="titulo">
                 <th style="border-right: 1px solid #9ecaca"colspan="9">Información Pedido</th>
-                <th colspan="8"> Información confeccion</th>
+                <th colspan="10"> Información confeccion</th>
             </tr>   
              <tr class="titulo">
                 <th >Pedido</th>
@@ -150,6 +150,8 @@ if (empty($_SESSION['active'])){
                 <th>Días Falta</th>
                 <th>Unds Parcial</th>
                 <th>Unds Falta</th>
+                <th>OC</th>
+                <th>Unds Corte</th>
                 <th>Observaciones</th>
                 <th>Estado</th>
                
@@ -157,7 +159,7 @@ if (empty($_SESSION['active'])){
 
             </tr>
             <tr>
-             <th class="titulo" colspan="17">FECHAS VENCIDAS</th>
+             <th class="titulo" colspan="19">FECHAS VENCIDAS</th>
              </tr>
         </thead>
         <tbody>
@@ -166,7 +168,7 @@ if (empty($_SESSION['active'])){
             
             $query=mysqli_query($conexion, "SELECT pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
             pe.fecha_fin as 'finpedido', pe.dias_habiles as 'diaspedido', pe.unds, pe.fecha_ingreso, pe.usuario,
-            con.idconfeccion, con.iniciofecha as 'inicioconfeccion', con.finfecha as 'finconfeccion', con.dias as 'diasconfeccion',
+            con.idconfeccion, con.iniciofecha as 'inicioconfeccion', con.finfecha as 'finconfeccion', con.pedido, con.dias as 'diasconfeccion',
             con.inicioprocesofecha, con.finprocesofecha, con.parcial, us.usuario, con.obs_confeccion, pr.siglas, es.estado
             FROM pedidos pe 
             INNER JOIN procesos pr ON pe.procesos=pr.idproceso
@@ -184,9 +186,16 @@ if (empty($_SESSION['active'])){
                     $unds=$data['unds'];
                     $parcial=$data['parcial'];
                     $falta=$unds-$parcial;
-                    
                     $diapedido=$data['finpedido'];
                     $diaconfeccion=$data['finconfeccion'];
+                    $idpedido=$data['pedido'];
+                    $query_oc=mysqli_query($conexion,"SELECT * FROM corte WHERE pedido=$idpedido");
+                    $consult_oc=mysqli_fetch_array($query_oc);
+                    $oc=$consult_oc['oc'];
+                    $unds_corte=$consult_oc['parcial'];
+                    if($unds==$unds_corte){
+                        $unds_corte="OK";
+                    }
                     $diafaltapedido=  number_of_working_days($hoy, $diapedido)-1;
                     if($diafaltapedido<0){
                         $diafaltapedido=  -(number_of_working_days($diapedido, $hoy)-1);
@@ -226,6 +235,8 @@ if (empty($_SESSION['active'])){
                      }
                     echo "<td class=\"redtable\">".$parcial."</td>
                     <td class=\"redtable\">".$falta."</td>
+                    <td class=\"redtable\">".$oc."</td>
+                    <td class=\"redtable\">".$unds_corte."</td>
                     <td class=\"redtable\">".$data['obs_confeccion']."</td>
                     <td class=\"redtable\">".$data['estado']."</td>
                     </tr>                    ";
@@ -233,7 +244,7 @@ if (empty($_SESSION['active'])){
             }
             ?>
             <tr>
-                <th class="titulo" colspan="17">0 a 3 DÍAS</th>
+                <th class="titulo" colspan="19">0 a 3 DÍAS</th>
             </tr>
          
             <?php
@@ -241,7 +252,7 @@ if (empty($_SESSION['active'])){
             
             $query=mysqli_query($conexion, "SELECT pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
             pe.fecha_fin as 'finpedido', pe.dias_habiles as 'diaspedido', pe.unds, pe.fecha_ingreso, pe.usuario,
-            con.idconfeccion, con.iniciofecha as 'inicioconfeccion', con.finfecha as 'finconfeccion', con.dias as 'diasconfeccion',
+            con.idconfeccion, con.iniciofecha as 'inicioconfeccion', con.finfecha as 'finconfeccion', con.pedido, con.dias as 'diasconfeccion',
             con.inicioprocesofecha, con.finprocesofecha, con.parcial, us.usuario, con.obs_confeccion, pr.siglas, es.estado
             FROM pedidos pe 
             INNER JOIN procesos pr ON pe.procesos=pr.idproceso
@@ -262,6 +273,14 @@ if (empty($_SESSION['active'])){
                     
                     $diapedido=$data['finpedido'];
                     $diaconfeccion=$data['finconfeccion'];
+                    $idpedido=$data['pedido'];
+                    $query_oc=mysqli_query($conexion,"SELECT * FROM corte WHERE pedido=$idpedido");
+                    $consult_oc=mysqli_fetch_array($query_oc);
+                    $oc=$consult_oc['oc'];
+                    $unds_corte=$consult_oc['parcial'];
+                    if($unds==$unds_corte){
+                        $unds_corte="OK";
+                    }
                     $diafaltapedido=  number_of_working_days($hoy, $diapedido)-1;
                     if($diafaltapedido<0){
                         $diafaltapedido=  -(number_of_working_days($diapedido, $hoy)-1);
@@ -301,6 +320,8 @@ if (empty($_SESSION['active'])){
                      }
                     echo "<td class=\"yellowtable\">".$parcial."</td>
                     <td class=\"yellowtable\">".$falta."</td>
+                    <td class=\"yellowtable\">".$oc."</td>
+                    <td class=\"yellowtable\">".$unds_corte."</td>
                     <td class=\"yellowtable\">".$data['obs_confeccion']."</td>
                     <td class=\"yellowtable\">".$data['estado']."</td>
                     </tr>                    ";
@@ -308,7 +329,7 @@ if (empty($_SESSION['active'])){
             }
             ?>
             <tr>
-                <th class="titulo" colspan="17">4 DÍAS EN ADELANTE</th>
+                <th class="titulo" colspan="19">4 DÍAS EN ADELANTE</th>
             </tr>
          
             <?php
@@ -316,7 +337,7 @@ if (empty($_SESSION['active'])){
            
             $query=mysqli_query($conexion, "SELECT pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
             pe.fecha_fin as 'finpedido', pe.dias_habiles as 'diaspedido', pe.unds, pe.fecha_ingreso, pe.usuario,
-            con.idconfeccion, con.iniciofecha as 'inicioconfeccion', con.finfecha as 'finconfeccion', con.dias as 'diasconfeccion',
+            con.idconfeccion, con.iniciofecha as 'inicioconfeccion', con.finfecha as 'finconfeccion', con.pedido, con.dias as 'diasconfeccion',
             con.inicioprocesofecha, con.finprocesofecha, con.parcial, us.usuario, con.obs_confeccion, pr.siglas, es.estado
             FROM pedidos pe 
             INNER JOIN procesos pr ON pe.procesos=pr.idproceso
@@ -334,9 +355,16 @@ if (empty($_SESSION['active'])){
                     $unds=$data['unds'];
                     $parcial=$data['parcial'];
                     $falta=$unds-$parcial;
-                    
                     $diapedido=$data['finpedido'];
                     $diaconfeccion=$data['finconfeccion'];
+                    $idpedido=$data['pedido'];
+                    $query_oc=mysqli_query($conexion,"SELECT * FROM corte WHERE pedido=$idpedido");
+                    $consult_oc=mysqli_fetch_array($query_oc);
+                    $oc=$consult_oc['oc'];
+                    $unds_corte=$consult_oc['parcial'];
+                    if($unds==$unds_corte){
+                        $unds_corte="OK";
+                    }
                     $diafaltapedido=  number_of_working_days($hoy, $diapedido)-1;
                     if($diafaltapedido<0){
                         $diafaltapedido=  -(number_of_working_days($diapedido, $hoy)-1);
@@ -376,6 +404,8 @@ if (empty($_SESSION['active'])){
                      }
                     echo "<td class=\"greentable\">".$parcial."</td>
                     <td class=\"greentable\">".$falta."</td>
+                    <td class=\"greentable\">".$oc."</td>
+                    <td class=\"greentable\">".$unds_corte."</td>
                     <td class=\"greentable\"> ".$data['obs_confeccion']."</td>
                     <td class=\"greentable\">".$data['estado']."</td>
                     </tr>                    ";

@@ -214,6 +214,7 @@ if ($result_sql == 0) {
                                     <option value="5">5</option>
                                     <option value="6">6</option>
                                     <option value="7">7</option>
+                                    <option value="8"></option>
                                 </select>
                             </div>
                             <div class="columns3">
@@ -228,6 +229,7 @@ if ($result_sql == 0) {
                                     <option value="5">5</option>
                                     <option value="6">6</option>
                                     <option value="7">7</option>
+                                    <option value="8"></option>
                                 </select>
                             </div>
                             <div class="columns3">
@@ -237,6 +239,9 @@ if ($result_sql == 0) {
                                     <option value="0" disabled></option>
                                     <option value="55">55</option>
                                     <option value="64">64</option>
+                                    <option value="77">77</option>
+                                    <option value="100">100</option>
+                                    <option value="120">120</option>
                                 </select>
                             </div>
                             <div class="columns2">
@@ -252,6 +257,7 @@ if ($result_sql == 0) {
                                     <option value="5">5</option>
                                     <option value="6">6</option>
                                     <option value="7">7</option>
+                                    <option value="8"></option>
                                 </select>
                             </div>
                             <div class="columns2">

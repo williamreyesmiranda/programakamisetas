@@ -27,7 +27,8 @@ if (empty($_SESSION['active'])){
 include "includes/header.php"?>
 <section id="container">
 
-<a href="reporte_confeccion.php" class="btn_new" style="position:fixed ; top:200px; left: 0px;">Reporte</a>
+<a href="reporte_confeccion.php" class="btn_new" style="position:fixed ; top:150px; left: 0px;">Reporte</a>
+<a href="listaconfeccionterminado.php" class="btn_new" style="position:fixed ; top:150px; left: 200px;">Resturar Pedido</a>
 
 
 <center><div style="width:100%">
@@ -40,7 +41,7 @@ include "includes/header.php"?>
             <tr class="titulo">
                 <th style="border-right: 1px solid #9ecaca"colspan="10">Información Pedido</th>
                 
-                <th colspan="10"> Información confección</th>
+                <th colspan="12"> Información confección</th>
             </tr>   
              <tr class="titulo">
                 <th>Pedido</th>
@@ -59,6 +60,7 @@ include "includes/header.php"?>
                 <th>Días Hab</th>
                 <th>Días Falta</th>
                 <th>OC</th>
+                <th>Unds Corte</th>
                 <th>Unds Parcial</th>
                 <th>Unds Falta</th>
                 <th>Entrega Prod</th>
@@ -119,6 +121,10 @@ include "includes/header.php"?>
                     $query_oc=mysqli_query($conexion,"SELECT * FROM corte WHERE pedido=$idpedido");
                     $consult_oc=mysqli_fetch_array($query_oc);
                     $oc=$consult_oc['oc'];
+                    $unds_corte=$consult_oc['parcial'];
+                    if($unds==$unds_corte){
+                        $unds_corte="OK";
+                    }
                     $diafaltapedido=  number_of_working_days($hoy, $diapedido)-1;
                     if($diafaltapedido<0){
                         $diafaltapedido=  -(number_of_working_days($diapedido, $hoy)-1);
@@ -160,6 +166,7 @@ include "includes/header.php"?>
                          echo "<td class=\"redtable\">".$diafaltaconfeccion."</td>"; 
                      }
                     echo "<td>".$oc."</td>
+                    <td>".$unds_corte."</td>
                     <td>".$parcial."</td>
                     <td>".$falta."</td>
                     <td>".$data['entrega']."</td>

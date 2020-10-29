@@ -2,6 +2,18 @@
 session_start();
 
 include "../conexion.php";
+if (empty($_GET['id'])) {
+    header('location listaconfecciongeneral.php');
+}else{
+    $idconfeccion = $_GET['id'];
+    $update=mysqli_query($conexion, "UPDATE confeccion SET estado=1 WHERE idconfeccion=$idconfeccion");
+
+    if($update){
+        $alert = '<p class="msg_save">Pedido Restaurado Correctamente</p>';
+    }else{
+        $alert = '<p class="msg_error">No se pudo resturar el pedido Correctamente</p>';
+    }
+}
 
 ?>
 
@@ -12,7 +24,7 @@ include "../conexion.php";
 	
     <?php include "includes/scripts.php"?>
     
-	<title>BODEGA</title>
+	<title>CONFECCIÓN</title>
 	<link rel="shortcut icon" href="img/kamisetas-icono.png" type="image/x-icon">
 	<style>
 		
@@ -27,21 +39,20 @@ if (empty($_SESSION['active'])){
 include "includes/header.php"?>
 <section id="container">
 
-<a href="reporte_bodega.php" class="btn_new" style="position:fixed ; top:150px; left: 0px;">Reporte</a>
-<a href="listabodegaterminado.php" class="btn_new" style="position:fixed ; top:150px; left: 200px;">Restaurar Pedido</a>
+<a href="listaconfecciongeneral.php" class="btn_new" style="position:fixed ; top:150px; left: 0px;">Lista Confección</a>
 
 
 <center><div style="width:100%">
 
-<h1>Lista General de Pedidos para BODEGA</h1>
-        
+<h1>Lista de pedidos Terminados y Anulados para CONFECCIÓN</h1>
+<div class="alert"><?php echo isset($alert) ? $alert : ''; ?></div>
        
         <table id="tabla" class="display" >
          <thead>   
             <tr class="titulo">
                 <th style="border-right: 1px solid #9ecaca"colspan="10">Información Pedido</th>
                 
-                <th colspan="9"> Información Bodega</th>
+                <th colspan="10"> Información confección</th>
             </tr>   
              <tr class="titulo">
                 <th>Pedido</th>
@@ -59,8 +70,10 @@ include "includes/header.php"?>
                 <th>Fecha Entrega</th>
                 <th>Días Hab</th>
                 <th>Días Falta</th>
+                <th>OC</th>
                 <th>Unds Parcial</th>
                 <th>Unds Falta</th>
+                <th>Entrega Prod</th>
                 <th>Observaciones</th>
                 <th>Estado</th>
                 <th>Acciones</th>
@@ -90,40 +103,43 @@ include "includes/header.php"?>
                 return $days;
             }
 
-            $query=mysqli_query($conexion, "SELECT pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
-            pe.fecha_fin as 'finpedido', pe.dias_habiles as 'diaspedido', pe.unds, pe.fecha_ingreso, pe.usuario,
-            bo.idbodega, bo.iniciofecha as 'iniciobodega', bo.finfecha as 'finbodega', bo.dias as 'diasbodega',
-            bo.inicioprocesofecha, bo.finprocesofecha, bo.parcial, us.usuario, bo.obs_bodega, pr.siglas, es.estado, est.estado as 'estadopedido'
+            $query=mysqli_query($conexion, "SELECT pe.idpedido, pe.num_pedido, pe.cliente, pe.asesor, pe.fecha_inicio as 'iniciopedido', 
+            pe.fecha_fin as 'finpedido', pe.dias_habiles as 'diaspedido', pe.unds, pe.fecha_ingreso, pe.usuario, con.entrega,
+            con.idconfeccion, con.iniciofecha as 'inicioconfeccion', con.finfecha as 'finconfeccion', con.dias as 'diasconfeccion',
+            con.inicioprocesofecha, con.finprocesofecha, con.parcial, us.usuario, con.obs_confeccion, pr.siglas, es.estado, est.estado as 'estadopedido'
             FROM pedidos pe 
             INNER JOIN procesos pr ON pe.procesos=pr.idproceso
-            INNER JOIN bodega bo ON pe.idpedido=bo.pedido
+            INNER JOIN confeccion con ON pe.idpedido=con.pedido
             INNER JOIN usuario us on pe.usuario=us.idusuario
-            INNER JOIN estado es ON bo.estado=es.id_estado
+            INNER JOIN estado es ON con.estado=es.id_estado
             INNER JOIN estado est ON pe.estado=est.id_estado
-            WHERE bo.estado<=2");
+            WHERE con.estado>2");
             
             $result=mysqli_num_rows($query);
 
             if ($result>0){
                 while($data=mysqli_fetch_array($query)){
 
-                    
+                    $idpedido=$data['idpedido'];
                     $unds=$data['unds'];
                     $parcial=$data['parcial'];
                     $falta=$unds-$parcial;
                     $hoy=date('Y-m-d');
                     $diapedido=$data['finpedido'];
-                    $diabodega=$data['finbodega'];
+                    $diaconfeccion=$data['finconfeccion'];
                     $estadopedido=$data['estadopedido'];
+                    $query_oc=mysqli_query($conexion,"SELECT * FROM corte WHERE pedido=$idpedido");
+                    $consult_oc=mysqli_fetch_array($query_oc);
+                    $oc=$consult_oc['oc'];
                     $diafaltapedido=  number_of_working_days($hoy, $diapedido)-1;
                     if($diafaltapedido<0){
                         $diafaltapedido=  -(number_of_working_days($diapedido, $hoy)-1);
                         
                     }
                     
-                    $diafaltabodega=  number_of_working_days($hoy, $diabodega)-1;   
-                    if($diafaltabodega<0){
-                        $diafaltabodega=  -(number_of_working_days($diabodega, $hoy)-1);
+                    $diafaltaconfeccion=  number_of_working_days($hoy, $diaconfeccion)-1;   
+                    if($diafaltaconfeccion<0){
+                        $diafaltaconfeccion=  -(number_of_working_days($diaconfeccion, $hoy)-1);
                     }
                     echo "
                     <tr>
@@ -145,24 +161,24 @@ include "includes/header.php"?>
                     <td>".$estadopedido."</td>
                     <td style=\"border-right: 1px solid #00a8a8\">".$unds."</td>
                    
-                    <td>".$data['iniciobodega']."</td>
-                    <td>".$data['finbodega']."</td>
-                    <td>".$data['diasbodega']."</td>";
-                    if($diafaltabodega>3){
-                        echo "<td class=\"greentable\">".$diafaltabodega."</td>";
-                     }elseif($diafaltabodega>=0){
-                         echo "<td class=\"yellowtable\">".$diafaltabodega."</td>";  
+                    <td>".$data['inicioconfeccion']."</td>
+                    <td>".$data['finconfeccion']."</td>
+                    <td>".$data['diasconfeccion']."</td>";
+                    if($diafaltaconfeccion>3){
+                        echo "<td class=\"greentable\">".$diafaltaconfeccion."</td>";
+                     }elseif($diafaltaconfeccion>=0){
+                         echo "<td class=\"yellowtable\">".$diafaltaconfeccion."</td>";  
                      }else{
-                         echo "<td class=\"redtable\">".$diafaltabodega."</td>"; 
+                         echo "<td class=\"redtable\">".$diafaltaconfeccion."</td>"; 
                      }
-                    echo "<td>".$parcial."</td>
+                    echo "<td>".$oc."</td>
+                    <td>".$parcial."</td>
                     <td>".$falta."</td>
-                    <td>".$data['obs_bodega']."</td>
+                    <td>".$data['entrega']."</td>
+                    <td>".$data['obs_confeccion']."</td>
                     <td>".$data['estado']."</td>
                     <td><div>
-                    <a title=\"Editar\"class=\"link_edit\"href=\"editar_bodega.php?id=".$data['idbodega']."\"><span class=\"glyphicon glyphicon-pencil\" aria-hidden=\"true\"></span></a>
-                    <a title=\"Finalizar\"class=\"link_edit\"href=\"finalizar_bodega.php?id=".$data['idbodega']."\"><span class=\"glyphicon glyphicon-ok\" aria-hidden=\"true\"></span></a>
-                    <a title=\"Anular\"class=\"link_delete\"href=\"anular_bodega.php?id=".$data['idbodega']."\"><span class=\"glyphicon glyphicon-trash\" aria-hidden=\"true\"></span></a>
+                    <a title=\"Restaurar pedido\"class=\"link_edit\"href=\"listaconfeccionterminado.php?id=".$data['idconfeccion']."\"><span class=\"glyphicon glyphicon-share\" aria-hidden=\"true\"></span></a>
                     
                     </div>
                     </td>                   
