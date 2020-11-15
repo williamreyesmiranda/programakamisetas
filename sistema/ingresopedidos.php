@@ -212,12 +212,12 @@ if (!empty($_POST)) {
 
 
                 <div>
-                    <label for="nropedido">Nro Pedido (*)</label>
                     <input value="" type="text" name="nropedido" id="nropedido" placeholder="Ingrese N° Pedido" autocomplete="off" autofocus required>
                 </div>
                 <div class="regcliente">
 
                     <?php
+                    
                     $query_idcliente = mysqli_query($conexion, "SELECT * FROM clientes order by nombre asc");
                     $result_idcliente = mysqli_num_rows($query_idcliente);
 
