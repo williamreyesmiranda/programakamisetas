@@ -327,10 +327,7 @@ if (empty($_SESSION['active'])){
 
 <script type="text/javascript">
 	$(document).ready(function(){
-		$('#fechafin').val();
 		
-		
-
 		$('#fechafin').change(function(){
             fechafin();
             diasproceso();
